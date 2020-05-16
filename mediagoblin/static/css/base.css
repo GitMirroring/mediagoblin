@@ -591,30 +591,57 @@ ul#action_to_resolve {list-style:none; margin-left:10px;}
 
 /* media galleries */
 
+.thumb_gallery {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .media_thumbnail {
-  float: left;
+  /* float: left; */
   padding: 0px;
-  width: 180px;
-  overflow: hidden;
+  /* overflow: hidden; */
   margin: 0px 3px 10px;
   text-align: center;
   font-size: 0.875em;
   background-color: #222;
   border-radius: 0 0 5px 5px;
-  padding: 0 0 6px;
   text-overflow: ellipsis;
-  overflow: hidden;
+  /* overflow: hidden; */
   border-color: #0D0D0D;
   border-style: solid;
   border-width: 1px 1px 2px;
   position: relative;
+
+  height: 180px;
 }
+
+.media_thumbnail{
+  flex-grow: 1;
+}
+
+.thumb_row:after {
+  content: '';
+  flex-grow: 999999999;
+}
+
 .media_thumbnail:hover {
     border-color: #0D0D0D #0D0D0D #378566 #0D0D0D;
 }
 
+.media_thumbnail:hover a.thumb_entry_title {
+  opacity: 1;
+}
+
+.media_thumbnail img.thumb_img {
+  height: 180px;
+
+  min-width: 100%;
+  min-width: 100%;
+
+  object-fit: cover;
+}
+
 .media_thumbnail a {
-  color: #eee;
   text-decoration: none;
   display: block;
 }
@@ -629,7 +656,18 @@ ul#action_to_resolve {list-style:none; margin-left:10px;}
 }
 
 a.thumb_entry_title {
-  padding: 8px;
+
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+
+  background: rgba(0, 0, 0, 0.5);
+  color: #f1f1f1;
+
+  text-align: center;
+  font-size: large;
+
+  opacity: 0;
 }
 
 .entry_type_icon {
@@ -927,15 +965,6 @@ pre {
 /* initial GMG max 940 */
 @media screen and (max-width: 960px) {
 
-  img.media_image {
-    max-width: 100%;
-/*    display: inline;*/
-  }
-
-  .media_thumbnail {
-/*    width: 21%;*/
-  }
-
   .profile_sidebar {
     width: 100%;
     margin: 0px;
@@ -968,31 +997,15 @@ pre {
 }
 /* desktop resolutions */
 @media screen and (min-width: 960px) {
-  .container .three.columns.media_thumbnail {
-    width:180px;
-    margin-left:3px;
-    margin-right:3px;
-  }
   #thingy_view {
     width:640px;
     height:640px;
   }
+
 }
 
 /* Tablet Portrait size to standard 960 (devices and browsers) */
 @media only screen and (min-width: 768px) and (max-width: 959px) {
-  .container .three.columns.media_thumbnail {
-    width:147px;
-    margin-left:2px;
-    margin-right:2px;
-  }
-  .media_thumbnail.thumb_entry img {
-    max-width:100%;
-  }
-  .thumb_gallery {
-    margin-left: 0;
-    margin-right: 0;
-  }
   .navigation_button {
   }
   #thingy_view {
@@ -1003,13 +1016,6 @@ pre {
 
 /* All Mobile Sizes (devices and browser) */
 @media screen and (max-width: 767px) {
-  .thumb_row {
-    margin-bottom: 0;
-  }
-  .thumb_gallery {
-    margin-left: 0;
-    margin-right: 0;
-  }
   h1,h2,h3,p {
     margin-bottom: 10px !important;
   }
