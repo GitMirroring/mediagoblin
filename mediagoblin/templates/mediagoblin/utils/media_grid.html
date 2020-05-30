@@ -1,0 +1,47 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% macro media_entry(request, entry, loop) %}
+  {% set entry_url = entry.url_for_self(request.urlgen) %}
+  <div class="media_thumbnail thumb_entry
+	   {%- if loop.first %} thumb_entry_first
+	   {%- elif loop.last %} thumb_entry_last{% endif %}">
+    <a href="{{ entry_url }}"
+    {% if entry.title %}
+    title="{{ entry.title }}"
+    {% endif %}
+    >
+      <img class="thumb_img" src="{{ entry.thumb_url }}" />
+    </a>
+    {% if entry.icon_url %}
+    <img class="entry_type_icon" src="{{ entry.icon_url }}" />
+    {% endif %}
+    {% if entry.title %}
+    <a class="thumb_entry_title" href="{{ entry_url }}">{{ entry.title }}</a>
+    {% endif %}
+  </div>
+{%- endmacro %}
+
+{% macro media_grid(request, media_entries, col_number=5) %}
+  <div class="thumb_gallery thumb_row">
+    {% for entry in media_entries %}
+      {{ media_entry(request, entry, loop) }}
+    {% endfor %}
+  </div>
+{%- endmacro %}
+

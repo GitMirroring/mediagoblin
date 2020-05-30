@@ -17,31 +17,7 @@
 #}
 
 {% from "mediagoblin/utils/pagination.html" import render_pagination %}
-
-{% macro media_grid(request, media_entries, col_number=5) %}
-  <div class="thumb_gallery thumb_row">
-    {% for entry in media_entries %}
-          {% set entry_url = entry.url_for_self(request.urlgen) %}
-          <div class="media_thumbnail thumb_entry
-                     {%- if loop.first %} thumb_entry_first
-                     {%- elif loop.last %} thumb_entry_last{% endif %}">
-            <a href="{{ entry_url }}"
-            {% if entry.title %}
-	    title="{{ entry.title }}"
-            {% endif %}
-	    >
-              <img class="thumb_img" src="{{ entry.thumb_url }}" />
-            </a>
-	    {% if entry.icon_url %}
-	    <img class="entry_type_icon" src="{{ entry.icon_url }}" />
-	    {% endif %}
-            {% if entry.title %}
-            <a class="thumb_entry_title" href="{{ entry_url }}">{{ entry.title }}</a>
-            {% endif %}
-          </div>
-    {% endfor %}
-  </div>
-{%- endmacro %}
+{% from "mediagoblin/utils/media_grid.html" import media_grid %}
 
 {#
   Render a media gallery with pagination.
