@@ -647,8 +647,19 @@ ul#action_to_resolve {list-style:none; margin-left:10px;}
 }
 
 .media_thumbnail a.remove {
-  color: #86D4B1;
-  text-decoration: underline;
+  font-size: 0;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+}
+.media_thumbnail a.remove:before {
+  content: 'X';
+  font-size: large;
+  font-weight: bold;
+  color: #f99;
+}
+.media_thumbnail a.remove:hover:before {
+  color: #f00;
 }
 
 .media_thumbnail img {

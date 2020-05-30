@@ -17,47 +17,25 @@
 #}
 
 {% from "mediagoblin/utils/pagination.html" import render_pagination %}
+{% from "mediagoblin/utils/media_grid.html" import media_entry %}
 
 {% macro media_grid(request, collection_items, col_number=5) %}
-  <div class="thumb_gallery">
+  <div class="thumb_gallery thumb_row">
     {% for row in collection_items|batch(col_number) %}
-      <div class="row thumb_row
-                 {%- if loop.first %} thumb_row_first
-                 {%- elif loop.last %} thumb_row_last{% endif %}">
         {% for item in row %}
           {% set obj = item.get_object() %}
-          {% set obj_url = obj.url_for_self(request.urlgen) %}
-          <div class="three columns media_thumbnail thumb_entry
-                     {%- if loop.first %} thumb_entry_first
-                     {%- elif loop.last %} thumb_entry_last{% endif %}">
-            <a href="{{ obj_url }}">
-              {% if obj.icon_url %}
-              <img class="entry_type_icon" src="{{ obj.icon_url }}" />
-              {% endif %}
-              <img src="{{ obj.thumb_url }}" />
-            </a>
-
-	    {% if obj.title %}
-	    <a href="{{ obj_url }}">{{ obj.title }}</a>
-	    {% endif %}
-            {% if item.note %}
-	      {{ item.note }}
-            {% endif %}
-	    {% if request.user and
-                  (item.in_collection.actor == request.user.id or
-                  request.user.has_privilege('admin')) %}
-	      {%- set remove_url=request.urlgen(
-                                 'mediagoblin.user_pages.collection_item_confirm_remove',
-                                 user=item.in_collection.get_actor.username,
-                                 collection=item.in_collection.slug,
-                                 collection_item=item.id) -%}
-	      <a href="{{ remove_url }}" class="remove">
-	        {%- trans %}(remove){% endtrans -%}
-	      </a>
-	    {% endif %}
-          </div>
+	  {% set remove_url = None %}
+	  {% if request.user and
+		(item.in_collection.actor == request.user.id or
+		request.user.has_privilege('admin')) %}
+		  {%- set remove_url=request.urlgen(
+				     'mediagoblin.user_pages.collection_item_confirm_remove',
+				     user=item.in_collection.get_actor.username,
+				     collection=item.in_collection.slug,
+				     collection_item=item.id) -%}
+	  {% endif %}
+          {{ media_entry(request, obj, loop, remove_url) }}
         {% endfor %}
-      </div>
     {% endfor %}
   </div>
 {%- endmacro %}
