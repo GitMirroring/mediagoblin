@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
 
-{% macro media_entry(request, entry, loop, remove_url=None) %}
+{% macro media_entry(request, entry, loop, remove_url=None, note=None) %}
   {% set entry_url = entry.url_for_self(request.urlgen) %}
   <div class="media_thumbnail thumb_entry
 	   {%- if loop.first %} thumb_entry_first
@@ -36,8 +36,14 @@
 	{%- trans %}(remove){% endtrans -%}
       </a>
     {% endif %}
-    {% if entry.title %}
-    <a class="thumb_entry_title" href="{{ entry_url }}">{{ entry.title }}</a>
+    {% if entry.title or note %}
+    <a class="thumb_entry_title" href="{{ entry_url }}">
+    {%- if entry.title -%}
+      {{ entry.title }}
+    {%- endif %} {% if note -%}
+      ({{ note }})
+    {%- endif -%}
+    </a>
     {% endif %}
   </div>
 {%- endmacro %}

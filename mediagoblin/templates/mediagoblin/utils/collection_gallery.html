@@ -34,7 +34,7 @@
 				     collection=item.in_collection.slug,
 				     collection_item=item.id) -%}
 	  {% endif %}
-          {{ media_entry(request, obj, loop, remove_url) }}
+          {{ media_entry(request, obj, loop, remove_url, item.note) }}
         {% endfor %}
     {% endfor %}
   </div>
