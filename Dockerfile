@@ -1,0 +1,190 @@
+# A Dockerfile for MediaGoblin hacking.
+#
+# IMPORTANT: This Dockerfile is not an officially supported approach to
+# deploying MediaGoblin. It is experimental and intended for helping developers
+# run the test suite. To deploy MediaGoblin, see:
+#
+# https://mediagoblin.readthedocs.io/en/master/siteadmin/deploying.html
+#
+# Most development Docker images are built and run as root. That doesn't work
+# here because the `bower` command run within the `make` step, refuses to run as
+# root.
+#
+# To build this Docker image, run:
+#
+#   docker build -t mediagoblin-debian-11 - < Dockerfile-debian-11-sqlite
+#
+# The "- < Dockerfile" format advises Docker not to include the current
+# directory as build context. Alternatively the following provides build
+# context:
+#
+#   docker build -t mediagoblin-debian-11 -f Dockerfile-debian-11-sqlite .
+#
+# Before running the image you first need to first assign the "mediagoblin" and
+# "user_dev" directories to an artificial group (1024) on the host that is
+# mirrored within the image (details below):
+#
+#   sudo chown --recursive :1024 mediagoblin user_dev
+#   find mediagoblin user_dev -type d -exec chmod 775 {} \;
+#   find mediagoblin user_dev -type f -exec chmod 664 {} \;
+#
+# Then you can run the image with the upstream MediaGoblin code:
+#
+#   docker run --interactive --tty --publish 6543:6543 mediagoblin-debian-11
+#
+# Or you can run with your local "mediagoblin" and "user_dev" directories
+# bind-mounted into the container. This provides automatic code reloading and
+# persistence:
+#
+#   # TODO: Not working.
+#   docker run --interactive --tty --publish 6543:6543 --volume ./mediagoblin:/opt/mediagoblin/mediagoblin --volume ./extlib:/opt/mediagoblin/extlib mediagoblin-python3
+#
+# Alternatively you use docker-compose instead of separate build/run steps:
+#
+#   sudo chown --recursive :1024 mediagoblin user_dev
+#   find mediagoblin user_dev -type d -exec chmod 775 {} \;
+#   find mediagoblin user_dev -type f -exec chmod 664 {} \;
+#   docker-compose up --build
+#
+# You can run the test suite with:
+#
+# docker run --tty mediagoblin-python3 bash -c "bin/python -m pytest ./mediagoblin/tests --boxed"
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+FROM debian:bullseye
+
+# Create working directory.
+RUN mkdir /opt/mediagoblin \
+	&& chown -R www-data:www-data /opt/mediagoblin
+
+WORKDIR /opt/mediagoblin
+
+# Create /var/www because Bower writes some cache files into /var/www during
+# make, failing if it doesn't exist.
+RUN mkdir --mode=g+w /var/www
+RUN chown root:www-data /var/www
+
+# Set up custom group to align with volume permissions for mounted
+# "mediagoblin/mediagoblin" and "mediagoblin/user_dev".
+#
+# The problem here is that the host's UID, GID and mode are used in the
+# container, but of course the container's user www-data is running under a
+# different UID/GID so can't read or write to the volume. It seems like there
+# should be a better approach, but we'll align volume permissions between host
+# and container as per
+# https://medium.com/@nielssj/docker-volumes-and-file-system-permissions-772c1aee23ca
+RUN groupadd --system mediagoblin --gid 1024 && adduser www-data mediagoblin
+
+# Install bootstrap and configure dependencies. Currently requires virtualenv
+# rather than the more modern python3-venv (should be fixed).
+RUN apt-get update \
+	    && apt-get install -y \
+	    automake \
+	    pkg-config \
+	    # git \
+	    nodejs \
+	    npm \
+	    python3-dev \
+	    virtualenv \
+# Install audio dependencies.
+#RUN apt-get install -y \
+	    gstreamer1.0-libav \
+	    gstreamer1.0-plugins-bad \
+	    gstreamer1.0-plugins-base \
+	    gstreamer1.0-plugins-good \
+	    gstreamer1.0-plugins-ugly \
+# Install video dependencies.
+#RUN apt-get install -y \
+	    gir1.2-gst-plugins-base-1.0 \
+	    gir1.2-gstreamer-1.0 \
+	    gstreamer1.0-tools \
+# Install raw image dependencies.
+#
+# Currently (March 2021), python3-py3exiv2 is only available in Debian Sid, so
+# we need to install py3exiv2 from PyPI (later on in this Dockerfile). These are
+# the build depedencies for py3exiv2.
+# RUN apt-get install -y \
+	    libexiv2-dev \
+	    libboost-python-dev \
+# Install document (PDF-only) dependencies.
+# TODO: Check that PDF tests aren't skipped.
+# RUN apt-get install -y \
+	    poppler-utils \
+# To build pygobject
+# RUN apt-get install -y \
+	    libglib2.0-dev \
+	    # gobject-introspection \
+	    libgirepository1.0-dev \
+# To build python-ldap
+# RUN apt-get install -y \
+	    libsasl2-dev \
+	    libldap2-dev \
+# To build pycairo
+# RUN apt-get install -y \
+	    libcairo-dev
+
+USER www-data
+
+# Copy upstream MediaGoblin into the image for use in the build process.
+#
+# This build process is somewhat complicated, because of Bower/NPM, translations
+# and Python dependencies, so it's not really feasible just to copy over a
+# requirements.txt like many Python Dockerfiles examples do. We need the full
+# source.
+#
+# While it is possible to copy the source from the current directory like this:
+#
+COPY --chown=www-data:www-data . /opt/mediagoblin
+#
+# that approach to lots of confusing problems when your working directory has
+# changed from the default - say you've enabled some plugins or switched
+# database type. So instead we're doing a git clone. We could potentially use
+# `git archive` but this still wouldn't account for the submodules.
+#
+# TODO: Figure out a docker-only way to do the build and run from our local
+# version, so that local changes are immediately available to the running
+# container. Not as easy as it sounds. We have this working with docker-compose,
+# but still uses upstream MediaGoblin for the build.
+# RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git --branch master .
+# RUN git clone --depth=1 https://gitlab.com/BenSturmfels/mediagoblin.git --branch master .
+# RUN git show --oneline --no-patch
+
+RUN ./bootstrap.sh \
+    && ./configure \
+    && make
+
+RUN ./bin/pip install \
+	. \
+	.[test] \
+	.[ldap] \
+	.[openid] \
+# Additional Sphinx dependencies not in Debian.
+	.[doc] \
+	# sphinxcontrib-applehelp \
+	# sphinxcontrib-htmlhelp \
+	# sphinxcontrib-jsmath
+# Install raw image library from PyPI.
+# RUN ./bin/pip install \
+	# py3exiv2 \
+	.[image] \
+	.[audio] \
+	.[video]
+
+# RUN pip install .
+
+# Confirm our packages version for later troubleshooting.
+# RUN ./bin/python -m pip freeze
+
+# Run the tests.
+RUN ./bin/python -m pytest -rs ./mediagoblin/tests --boxed
+
+# Build the documentation.
+RUN cd docs && make html
+
+EXPOSE 6543/tcp
+
+ENTRYPOINT = ["./entrypoint.sh"]
+
+# TODO: Is it possible to have a CMD here that is overriden by docker-compose?
+CMD ["./lazyserver.sh", "--server-name=broadcast"]
