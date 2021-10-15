@@ -86,7 +86,7 @@ RUN apt-get update \
 	    nodejs \
 	    npm \
 	    python3-dev \
-	    virtualenv \
+	    python3-venv \
 # Install audio dependencies.
 #RUN apt-get install -y \
 	    gstreamer1.0-libav \
@@ -150,26 +150,25 @@ COPY --chown=www-data:www-data . /opt/mediagoblin
 # RUN git clone --depth=1 https://gitlab.com/BenSturmfels/mediagoblin.git --branch master .
 # RUN git show --oneline --no-patch
 
-RUN ./bootstrap.sh \
-    && ./configure \
-    && make
+# RUN ./bootstrap.sh \
+#     && ./configure \
+#     && make
 
-RUN ./bin/pip install \
-	. \
-	.[test] \
-	.[ldap] \
-	.[openid] \
-# Additional Sphinx dependencies not in Debian.
-	.[doc] \
-	# sphinxcontrib-applehelp \
-	# sphinxcontrib-htmlhelp \
-	# sphinxcontrib-jsmath
+RUN python3 -m venv venv \
+	    && ./venv/bin/pip install \
+	    . \
+	    .[dev] \
+	    .[test] \
+	    .[ldap] \
+	    .[openid] \
+# Additional Sphinx dependencies
+	    .[doc] \
 # Install raw image library from PyPI.
 # RUN ./bin/pip install \
-	# py3exiv2 \
-	.[image] \
-	.[audio] \
-	.[video]
+# py3exiv2 \
+	    .[image] \
+	    .[audio] \
+	    .[video]
 
 # RUN pip install .
 
@@ -177,7 +176,7 @@ RUN ./bin/pip install \
 # RUN ./bin/python -m pip freeze
 
 # Run the tests.
-RUN ./bin/python -m pytest -rs ./mediagoblin/tests --boxed
+RUN ./venv/bin/python -m pytest
 
 # Build the documentation.
 RUN cd docs && make html
