@@ -50,41 +50,16 @@
 #
 # docker run --tty mediagoblin-python3 bash -c "bin/python -m pytest ./mediagoblin/tests --boxed"
 
-ARG DEBIAN_FRONTEND=noninteractive
+ARG build_doc=false
+ARG run_tests=true
 
 FROM debian:bullseye
 
-# Create working directory.
-RUN mkdir /opt/mediagoblin \
-	&& chown -R www-data:www-data /opt/mediagoblin
-
-WORKDIR /opt/mediagoblin
-
-# Create /var/www because Bower writes some cache files into /var/www during
-# make, failing if it doesn't exist.
-RUN mkdir --mode=g+w /var/www
-RUN chown root:www-data /var/www
-
-# Set up custom group to align with volume permissions for mounted
-# "mediagoblin/mediagoblin" and "mediagoblin/user_dev".
-#
-# The problem here is that the host's UID, GID and mode are used in the
-# container, but of course the container's user www-data is running under a
-# different UID/GID so can't read or write to the volume. It seems like there
-# should be a better approach, but we'll align volume permissions between host
-# and container as per
-# https://medium.com/@nielssj/docker-volumes-and-file-system-permissions-772c1aee23ca
-RUN groupadd --system mediagoblin --gid 1024 && adduser www-data mediagoblin
-
 # Install bootstrap and configure dependencies. Currently requires virtualenv
 # rather than the more modern python3-venv (should be fixed).
-RUN apt-get update \
+RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	    && apt-get install -y \
-	    automake \
-	    pkg-config \
-	    # git \
-	    nodejs \
-	    npm \
+	    curl \
 	    python3-dev \
 	    python3-venv \
 # Install audio dependencies.
@@ -94,6 +69,7 @@ RUN apt-get update \
 	    gstreamer1.0-plugins-base \
 	    gstreamer1.0-plugins-good \
 	    gstreamer1.0-plugins-ugly \
+	    python3-gst-1.0 \
 # Install video dependencies.
 #RUN apt-get install -y \
 	    gir1.2-gst-plugins-base-1.0 \
@@ -123,6 +99,30 @@ RUN apt-get update \
 # To build pycairo
 # RUN apt-get install -y \
 	    libcairo-dev
+
+RUN npm install -g bower
+
+# Create working directory.
+RUN mkdir /opt/mediagoblin \
+	&& chown -R www-data:www-data /opt/mediagoblin
+
+WORKDIR /opt/mediagoblin
+
+# Create /var/www because Bower writes some cache files into /var/www during
+# make, failing if it doesn't exist.
+RUN mkdir --mode=g+w /var/www
+RUN chown root:www-data /var/www
+
+# Set up custom group to align with volume permissions for mounted
+# "mediagoblin/mediagoblin" and "mediagoblin/user_dev".
+#
+# The problem here is that the host's UID, GID and mode are used in the
+# container, but of course the container's user www-data is running under a
+# different UID/GID so can't read or write to the volume. It seems like there
+# should be a better approach, but we'll align volume permissions between host
+# and container as per
+# https://medium.com/@nielssj/docker-volumes-and-file-system-permissions-772c1aee23ca
+RUN groupadd --system mediagoblin --gid 1024 && adduser www-data mediagoblin
 
 USER www-data
 
@@ -154,7 +154,7 @@ COPY --chown=www-data:www-data . /opt/mediagoblin
 #     && ./configure \
 #     && make
 
-RUN python3 -m venv venv \
+RUN python3 -m venv --system-site-packages venv \
 	    && ./venv/bin/pip install \
 	    . \
 	    .[dev] \
@@ -172,6 +172,8 @@ RUN python3 -m venv venv \
 
 # RUN pip install .
 
+RUN ./devtools/compile_translations.sh
+
 # Confirm our packages version for later troubleshooting.
 # RUN ./bin/python -m pip freeze
 
@@ -179,11 +181,14 @@ RUN python3 -m venv venv \
 RUN ./venv/bin/python -m pytest
 
 # Build the documentation.
-RUN cd docs && make html
+RUN cd docs && make html SPHINXBUILD=../venv/bin/sphinx-build
 
 EXPOSE 6543/tcp
 
-ENTRYPOINT = ["./entrypoint.sh"]
+ENTRYPOINT ["/opt/mediagoblin/entrypoint.sh"]
+
+HEALTHCHECK \
+  CMD curl -f http://localhost:6543/ || exit 1
 
 # TODO: Is it possible to have a CMD here that is overriden by docker-compose?
-CMD ["./lazyserver.sh", "--server-name=broadcast"]
+CMD ["/opt/mediagoblin/lazyserver.sh",  "--server-name=broadcast" ]

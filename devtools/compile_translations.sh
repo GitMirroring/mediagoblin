@@ -19,8 +19,8 @@
 # exit if anything fails
 set -e
 
-if [ -f "./bin/pybabel" ]; then
-    PYBABEL="./bin/pybabel";
+if [ -f "./venv/bin/pybabel" ]; then
+    PYBABEL="./venv/bin/pybabel";
 else
     PYBABEL=pybabel;
 fi

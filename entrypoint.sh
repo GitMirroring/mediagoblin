@@ -1,30 +1,37 @@
-#!/bin/sh
+#!/bin/sh -eux
 
-ADMIN_USER=admin
+ADMIN_USER="admin"
 ADMIN_PASSWORD=a
 ADMIN_EMAIL=admin@example.com
-PLUGINS=\
+PLUGINS="\
 	mediagoblin.media_types.audio \
 	mediagoblin.media_types.video \
 	mediagoblin.media_types.raw_image \
 	mediagoblin.media_types.pdf \
-	#END
+	"
 
-CONFIG=mediagoblin_local.ini
+VENV_PATH=./venv
+GMG=gmg
+CONFIG=mediagoblin.ini
 
-touch "${CONFIG}"
+. ${VENV_PATH}/bin/activate
 
-for P in ${PLUGINS}; do
-	if ! grep "${P}" "${CONFIG}"
-		echo "[[${P}]]" >> "${CONFIG}"
-	fi
-done
 
-RUN ./bin/gmg dbupdate
-RUN ./bin/gmg adduser \
+if [ ! -e ${CONFIG} ]; then
+	grep -q "plugins" "${CONFIG}" \
+		echo '[plugins]' >> "${CONFIG}"
+	for P in ${PLUGINS}; do
+		grep -q "${P}" "${CONFIG}" \
+			|| echo "[[${P}]]" >> "${CONFIG}"
+	done
+fi
+
+${GMG} dbupdate
+${GMG} adduser \
 	--username "${ADMIN_USER}"\
 	--password "${ADMIN_PASSWORD}"\
-	--email "${ADMIN_EMAIL}"
-RUN ./bin/gmg makeadmin "${ADMIN_USER}"
+	--email "${ADMIN_EMAIL}" \
+	&& ${GMG} makeadmin "${ADMIN_USER}" \
+	|| true
 
-exec "@{@}"
+exec "${@}"
