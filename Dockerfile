@@ -54,6 +54,8 @@ ARG build_doc=false
 ARG run_tests=true
 
 FROM debian:bullseye
+ARG build_doc
+ARG run_tests
 
 # Install bootstrap and configure dependencies. Currently requires virtualenv
 # rather than the more modern python3-venv (should be fixed).
@@ -98,7 +100,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	    libldap2-dev \
 # To build pycairo
 # RUN apt-get install -y \
-	    libcairo-dev
+	    libcairo-dev \
+	    && rm -rf /var/lib/apt/lists/*
 
 RUN npm install -g bower
 
@@ -153,22 +156,24 @@ COPY --chown=www-data:www-data . /opt/mediagoblin
 # RUN ./bootstrap.sh \
 #     && ./configure \
 #     && make
+RUN bower install; rm -rf ~/.bower
 
 RUN python3 -m venv --system-site-packages venv \
 	    && ./venv/bin/pip install \
 	    . \
 	    .[dev] \
-	    .[test] \
+	    $(test "${run_tests}" = 'false' || echo '.[test]') \
 	    .[ldap] \
 	    .[openid] \
 # Additional Sphinx dependencies
-	    .[doc] \
+	    $(test "${build_doc}" = 'false' || echo '.[doc]') \
 # Install raw image library from PyPI.
 # RUN ./bin/pip install \
 # py3exiv2 \
 	    .[image] \
 	    .[audio] \
-	    .[video]
+	    .[video]; \
+	    rm -rf ~/.cache/pip
 
 # RUN pip install .
 
@@ -178,10 +183,12 @@ RUN ./devtools/compile_translations.sh
 # RUN ./bin/python -m pip freeze
 
 # Run the tests.
-RUN ./venv/bin/python -m pytest
+RUN test "${run_tests}" != 'false' \
+	|| ./venv/bin/python -m pytest
 
 # Build the documentation.
-RUN cd docs && make html SPHINXBUILD=../venv/bin/sphinx-build
+RUN test "${build_doc}" != 'false' \
+	|| make -C docs html SPHINXBUILD=../venv/bin/sphinx-build
 
 EXPOSE 6543/tcp
 
