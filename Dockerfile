@@ -183,12 +183,14 @@ RUN ./devtools/compile_translations.sh
 # RUN ./bin/python -m pip freeze
 
 # Run the tests.
-RUN test "${run_tests}" != 'false' \
+RUN test "${run_tests}" = 'false' \
 	|| ./venv/bin/python -m pytest
 
 # Build the documentation.
-RUN test "${build_doc}" != 'false' \
+RUN test "${build_doc}" = 'false' \
 	|| make -C docs html SPHINXBUILD=../venv/bin/sphinx-build
+
+WORKDIR /srv
 
 EXPOSE 6543/tcp
 
@@ -198,4 +200,4 @@ HEALTHCHECK \
   CMD curl -f http://localhost:6543/ || exit 1
 
 # TODO: Is it possible to have a CMD here that is overriden by docker-compose?
-CMD ["/opt/mediagoblin/lazyserver.sh",  "--server-name=broadcast" ]
+CMD ["/opt/mediagoblin/lazyserver.sh",  "-c", "./paste.ini", "--server-name=broadcast" ]
