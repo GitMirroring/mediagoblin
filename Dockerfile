@@ -1,71 +1,14 @@
-# A Dockerfile for MediaGoblin hacking.
-#
-# IMPORTANT: This Dockerfile is not an officially supported approach to
-# deploying MediaGoblin. It is experimental and intended for helping developers
-# run the test suite. To deploy MediaGoblin, see:
-#
-# https://mediagoblin.readthedocs.io/en/master/siteadmin/deploying.html
-#
-# Most development Docker images are built and run as root. That doesn't work
-# here because the `bower` command run within the `make` step, refuses to run as
-# root.
-#
-# To build this Docker image, run:
-#
-#   docker build -t mediagoblin-debian-11 - < Dockerfile-debian-11-sqlite
-#
-# The "- < Dockerfile" format advises Docker not to include the current
-# directory as build context. Alternatively the following provides build
-# context:
-#
-#   docker build -t mediagoblin-debian-11 -f Dockerfile-debian-11-sqlite .
-#
-# Before running the image you first need to first assign the "mediagoblin" and
-# "user_dev" directories to an artificial group (1024) on the host that is
-# mirrored within the image (details below):
-#
-#   sudo chown --recursive :1024 mediagoblin user_dev
-#   find mediagoblin user_dev -type d -exec chmod 775 {} \;
-#   find mediagoblin user_dev -type f -exec chmod 664 {} \;
-#
-# Then you can run the image with the upstream MediaGoblin code:
-#
-#   docker run --interactive --tty --publish 6543:6543 mediagoblin-debian-11
-#
-# Or you can run with your local "mediagoblin" and "user_dev" directories
-# bind-mounted into the container. This provides automatic code reloading and
-# persistence:
-#
-#   # TODO: Not working.
-#   docker run --interactive --tty --publish 6543:6543 --volume ./mediagoblin:/opt/mediagoblin/mediagoblin --volume ./extlib:/opt/mediagoblin/extlib mediagoblin-python3
-#
-# Alternatively you use docker-compose instead of separate build/run steps:
-#
-#   sudo chown --recursive :1024 mediagoblin user_dev
-#   find mediagoblin user_dev -type d -exec chmod 775 {} \;
-#   find mediagoblin user_dev -type f -exec chmod 664 {} \;
-#   docker-compose up --build
-#
-# You can run the test suite with:
-#
-# docker run --tty mediagoblin-python3 bash -c "bin/python -m pytest ./mediagoblin/tests --boxed"
-
 ARG build_doc=false
 ARG run_tests=true
 
-FROM debian:bullseye
-ARG build_doc
-ARG run_tests
+FROM debian:bullseye AS base
 
-# Install bootstrap and configure dependencies. Currently requires virtualenv
-# rather than the more modern python3-venv (should be fixed).
 RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	    && apt-get install -y \
 	    curl \
 	    python3-dev \
 	    python3-venv \
 # Install audio dependencies.
-#RUN apt-get install -y \
 	    gstreamer1.0-libav \
 	    gstreamer1.0-plugins-bad \
 	    gstreamer1.0-plugins-base \
@@ -73,7 +16,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	    gstreamer1.0-plugins-ugly \
 	    python3-gst-1.0 \
 # Install video dependencies.
-#RUN apt-get install -y \
 	    gir1.2-gst-plugins-base-1.0 \
 	    gir1.2-gstreamer-1.0 \
 	    gstreamer1.0-tools \
@@ -82,39 +24,47 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 # Currently (March 2021), python3-py3exiv2 is only available in Debian Sid, so
 # we need to install py3exiv2 from PyPI (later on in this Dockerfile). These are
 # the build depedencies for py3exiv2.
-# RUN apt-get install -y \
 	    libexiv2-dev \
 	    libboost-python-dev \
 # Install document (PDF-only) dependencies.
 # TODO: Check that PDF tests aren't skipped.
-# RUN apt-get install -y \
 	    poppler-utils \
 # To build pygobject
-# RUN apt-get install -y \
 	    libglib2.0-dev \
 	    # gobject-introspection \
 	    libgirepository1.0-dev \
 # To build python-ldap
-# RUN apt-get install -y \
 	    libsasl2-dev \
 	    libldap2-dev \
 # To build pycairo
-# RUN apt-get install -y \
-	    libcairo-dev \
+	    libcairo-dev
+
+RUN groupadd --system mediagoblin \
+	    && useradd --gid mediagoblin --home-dir /srv/mediagoblin mediagoblin
+
+RUN mkdir /opt/mediagoblin \
+	&& chown -R www-data:www-data /opt/mediagoblin
+
+
+FROM base AS builder
+ARG build_doc
+ARG run_tests
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get update \
+	    && apt-get install -y \
+	    pkg-config \
+	    nodejs \
+	    npm \
 	    && rm -rf /var/lib/apt/lists/*
 
 RUN npm install -g bower
 
-# Create working directory.
-RUN mkdir /opt/mediagoblin \
-	&& chown -R www-data:www-data /opt/mediagoblin
-
-WORKDIR /opt/mediagoblin
-
 # Create /var/www because Bower writes some cache files into /var/www during
 # make, failing if it doesn't exist.
 RUN mkdir --mode=g+w /var/www
-RUN chown root:www-data /var/www
+RUN chown www-data:www-data /var/www
+
+USER www-data
 
 # Set up custom group to align with volume permissions for mounted
 # "mediagoblin/mediagoblin" and "mediagoblin/user_dev".
@@ -125,9 +75,6 @@ RUN chown root:www-data /var/www
 # should be a better approach, but we'll align volume permissions between host
 # and container as per
 # https://medium.com/@nielssj/docker-volumes-and-file-system-permissions-772c1aee23ca
-RUN groupadd --system mediagoblin --gid 1024 && adduser www-data mediagoblin
-
-USER www-data
 
 # Copy upstream MediaGoblin into the image for use in the build process.
 #
@@ -156,6 +103,9 @@ COPY --chown=www-data:www-data . /opt/mediagoblin
 # RUN ./bootstrap.sh \
 #     && ./configure \
 #     && make
+
+WORKDIR /opt/mediagoblin
+
 RUN bower install; rm -rf ~/.bower
 
 RUN python3 -m venv --system-site-packages venv \
@@ -189,6 +139,20 @@ RUN test "${run_tests}" = 'false' \
 # Build the documentation.
 RUN test "${build_doc}" = 'false' \
 	|| make -C docs html SPHINXBUILD=../venv/bin/sphinx-build
+
+
+FROM base AS runner
+
+# RUN DEBIAN_FRONTEND=noninteractive apt-get -y remove 'lib.*-dev' \
+#	&& rm -rf /var/lib/apt/lists/*
+RUN rm -rf /var/lib/apt/lists/*
+
+# COPY --from=builder /opt/mediagoblin/venv /opt/mediagoblin
+COPY --from=builder /opt/mediagoblin /opt/mediagoblin
+COPY entrypoint.sh /opt/mediagoblin
+COPY lazyserver.sh /opt/mediagoblin
+
+VOLUME [ "/srv" ]
 
 WORKDIR /srv
 
