@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  paste:
+    restart: unless-stopped
+    volumes:
+      - ./data:/srv
+
+  celery:
+    restart: unless-stopped
+    volumes:
+      - ./data:/srv
