@@ -6,6 +6,7 @@ FROM debian:bullseye AS base
 RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	    && apt-get install -y \
 	    curl \
+	    sqlite3 \
 	    python3-dev \
 	    python3-venv \
 # Install audio dependencies.
