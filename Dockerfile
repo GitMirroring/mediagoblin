@@ -1,5 +1,6 @@
 ARG build_doc=false
 ARG run_tests=true
+ARG requirements_txt=
 
 FROM debian:bullseye AS base
 
@@ -50,6 +51,7 @@ RUN mkdir /opt/mediagoblin \
 FROM base AS builder
 ARG build_doc
 ARG run_tests
+ARG requirements_txt
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	    && apt-get install -y \
@@ -110,7 +112,9 @@ WORKDIR /opt/mediagoblin
 RUN bower install; rm -rf ~/.bower
 
 RUN python3 -m venv --system-site-packages venv \
-	    && ./venv/bin/pip install \
+	    && test -n "${requirements_txt}" \
+	    && ./venv/bin/pip install -r "${requirements_txt}" \
+	    || ./venv/bin/pip install \
 	    . \
 	    .[dev] \
 	    $(test "${run_tests}" = 'false' || echo '.[test]') \
@@ -124,6 +128,7 @@ RUN python3 -m venv --system-site-packages venv \
 	    .[image] \
 	    .[audio] \
 	    .[video]; \
+	    pip freeze > requirements.new.txt; \
 	    rm -rf ~/.cache/pip
 
 # RUN pip install .
