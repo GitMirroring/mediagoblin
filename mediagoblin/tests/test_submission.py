@@ -51,10 +51,11 @@ from mediagoblin.db.base import Session
 from mediagoblin.tools import template
 from mediagoblin.media_types.image import ImageMediaManager
 from mediagoblin.media_types.pdf.processing import check_prerequisites as pdf_check_prerequisites
-from mediagoblin.media_types.video.processing import (
-    VideoProcessingManager, main_task, complementary_task, group,
-    processing_cleanup, CommonVideoProcessor)
-from mediagoblin.media_types.video.util import ACCEPTED_RESOLUTIONS
+if not SKIP_VIDEO:
+    from mediagoblin.media_types.video.processing import (
+        VideoProcessingManager, main_task, complementary_task, group,
+        processing_cleanup, CommonVideoProcessor)
+    from mediagoblin.media_types.video.util import ACCEPTED_RESOLUTIONS
 from mediagoblin.submit.lib import new_upload_entry, run_process_media
 
 from .resources import GOOD_JPG, GOOD_PNG, EVIL_FILE, EVIL_JPG, EVIL_PNG, \
