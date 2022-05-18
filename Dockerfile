@@ -2,7 +2,7 @@ ARG build_doc=false
 ARG run_tests=true
 ARG requirements_txt=
 
-FROM debian:bullseye AS base
+FROM debian:bullseye-slim AS base
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	    && apt-get install -y \
@@ -13,11 +13,12 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 # Install audio dependencies.
 	    gstreamer1.0-libav \
 	    gstreamer1.0-plugins-bad \
-	    gstreamer1.0-plugins-base \
+	    # gstreamer1.0-plugins-base \
 	    gstreamer1.0-plugins-good \
 	    gstreamer1.0-plugins-ugly \
 	    python3-gst-1.0 \
 # Install video dependencies.
+	    python3-gi \
 	    gir1.2-gst-plugins-base-1.0 \
 	    gir1.2-gstreamer-1.0 \
 	    gstreamer1.0-tools \
@@ -128,7 +129,7 @@ RUN python3 -m venv --system-site-packages venv \
 	    .[image] \
 	    .[audio] \
 	    .[video]; \
-	    pip freeze > requirements.new.txt; \
+	    ./venv/bin/pip freeze > requirements.txt; \
 	    rm -rf ~/.cache/pip
 
 # RUN pip install .
@@ -146,17 +147,19 @@ RUN test "${run_tests}" = 'false' \
 RUN test "${build_doc}" = 'false' \
 	|| make -C docs html SPHINXBUILD=../venv/bin/sphinx-build
 
-
 FROM base AS runner
 
 # RUN DEBIAN_FRONTEND=noninteractive apt-get -y remove 'lib.*-dev' \
 #	&& rm -rf /var/lib/apt/lists/*
 RUN rm -rf /var/lib/apt/lists/*
 
-# COPY --from=builder /opt/mediagoblin/venv /opt/mediagoblin
 COPY --from=builder /opt/mediagoblin /opt/mediagoblin
 COPY entrypoint.sh /opt/mediagoblin
 COPY lazyserver.sh /opt/mediagoblin
+
+RUN python3 -m venv --system-site-packages venv && \
+	./venv/bin/pip install /opt/mediagoblin*.whl; \
+	rm -rf ~/.cache/pip
 
 VOLUME [ "/srv" ]
 
