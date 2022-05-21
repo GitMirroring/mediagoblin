@@ -1,46 +1,48 @@
 ARG build_doc=false
-ARG run_tests=true
 ARG requirements_txt=
+ARG run_tests=true
 
 FROM debian:bullseye-slim AS base
 
+# We don't install -dev packages in the base image, so they don't pull down
+# build tools unecessary at runtime.
+# We install them separately in the builder stage.
+# The drawback of this is that we need to specify the ABI version of each
+# library we need, as there are no unversioned metapackage depending on them the
+# way the -dev ones do.
 RUN DEBIAN_FRONTEND=noninteractive apt-get update \
-	    && apt-get install -y \
+	    && apt-get install --no-install-recommends -y \
 	    curl \
 	    sqlite3 \
-	    python3-dev \
 	    python3-venv \
+# Those get installed automatically in the builder, so end up missing in the
+# venv, and the final image if not installed here
+	    python3-markdown \
+	    python3-mako \
+	    python3-gi \
 # Install audio dependencies.
 	    gstreamer1.0-libav \
 	    gstreamer1.0-plugins-bad \
-	    # gstreamer1.0-plugins-base \
 	    gstreamer1.0-plugins-good \
 	    gstreamer1.0-plugins-ugly \
 	    python3-gst-1.0 \
 # Install video dependencies.
-	    python3-gi \
 	    gir1.2-gst-plugins-base-1.0 \
 	    gir1.2-gstreamer-1.0 \
 	    gstreamer1.0-tools \
+	    libcairo2 \
 # Install raw image dependencies.
-#
-# Currently (March 2021), python3-py3exiv2 is only available in Debian Sid, so
-# we need to install py3exiv2 from PyPI (later on in this Dockerfile). These are
-# the build depedencies for py3exiv2.
-	    libexiv2-dev \
-	    libboost-python-dev \
+	    libexiv2-27 \
+	    libboost-python1.74.0 \
 # Install document (PDF-only) dependencies.
 # TODO: Check that PDF tests aren't skipped.
 	    poppler-utils \
-# To build pygobject
-	    libglib2.0-dev \
-	    # gobject-introspection \
-	    libgirepository1.0-dev \
-# To build python-ldap
-	    libsasl2-dev \
-	    libldap2-dev \
-# To build pycairo
-	    libcairo-dev
+# For pygobject
+	    libgirepository-1.0-1 \
+# For python-ldap
+	    libsasl2-2 \
+	    libldap-2.4-2 \
+	    && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd --system mediagoblin \
 	    && useradd --gid mediagoblin --home-dir /srv/mediagoblin mediagoblin
@@ -48,25 +50,33 @@ RUN groupadd --system mediagoblin \
 RUN mkdir /opt/mediagoblin \
 	&& chown -R www-data:www-data /opt/mediagoblin
 
+WORKDIR /opt/mediagoblin
 
 FROM base AS builder
 ARG build_doc
-ARG run_tests
+ARG build_dists
 ARG requirements_txt
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update \
-	    && apt-get install -y \
+	    && apt-get install --no-install-recommends -y \
+	    python3-dev \
+	    libexiv2-dev \
+	    libboost-python-dev \
+	    libglib2.0-dev \
+	    libgirepository1.0-dev \
+	    libsasl2-dev \
+	    libldap2-dev \
+	    libcairo-dev \
 	    pkg-config \
 	    nodejs \
 	    npm \
-	    && rm -rf /var/lib/apt/lists/*
-
-RUN npm install -g bower
+	    && rm -rf /var/lib/apt/lists/* \
+	    && npm install -g bower
 
 # Create /var/www because Bower writes some cache files into /var/www during
 # make, failing if it doesn't exist.
-RUN mkdir --mode=g+w /var/www
-RUN chown www-data:www-data /var/www
+RUN mkdir --mode=g+w /var/www \
+	&& chown www-data:www-data /var/www
 
 USER www-data
 
@@ -108,7 +118,6 @@ COPY --chown=www-data:www-data . /opt/mediagoblin
 #     && ./configure \
 #     && make
 
-WORKDIR /opt/mediagoblin
 
 RUN bower install; rm -rf ~/.bower
 
@@ -119,16 +128,17 @@ RUN python3 -m venv --system-site-packages venv \
 	    . \
 	    .[dev] \
 	    $(test "${run_tests}" = 'false' || echo '.[test]') \
+	    .[raw_image] \
+	    .[audio] \
+	    .[video] \
+	    .[ascii] \
 	    .[ldap] \
 	    .[openid] \
 # Additional Sphinx dependencies
-	    $(test "${build_doc}" = 'false' || echo '.[doc]') \
+	    $(test "${build_doc}" = 'false' || echo '.[doc]'); \
 # Install raw image library from PyPI.
 # RUN ./bin/pip install \
 # py3exiv2 \
-	    .[image] \
-	    .[audio] \
-	    .[video]; \
 	    ./venv/bin/pip freeze > requirements.txt; \
 	    rm -rf ~/.cache/pip
 
@@ -139,27 +149,23 @@ RUN ./devtools/compile_translations.sh
 # Confirm our packages version for later troubleshooting.
 # RUN ./bin/python -m pip freeze
 
-# Run the tests.
-RUN test "${run_tests}" = 'false' \
-	|| ./venv/bin/python -m pytest
-
 # Build the documentation.
 RUN test "${build_doc}" = 'false' \
 	|| make -C docs html SPHINXBUILD=../venv/bin/sphinx-build
 
 FROM base AS runner
+ARG run_tests
 
 # RUN DEBIAN_FRONTEND=noninteractive apt-get -y remove 'lib.*-dev' \
 #	&& rm -rf /var/lib/apt/lists/*
-RUN rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /opt/mediagoblin /opt/mediagoblin
 COPY entrypoint.sh /opt/mediagoblin
 COPY lazyserver.sh /opt/mediagoblin
 
-RUN python3 -m venv --system-site-packages venv && \
-	./venv/bin/pip install /opt/mediagoblin*.whl; \
-	rm -rf ~/.cache/pip
+# Run the tests.
+RUN test "${run_tests}" = 'false' \
+	|| ./venv/bin/python -m pytest
 
 VOLUME [ "/srv" ]
 
