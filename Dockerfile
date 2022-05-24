@@ -1,4 +1,5 @@
 ARG build_doc=false
+ARG build_dists=false
 ARG requirements_txt=
 ARG run_tests=true
 
@@ -153,6 +154,10 @@ RUN ./devtools/compile_translations.sh
 # Build the documentation.
 RUN test "${build_doc}" = 'false' \
 	|| make -C docs html SPHINXBUILD=../venv/bin/sphinx-build
+
+# Build a wheel
+RUN test "${build_dists}" = 'false' \
+	|| ./venv/bin/python ./setup.py sdist bdist_wheel
 
 FROM base AS runner
 ARG run_tests
