@@ -74,3 +74,5 @@ venv*
 # Mac files
 .DS_Store
 .Python
+data/*
+extlib/mediagoblin-extlib/*

@@ -1,147 +1,237 @@
-dnl configure.ac
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ([2.71])
+AC_INIT([mediagoblin], [0.13.0.dev],
+	[mediagoblin-devel@gnu.org],
+	[mediagoblin],
+	[https://mediagoblin.org])
+AC_CONFIG_MACRO_DIR([m4])
+
+dnl pkg-config is required prior to generating the configure script
+dnl make sure the macros it provides have been successfully replaced
+m4_pattern_forbid([^PKG_])
+
+# Checks for programs.
+AC_ARG_WITH([docker],
+	    [AS_HELP_STRING([--with-docker],
+			    [build a docker image @<:@default=check@:>@])],
+			    [use_docker=$withval],
+			    [use_docker=check]
+			    )
+AC_ARG_WITH([bower],
+	    [AS_HELP_STRING([--with-bower],
+			    [build a bower image @<:@default=check@:>@])],
+			    [use_bower=$withval],
+			    [use_bower=check]
+			    )
+
+AS_IF([test "$use_docker" = check],
+      [AC_CHECK_PROGS([DOCKER], [docker], [none])],
+      [test "$use_docker" = no], [DOCKER=none],
+      [DOCKER=$use_docker]
+      )
+
+AS_IF([test "$DOCKER" = none ], [
+       AX_PYTHON_DEVEL([3], [>= '3.6'])
+       # XXX: Debian: ensurepip comes as a dependency of python3-venv
+       AX_PYTHON_MODULE([ensurepip], [1])
+       AX_PYTHON_MODULE([venv], [1])
+
+       AC_PROG_AWK
+
+       AS_IF([test "$use_bower" = check],
+	     [AC_CHECK_PROGS([BOWER], [bower], [none])],
+	     [test "$use_bower" = no], [BOWER=none],
+	     [BOWER=$use_bower]
+	     )
+       AS_IF([test $BOWER = none],
+	     [AC_MSG_ERROR(bower was not found)]
+	     )
+
+       dnl
+       dnl Media type plugins [0]
+       dnl [0] https://docs.mediagoblin.org/en/master/siteadmin/media-types.html
+       dnl
+
+       PKG_PROG_PKG_CONFIG
+       AS_IF([test -z "$PKG_CONFIG"],
+	     [AC_MSG_WARN([pkg-config not found, some optional dependencies may fail to be correctly detected])]
+	     )
+
+       dnl
+       dnl mediagoblin.media_types.audio
+       dnl
+       BUILD_AUDIO=yes
+       # XXX: Debian: libgstreamer-plugins-base1.0-dev
+       audio_libs="gstreamer-plugins-base-1.0"
+       other_audio_dep="gst-libav1.0 gst-plugins-good1.0 gst-python1.0"
+       AC_MSG_NOTICE([mediagoblin.media_types.audio: $audio_libs $other_audio_dep])
+       PKG_CHECK_MODULES([audio_libs],
+			 [$audio_libs],
+			 [],
+			 [BUILD_AUDIO=no]
+			 )
+       AS_IF([test $BUILD_AUDIO = yes],
+	     [
+	      GST_LIBDIR=`$PKG_CONFIG --variable=libdir gstreamer-plugins-base-1.0`
+	      LIBS="-L${GST_LIBDIR}/gstreamer-1.0/"
+	      AC_CHECK_LIB([gstlibav],
+			   [gst_plugin_libav_get_desc],
+			   [],
+			   [BUILD_AUDIO=no]
+			   )
+	      # XXX: Debian: gstreamer1.0-plugins-good
+	      AC_CHECK_LIB([gstlame],
+			   [gst_plugin_lame_get_desc],
+			   [],
+			   [BUILD_AUDIO=no]
+			   )
+	     ]
+	    )
+       AX_PYTHON_MODULE([gi])
+       AX_PYTHON_GI([Gst], [1.0])
+       AS_IF([test "$HAVE_PYTHON_GI_Gst" = no],
+	     [BUILD_AUDIO=no]
+	     )
+       AS_IF([test $HAVE_PYMOD_GI = no],
+	     [BUILD_AUDIO=no]
+	     )
+       AS_IF([test $BUILD_AUDIO = no],
+	     [AC_MSG_WARN(mediagoblin.media_types.audio: some dependencies missing)]
+	     )
+
+       dnl
+       dnl mediagoblin.media_types.video
+       dnl
+       AS_IF([test $BUILD_AUDIO = yes],
+	     [
+	      BUILD_VIDEO=yes
+	      # XXX: gstreamer1.0-tools no longer seems needed
+	      # Also needs audio libs
+	      video_libs="cairo gobject-introspection-1.0"
+	      AC_MSG_NOTICE([mediagoblin.media_types.video: $video_libs])
+	      PKG_CHECK_MODULES([video_libs],
+				[$video_libs],
+				[],
+				[BUILD_VIDEO=no])
+	      # gir1.2-gst-plugins-base-1.0
+	      AX_PYTHON_GI([GstVideo], [1.0])
+	      AS_IF([test "$HAVE_PYTHON_GI_GstVideo" = no],
+		    [BUILD_VIDEO=no]
+		    )
+	      AS_IF([test $BUILD_VIDEO = no],
+		    [AC_MSG_WARN(mediagoblin.media_types.video: some dependencies missing)]
+		    )
+	      ],
+	      [
+	       BUILD_VIDEO=no
+	       AC_MSG_WARN(mediagoblin.media_types.video: audio dependencies needed)]
+	      )
+
+       dnl
+       dnl mediagoblin.media_types.raw_image
+       dnl
+       other_raw_image_libs="libboost-python"
+       raw_image_libs="exiv2"
+       AC_MSG_NOTICE([mediagoblin.media_types.raw_image: $raw_image_libs])
+       BUILD_RAW_IMAGE=yes
+
+       AX_BOOST_PYTHON
+       dnl XXX dependent on a variable internal to the macro
+       AS_IF([test  "$ac_cv_boost_python" != yes ],
+	     [BUILD_RAW_IMAGE=no]
+	    )
+       PKG_CHECK_MODULES([raw_image_libs],
+			 [$raw_image_libs],
+			 [],
+			 [BUILD_RAW_IMAGE=no]
+			 )
+       AS_IF([test $BUILD_RAW_IMAGE = no],
+	     [AC_MSG_WARN(mediagoblin.media_types.raw_image: some dependencies missing)]
+	     )
+
+       dnl
+       dnl mediagoblin.media_types.pdf
+       dnl
+       pdf_cmds="pdfinfo pdfcairo / unoconv (optional, for LibreOffice documents)"
+       AC_MSG_NOTICE([mediagoblin.media_types.pdf: $pdf_cmds])
+       AC_CHECK_PROG([PDFINFO], [pdfinfo], [yes], [no])
+       AC_CHECK_PROG([PDFCAIRO], [pdfcairo], [yes], [no])
+       AC_CHECK_PROG([UNOCONV], [unoconv], [yes], [no])
+       AS_IF([test "$PDFINFO" = no || test "$PDFCAIRO" = no && test "$UNOCONV" = no],
+	     [
+	      BUILD_PDF=no
+	      AC_MSG_WARN(mediagoblin.media_types.pdf: some dependencies missing)
+	     ],
+	     [BUILD_PDF=yes]
+	    )
+
+       dnl
+       dnl mediagoblin.media_types.stl
+       dnl
+       stl_cmds="blender"
+       AC_MSG_NOTICE([mediagoblin.media_types.stl: $stl_cmds])
+       AC_CHECK_PROG([BLENDER], [blender], [yes], [no])
+       AS_IF([test $BLENDER = no],
+	     [
+	      BUILD_STL=no
+	      AC_MSG_WARN(mediagoblin.media_types.stl: some dependencies missing)
+	     ],
+	     [BUILD_STL=yes]
+	    )
+
+
 dnl
-dnl Copyright 2012, 2013 Brandon Invergo <brandon@invergo.net>
-dnl           2014 MediaGoblin contributors (see MediaGoblin's AUTHORS)
+dnl Core plugins [0]
+dnl [0] https://docs.mediagoblin.org/en/master/#part-2-core-plugin-documentation
 dnl
-dnl Copying and distribution of this file, with or without modification,
-dnl are permitted in any medium without royalty provided the copyright
-dnl notice and this notice are preserved.  This file is offered as-is,
-dnl without any warranty.
+       dnl
+       dnl mediagoblin.plugins.ldap
+       dnl
+       dnl XXX: python-ldap needs libldap_r from OpenLDAP<2.5.2 to build
+       dnl https://github.com/python-ldap/python-ldap/issues/432
+       other_ldap_dep="ldap"
+       ldap_libs="libsasl2"
+       AC_MSG_NOTICE([mediagoblin.plugins.ldap: $other_ldap_dep $ldap_libs])
+       BUILD_LDAP=yes
+       AC_CHECK_LIB([ldap_r],
+		    [ldap_open],
+		    [],
+		    [BUILD_LDAP=no]
+		    )
+       PKG_CHECK_MODULES([ldap_libs],
+			 [$ldap_libs],
+			 [],
+			 [BUILD_LDAP=no]
+			 )
+       AS_IF([test $BUILD_LDAP = no],
+	     [AC_MSG_WARN(mediagoblin.plugins.ldap: some dependencies missing)]
+	     )
 
-dnl#########
-dnl README #
-dnl#########
-dnl
-dnl This is a basic Autoconf configure.ac file for Python-based
-dnl projects. It is not intended to be used as-is, but rather to be
-dnl modified to the specific needs of the project.
-dnl
-dnl Lines prefixed with "dnl" are comments that are automatically
-dnl removed by Autoconf/M4, thus they will not appear in the generated
-dnl configure script (see the M4 documentation for more information). 
-dnl Such comments are used in this file to communicate information to 
-dnl you, the developer. In some cases, the comments contain extra 
-dnl macros that you might consider including in your configure script. 
-dnl If you wish to include them, simply remove the "dnl" from the 
-dnl beginning of the line.
-dnl
-dnl Lines prefixed with "#" are comments that will appear in the 
-dnl generated configure script. These comments are thus used to clarify
-dnl to the user what is happening in that script
+        AC_MSG_NOTICE([Plugins with available dependencies:])
+cat << EOF
+* mediagoblin.media_types.audio:	$BUILD_AUDIO
+* mediagoblin.media_types.video:	$BUILD_VIDEO
+* mediagoblin.media_types.raw_image:	$BUILD_RAW_IMAGE
+* mediagoblin.media_types.pdf:		$BUILD_PDF
+* mediagoblin.media_types.stl:		$BUILD_STL
+* mediagoblin.plugins.ldap:		$BUILD_LDAP
 
-dnl######################
-dnl Package Information #
-dnl######################
+EOF
 
-dnl----
-dnl Initialize Autoconf with the package metadata
-dnl The arguments have been set via the project's PKG-INFO file
-dnl and correspond to:
-dnl
-dnl 1) package name (i.e. foo)
-dnl 2) package version (i.e. 1.2)
-dnl 3) bug/info/project email address (i.e. bug-foo@gnu.org)
-dnl----
-dnl
+       ],
+       [AC_MSG_NOTICE([preparing a containerised build using ${DOCKER}])]
+       )
 
-dnl # valid version formats:
-dnl # * x.y      - final release
-dnl # * x.ya1    - alpha 1
-dnl # * x.yb1    - beta 1
-dnl # * x.yrc1   - release candidate 1
-dnl # * x.y.dev  - dev
-dnl 
-dnl # see http://www.python.org/dev/peps/pep-0386/
+AC_SUBST([BUILD_AUDIO], [$BUILD_AUDIO])
+AC_SUBST([BUILD_VIDEO], [$BUILD_VIDEO])
+AC_SUBST([BUILD_RAW_IMAGE], [$BUILD_RAW_IMAGE])
+AC_SUBST([BUILD_PDF], [$BUILD_PDF])
+AC_SUBST([BUILD_STL], [$BUILD_STL])
+AC_SUBST([BUILD_LDAP], [$BUILD_LDAP])
 
-AC_INIT([mediagoblin], [0.14.0.dev], [mediagoblin-devel@gnu.org])
-
-
-dnl----
-dnl Load macros from the m4/ directory. If you plan to write new 
-dnl macros, put them in files in this directory.
-dnl----
-dnl
-dnl AC_CONFIG_MACRO_DIR([m4])
-
-
-dnl # The default prefix should be changed from /usr/local. Set it, as in
-dnl # the documentation, to /srv/mediagoblin.example.org/mediagoblin/
-dnl AC_PREFIX_DEFAULT([`pwd`])
-
-
-dnl###########################
-dnl Program/command support  #
-dnl###########################
-dnl
-dnl In this section, we check for the presence of important commands
-dnl and programs.
-
-AC_CHECK_PROGS([PYTHON], [python3], [none])
-AS_IF([test "$PYTHON" = none], [AC_MSG_FAILURE([No acceptable python3 could be found])])
-
-dnl----
-dnl With the following set of macros, we implement an option 
-dnl "--with-virtualenv", which the user can pass to the configure 
-dnl script in order to install to a Virtualenv (AC_ARG_WITH). If the 
-dnl option is specified by the user, then we check if the program is
-dnl available, checking both for "virtualenv" and "virtualenv2" 
-dnl (AC_CHECK_PROGS)
-dnl----
-dnl
-# Support doing development in a virtualenv via the --with-virtualenv 
-# configure flag
-AC_ARG_WITH([virtualenv],
-  [AS_HELP_STRING([--without-virtualenv], [do not install a Python virtualenv for the user])],
-  [],
-  [with_virtualenv=yes])
-
-if [  `$PYTHON -c "try: import venv
-except: exit(1)"` ]; then
-  VIRTUALENV=yes
-else
-  VIRTUALENV=no
-fi
-
-AS_IF(
-  [test "$with_virtualenv" = yes -a "$VIRTUALENV" = no], [AC_MSG_FAILURE([--with-virtualenv given but Python venv module could not be found])],
-  [test "$with_virtualenv" = no], [AC_SUBST([VIRTUALENV], [no])]
-)
-
-AC_ARG_VAR([VIRTUALENV_FLAGS], [flags to pass to the virtualenv command])
-
-dnl----
-dnl If the program uses sphinx-build to build documentation, uncomment 
-dnl this to create a SPHINXBUILD variable in the Makefile pointing to 
-dnl the program. Thus, the user would specify 
-dnl SPHINXBUILD=/path/to/sphinx-build as an argument to the configure
-dnl script. Since building the documentation should be optional, just
-dnl print a warning. If the program uses some other documentation
-dnl system, you can do something similar with it.
-dnl----
-dnl
-dnl # Check for sphinx-build
-dnl AC_CHECK_PROGS([SPHINXBUILD], [sphinx-build sphinx-build3 sphinx-build2], [no])
-dnl AS_IF([test "x$SPHINXBUILD" = xno], 
-dnl     AC_MSG_WARN(sphinx-build is required to build documentation))
-
-
-dnl----
-dnl These two are standard Autoconf macros which check for the 
-dnl presence of some programs that we will use in the Makefile.
-dnl----
-dnl
-AC_PROG_MKDIR_P
-AC_PROG_INSTALL	    
-
-dnl--MediaGoblin specific commands/variables ------------------------
-
-
-dnl#########
-dnl Finish #
-dnl#########
-
-dnl Define the files to be configured
-AC_CONFIG_FILES([Makefile])
-
-dnl Generate config.status
+AC_CONFIG_FILES([Makefile
+		 mediagoblin/_version.py])
 AC_OUTPUT
+
