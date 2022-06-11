@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  paste:
+    image: omehani/mediagoblin
+    build:
+      context: .
+
+  nginx:
+    image: omehani/mediagoblin-nginx
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
