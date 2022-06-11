@@ -22,6 +22,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	    python3-gi \
 # Install audio dependencies.
 	    gstreamer1.0-libav \
+	    gstreamer1.0-plugins-base \
 	    gstreamer1.0-plugins-bad \
 	    gstreamer1.0-plugins-good \
 	    gstreamer1.0-plugins-ugly \
@@ -31,17 +32,16 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	    gir1.2-gstreamer-1.0 \
 	    gstreamer1.0-tools \
 	    libcairo2 \
+	    libgirepository-1.0-1 \
 # Install raw image dependencies.
-	    libexiv2-27 \
 	    libboost-python1.74.0 \
+	    libexiv2-27 \
 # Install document (PDF-only) dependencies.
 # TODO: Check that PDF tests aren't skipped.
 	    poppler-utils \
-# For pygobject
-	    libgirepository-1.0-1 \
 # For python-ldap
-	    libsasl2-2 \
 	    libldap-2.4-2 \
+	    libsasl2-2 \
 	    && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd --system mediagoblin \
@@ -63,12 +63,13 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	    libexiv2-dev \
 	    libboost-python-dev \
 	    libglib2.0-dev \
+	    libgstreamer1.0-dev \
+	    libgstreamer-plugins-base1.0-dev \
 	    libgirepository1.0-dev \
+	    libcairo-dev \
 	    libsasl2-dev \
 	    libldap2-dev \
-	    libcairo-dev \
 	    pkg-config \
-	    nodejs \
 	    npm \
 	    && rm -rf /var/lib/apt/lists/* \
 	    && npm install -g bower
