@@ -1,8 +1,3 @@
 #!/bin/sh
-
-set -e
-
-aclocal -I m4 --install
-autoreconf -fvi
-
-git submodule update --init
+echo '*** This script is deprecated, please use autogen.sh instead' >&2
+./autogen.sh

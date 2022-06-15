@@ -54,7 +54,7 @@ tasks:
       set -x
       cd mediagoblin
       git show --oneline --no-patch
-      ./bootstrap.sh
+      ./autogen.sh
       ./configure
       make
 

@@ -254,7 +254,7 @@ Clone the MediaGoblin repository and set up the git submodules::
 
 Set up the environment::
 
-    $ ./bootstrap.sh
+    $ ./autogen.sh
     $ ./configure
     $ make
 

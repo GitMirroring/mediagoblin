@@ -48,7 +48,7 @@
 ;;; First time setup only, run:
 ;;;
 ;;;   git submodule update --init
-;;;   ./bootstrap.sh
+;;;   ./autogen.sh
 ;;;   ./configure --without-virtualenv
 ;;;   make
 ;;;

@@ -50,7 +50,7 @@ Upgrade
 
 5. Recreate the virtual environment and install MediaGoblin::
 
-     ./bootstrap.sh && ./configure && make
+     ./autogen.sh && ./configure && make
 
    You may need to update file permissions as mentioned in ":doc:`deploying`".
 

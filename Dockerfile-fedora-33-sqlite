@@ -77,7 +77,7 @@ USER www-data
 RUN git clone --depth=1 https://git.sr.ht/~mediagoblin/mediagoblin --branch master .
 RUN git show --oneline --no-patch
 
-RUN ./bootstrap.sh
+RUN ./autogen.sh
 RUN ./configure
 RUN make
 
