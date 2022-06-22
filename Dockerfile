@@ -1,9 +1,23 @@
 ARG build_doc=false
-ARG build_dists=false
-ARG requirements_txt=
+ARG build_dist=false
 ARG run_tests=true
 
+ARG audio_support=true
+ARG video_support=true
+ARG raw_image_support=true
+ARG pdf_support=true
+ARG document_support=false
+ARG stl_support=false
+ARG ldap_support=true
+
 FROM debian:bullseye-slim AS base
+ARG audio_support
+ARG video_support
+ARG raw_image_support
+ARG pdf_support
+ARG document_support
+ARG stl_support
+ARG ldap_support
 
 # We don't install -dev packages in the base image, so they don't pull down
 # build tools unecessary at runtime.
@@ -17,32 +31,48 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	    sqlite3 \
 	    python3-venv \
 # Those get installed automatically in the builder, so end up missing in the
-# venv, and the final image if not installed here
+# venv, and the final image, if not installed here
 	    python3-markdown \
 	    python3-mako \
-	    python3-gi \
 # Install audio dependencies.
-	    gstreamer1.0-libav \
-	    gstreamer1.0-plugins-base \
-	    gstreamer1.0-plugins-bad \
-	    gstreamer1.0-plugins-good \
-	    gstreamer1.0-plugins-ugly \
-	    python3-gst-1.0 \
+	    $(test "${audio_support}" = 'false' \
+			    && test "${video_support}" = 'false' || echo '\
+		    gstreamer1.0-libav \
+		    gstreamer1.0-plugins-base \
+		    gstreamer1.0-plugins-bad \
+		    gstreamer1.0-plugins-good \
+		    gstreamer1.0-plugins-ugly \
+		    python3-gst-1.0\n\
+	    ') \
 # Install video dependencies.
-	    gir1.2-gst-plugins-base-1.0 \
-	    gir1.2-gstreamer-1.0 \
-	    gstreamer1.0-tools \
-	    libcairo2 \
-	    libgirepository-1.0-1 \
+	    $(test "${video_support}" = 'false' || echo '\
+		    gir1.2-gst-plugins-base-1.0 \
+		    gir1.2-gstreamer-1.0 \
+		    gstreamer1.0-tools \
+		    libcairo2 \
+		    libgirepository-1.0-1 \
+	    ') \
 # Install raw image dependencies.
-	    libboost-python1.74.0 \
-	    libexiv2-27 \
+	    $(test "${raw_image_support}" = 'false' || echo '\
+		    libboost-python1.74.0 \
+		    libexiv2-27 \
+	    ') \
 # Install document (PDF-only) dependencies.
-# TODO: Check that PDF tests aren't skipped.
-	    poppler-utils \
+	    $(test "${pdf_support}" = 'false' || echo '\
+		    poppler-utils \
+	    ') \
+	    $(test "${document_support}" = 'false' || echo '\
+		    unoconv \
+	    ') \
+# For STL files
+	    $(test "${stl_support}" = 'false' || echo '\
+		    blender \
+	    ') \
 # For python-ldap
-	    libldap-2.4-2 \
-	    libsasl2-2 \
+	    $(test "${ldap_support}" = 'false' || echo '\
+		    libldap-2.4-2 \
+		    libsasl2-2 \
+	    ') \
 	    && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd --system mediagoblin \
@@ -55,23 +85,38 @@ WORKDIR /opt/mediagoblin
 
 FROM base AS builder
 ARG build_doc
-ARG build_dists
-ARG requirements_txt
+ARG build_dist
+
+ARG audio_support
+ARG video_support
+ARG raw_image_support
+ARG pdf_support
+ARG document_support
+ARG stl_support
+ARG ldap_support
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	    && apt-get install --no-install-recommends -y \
+	    git \
 	    python3-dev \
-	    libexiv2-dev \
-	    libboost-python-dev \
-	    libglib2.0-dev \
-	    libgstreamer1.0-dev \
-	    libgstreamer-plugins-base1.0-dev \
-	    libgirepository1.0-dev \
-	    libcairo-dev \
-	    libsasl2-dev \
-	    libldap2-dev \
 	    pkg-config \
 	    npm \
+	    $(test "${audio_support}" = 'false' \
+	    && test "${video_support}" = 'false' || echo '\
+		    libglib2.0-dev \
+		    libgstreamer1.0-dev \
+		    libgstreamer-plugins-base1.0-dev \
+		    libgirepository1.0-dev \
+		    libcairo-dev \
+	    ') \
+	    $(test "${raw_image_support}" = 'false' || echo '\
+		    libexiv2-dev \
+		    libboost-python-dev \
+	    ') \
+	    $(test "${ldap_support}" = 'false' || echo '\
+		    libsasl2-dev \
+		    libldap2-dev \
+	    ') \
 	    && rm -rf /var/lib/apt/lists/* \
 	    && npm install -g bower
 
@@ -121,43 +166,17 @@ COPY --chown=www-data:www-data . /opt/mediagoblin
 #     && make
 
 
-RUN bower install; rm -rf ~/.bower
-
-RUN python3 -m venv --system-site-packages venv \
-	    && test -n "${requirements_txt}" \
-	    && ./venv/bin/pip install -r "${requirements_txt}" \
-	    || ./venv/bin/pip install \
-	    . \
-	    .[dev] \
-	    $(test "${run_tests}" = 'false' || echo '.[test]') \
-	    .[raw_image] \
-	    .[audio] \
-	    .[video] \
-	    .[ascii] \
-	    .[ldap] \
-	    .[openid] \
-# Additional Sphinx dependencies
-	    $(test "${build_doc}" = 'false' || echo '.[doc]'); \
-# Install raw image library from PyPI.
-# RUN ./bin/pip install \
-# py3exiv2 \
-	    ./venv/bin/pip freeze > requirements.txt; \
-	    rm -rf ~/.cache/pip
-
-# RUN pip install .
-
-RUN ./devtools/compile_translations.sh
-
-# Confirm our packages version for later troubleshooting.
-# RUN ./bin/python -m pip freeze
+RUN ./configure \
+	&& make build \
+	&& rm -rf ~/.cache/pip
 
 # Build the documentation.
 RUN test "${build_doc}" = 'false' \
-	|| make -C docs html SPHINXBUILD=../venv/bin/sphinx-build
+	|| make docs
 
 # Build a wheel
-RUN test "${build_dists}" = 'false' \
-	|| ./venv/bin/python ./setup.py sdist bdist_wheel
+RUN test "${build_dist}" = 'false' \
+	|| make dist
 
 FROM base AS runner
 ARG run_tests
@@ -169,9 +188,11 @@ COPY --from=builder /opt/mediagoblin /opt/mediagoblin
 COPY entrypoint.sh /opt/mediagoblin
 COPY lazyserver.sh /opt/mediagoblin
 
-# Run the tests.
+# Run the tests in the final container.
+# We can't use make here, as it's not actually installed.
 RUN test "${run_tests}" = 'false' \
-	|| ./venv/bin/python -m pytest
+	|| ( ./venv/bin/pip install .[test] \
+		&& ./venv/bin/python -m pytest)
 
 VOLUME [ "/srv" ]
 

@@ -32,6 +32,8 @@ EXTLIB_DIR=$(SRC_DIR)/extlib
 I18N_DIR=$(SRC_DIR)/mediagoblin/i18n
 DOCS_BUILD_DIR=$(SRC_DIR)/docs/build
 
+DOCKER_PATH=/opt/mediagoblin
+
 EXTLIB_JS=\
 	 $(EXTLIB_DIR)/jquery \
 	 $(EXTLIB_DIR)/leaflet \
@@ -45,11 +47,12 @@ VENV_PYTHON=$(VENV_DIR)/bin/python
 VENV_PIP=$(VENV_DIR)/bin/pip
 VENV_PYTEST=$(VENV_DIR)/bin/pytest
 VENV_PYBABEL=$(VENV_DIR)/bin/pybabel
-VENV_EDITABLE=-e
+VENV_SPHINX_BUILD=$(VENV_DIR)/bin/sphinx-build
+VENV_EDITABLE=
 VENV_DIST_INFO=$(VENV_DIR)/lib/python$(PYTHON_VERSION)/site-packages/$(PACKAGE_DISTNAME).dist-info/
 EGG_INFO=$(BUILD_DIR)/mediagoblin.egg-info
 
-PACKAGE_WHEEL=$(BUILD_DIR)/dist/$(PACKAGE_DISTNAME)-py3-none-any.whl
+PACKAGE_WHEEL=dist/$(PACKAGE_DISTNAME)0-py3-none-any.whl
 
 all: build check
 dist: $(PACKAGE_WHEEL)
@@ -89,9 +92,10 @@ $(VENV_DIST_INFO): $(VENV_PIP) $(SRC_DIR)/setup.cfg
 
 # XXX: add to docker
 docs: $(DOCS_BUILD_DIR)
-$(DOCS_BUILD_DIR): $(VENV_PIP)
+$(DOCS_BUILD_DIR): $(VENV_SPHINX_BUILD)
+	$(MAKE) -C docs html SPHINXBUILD=$(VENV_SPHINX_BUILD)
+$(VENV_SPHINX_BUILD): $(VENV_PIP)
 	$(VENV_PIP) install $(SRC_DIR)[doc]
-	$(MAKE) -C docs html SPHINXBUILD=../venv/bin/sphinx-build
 
 $(VENV_PYTHON) $(VENV_PIP): $(VENV_DIR)
 $(VENV_DIR):
@@ -103,7 +107,7 @@ $(VENV_DIR):
 	# idea.
 	$(VENV_PIP) install 'pip>=20.2.4,<=24.0'
 
-$(VENV_PYTEST): $(VENV_DIST_INFO)
+$(VENV_PYTEST): $(VENV_PIP) $(SRC_DIR)/setup.cfg
 	$(VENV_PIP) install $(SRC_DIR)[test]
 
 $(PACKAGE_WHEEL): $(SRC_DIR)/setup.py $(VENV_DIST_INFO)
@@ -117,22 +121,31 @@ build: $(PACKAGE_DISTNAME).docker-stamp
 $(PACKAGE_DISTNAME).docker-stamp:
 	$(DOCKER) build \
 		--build-arg build_doc=true \
-		--build-arg build_dists=true \
+		--build-arg build_dist=true \
 		--build-arg run_tests=false \
 		--tag $(PACKAGE_DISTNAME) \
 		.
 	echo $(PACKAGE_DISTNAME) > $(@)
 
+# make is not installed in the final container
 check: $(PACKAGE_DISTNAME).docker-stamp
-	$(DOCKER) run -it --rm $(PACKAGE_DISTNAME) make test
+	$(DOCKER) run -it --rm -w $(DOCKER_PATH) \
+		--entrypoint bash $(PACKAGE_DISTNAME) -c ' \
+		./venv/bin/pip install $(DOCKER_PATH)[test] \
+		&& ./venv/bin/python -m pytest '
 
-$(PACKAGE_WHEEL): cp-$(PACKAGE_WHEEL)
+docs: COPY_PATH=docs/build
+docs: cp-docs
+
+$(PACKAGE_WHEEL): COPY_PATH=$(PACKAGE_WHEEL)
+$(PACKAGE_WHEEL): cp-dist
 
 # Generic target to copy paths out of the Docker image
 cp-%: $(PACKAGE_DISTNAME).docker-stamp
-	id=$($(DOCKER) run -it $(PACKAGE_DISTNAME) make dist); \
-	   $(DOCKER) cp ${id}:$(*) $(*); \
-	   $(DOCKER) rm -v ${id}
+	mkdir -p $$(dirname $(COPY_PATH))
+	id=$$($(DOCKER) create $(PACKAGE_DISTNAME)); \
+	   $(DOCKER) cp $${id}:$(DOCKER_PATH)/$(COPY_PATH) $(COPY_PATH); \
+	   $(DOCKER) rm -v $${id} >/dev/null
 
 clean-docker:
 	-$(DOCKER) rmi $(PACKAGE_DISTNAME)
