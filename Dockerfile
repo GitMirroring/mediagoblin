@@ -19,6 +19,10 @@ ARG document_support
 ARG stl_support
 ARG ldap_support
 
+COPY glib-networking-fake-DEBIAN-control /tmp/glib-networking-fake/DEBIAN/control
+RUN dpkg-deb -b /tmp/glib-networking-fake . \
+	&& dpkg -i ./glib-networking-fake_*.deb
+
 # We don't install -dev packages in the base image, so they don't pull down
 # build tools unecessary at runtime.
 # We install them separately in the builder stage.

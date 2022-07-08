@@ -1,0 +1,11 @@
+Package: glib-networking-fake
+Version: 2.66.0-2
+Section: libs
+Priority: optional
+Architecture: amd64
+Depends:
+Provides: glib-networking (= 2.66.0-1)
+Suggests:
+Conflicts: glib-networking
+Maintainer: Mediagoblin developers <mediagoblin-devel@gnu.org>
+Description: Fake package satisfying glib-networking
