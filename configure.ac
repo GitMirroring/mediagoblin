@@ -154,12 +154,12 @@ AS_IF([test "$DOCKER" = none ], [
        dnl
        dnl mediagoblin.media_types.pdf
        dnl
-       pdf_cmds="pdfinfo pdfcairo / unoconv (optional, for LibreOffice documents)"
+       pdf_cmds="pdfinfo pdftocairo / unoconv (optional, for LibreOffice documents)"
        AC_MSG_NOTICE([mediagoblin.media_types.pdf: $pdf_cmds])
        AC_CHECK_PROG([PDFINFO], [pdfinfo], [yes], [no])
-       AC_CHECK_PROG([PDFCAIRO], [pdfcairo], [yes], [no])
+       AC_CHECK_PROG([PDFTOCAIRO], [pdftocairo], [yes], [no])
        AC_CHECK_PROG([UNOCONV], [unoconv], [yes], [no])
-       AS_IF([test "$PDFINFO" = no || test "$PDFCAIRO" = no && test "$UNOCONV" = no],
+       AS_IF([test "$PDFINFO" = no || test "$PDFTOCAIRO" = no && test "$UNOCONV" = no],
 	     [
 	      BUILD_PDF=no
 	      AC_MSG_WARN(mediagoblin.media_types.pdf: some dependencies missing)
