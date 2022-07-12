@@ -6,7 +6,7 @@ ADMIN_EMAIL=${ADMIN_EMAIL:-admin@example.com}
 
 CELERY_ALWAYS_EAGER=${CELERY_ALWAYS_EAGER:-false}
 BROKER_URL=${BROKER_URL:-}
-PLUGINS=${PLUGINS:-[[mediagoblin.plugins.geolocation]]\\n[[mediagoblin.plugins.basic_auth]]\\n[[mediagoblin.plugins.processing_info]]\\n[[mediagoblin.media_types.image]]\\n[[mediagoblin.media_types.audio]]\\n[[mediagoblin.media_types.video]]}
+PLUGINS=${PLUGINS:-}
 
 # TODO:
 # sql_engine = postgresql:///mediagoblin
@@ -36,10 +36,11 @@ log () {
 sudo () {
 	USER=${1}
 	shift
-	CMD="${@}"
+	CMD="${*}"
 	su "${USER}" -c "${CMD}"
 }
 
+# shellcheck disable=SC1091
 . "${VENV_PATH}/bin/activate"
 
 for CONFIG in $PASTE_CONFIG $MG_CONFIG; do
@@ -63,11 +64,13 @@ BROKER_URL = ${BROKER_URL}\\
 " "${MG_CONFIG}"
 	fi
 
-	log "Configuring plugins ..."
-	sed -i '/\[plugins\]/,$d' ${MG_CONFIG}
-	echo "[plugins]\n${PLUGINS}" \
-		| sed 's/\\n/\n/' \
-		>> "${MG_CONFIG}"
+	if [ -n "${PLUGINS}" ]; then
+		log "Configuring plugins ..."
+		sed -i '/\[plugins\]/,$d' ${MG_CONFIG}
+		printf "[plugins]\n%s" "${PLUGINS}" \
+			| sed 's/\\n/\n/g' \
+			>> "${MG_CONFIG}"
+	fi
 fi
 
 if [ "${SKIP_MIGRATE:-false}" = "true" ]; then
