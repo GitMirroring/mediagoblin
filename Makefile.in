@@ -2,9 +2,10 @@ PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
 PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
-PACKAGE_DISTNAME = ${PACKAGE_NAME}-${PACKAGE_VERSION}
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
+PACKAGE_DISTNAME = ${PACKAGE_NAME}-${PACKAGE_VERSION}
+PACKAGE_DOCKER_IMAGE = ${PACKAGE_NAME}:${PACKAGE_VERSION}
 
 DOCKER=@DOCKER@
 
@@ -123,14 +124,14 @@ $(PACKAGE_DISTNAME).docker-stamp:
 		--build-arg build_doc=true \
 		--build-arg build_dist=true \
 		--build-arg run_tests=false \
-		--tag $(PACKAGE_DISTNAME) \
+		--tag $(PACKAGE_DOCKER_IMAGE) \
 		.
-	echo $(PACKAGE_DISTNAME) > $(@)
+	echo $(PACKAGE_DOCKER_IMAGE) > $(@)
 
 # make is not installed in the final container
 check: $(PACKAGE_DISTNAME).docker-stamp
 	$(DOCKER) run -it --rm -w $(DOCKER_PATH) \
-		--entrypoint bash $(PACKAGE_DISTNAME) -c ' \
+		--entrypoint bash $(PACKAGE_DOCKER_IMAGE) -c ' \
 		./venv/bin/pip install $(DOCKER_PATH)[test] \
 		&& ./venv/bin/python -m pytest '
 
@@ -143,12 +144,12 @@ $(PACKAGE_WHEEL): cp-dist
 # Generic target to copy paths out of the Docker image
 cp-%: $(PACKAGE_DISTNAME).docker-stamp
 	mkdir -p $$(dirname $(COPY_PATH))
-	id=$$($(DOCKER) create $(PACKAGE_DISTNAME)); \
+	id=$$($(DOCKER) create $(PACKAGE_DOCKER_IMAGE)); \
 	   $(DOCKER) cp $${id}:$(DOCKER_PATH)/$(COPY_PATH) $(COPY_PATH); \
 	   $(DOCKER) rm -v $${id} >/dev/null
 
 clean-docker:
-	-$(DOCKER) rmi $(PACKAGE_DISTNAME)
+	-$(DOCKER) rmi $(PACKAGE_DOCKER_IMAGE)
 	rm -f $(PACKAGE_DISTNAME).docker-stamp
 clean: clean-docker
 
