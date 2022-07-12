@@ -55,6 +55,10 @@ Dependencies
 MediaGoblin has the following core dependencies:
 
 - Python 3.7+
+
+=======
+.. todo: shtrom update this section
+
 - `lxml <http://lxml.de/>`_
 - `git <http://git-scm.com/>`_
 - `SQLite <http://www.sqlite.org/>`_ or `PostgreSQL <http://www.postgresql.org/>`_
@@ -105,6 +109,8 @@ server and RabbitMQ to store the media processing queue::
 
 Configure PostgreSQL
 ~~~~~~~~~~~~~~~~~~~~
+
+.. todo: shtrom test this section
 
 .. note::
 
