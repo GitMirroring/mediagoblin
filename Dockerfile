@@ -198,7 +198,9 @@ RUN test "${run_tests}" = 'false' \
 	|| ( ./venv/bin/pip install .[test] \
 		&& ./venv/bin/python -m pytest)
 
-VOLUME [ "/srv" ]
+# XXX: don't make this a volume by default. Otherwise, new anonymous volumes are
+# created, and not cleaned, for every new container getting created.
+#VOLUME [ "/srv" ]
 
 WORKDIR /srv
 
