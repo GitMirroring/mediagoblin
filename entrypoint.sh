@@ -51,7 +51,8 @@ for CONFIG in $PASTE_CONFIG $MG_CONFIG; do
 	fi
 done
 
-if [ "${SKIP_RECONFIG:-true}" = "true" ]; then
+if [ "${SKIP_RECONFIG:-true}" = "true" ] \
+	&& [ "${FORCE_RECONFIG:-false}" = "false" ]; then
 	log "Skipping reconfiguration ..."
 else
 
