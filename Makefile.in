@@ -5,7 +5,8 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PACKAGE_DISTNAME = ${PACKAGE_NAME}-${PACKAGE_VERSION}
-PACKAGE_DOCKER_IMAGE = ${PACKAGE_NAME}:${PACKAGE_VERSION}
+PACKAGE_DOCKER_REPO = mediagoblin
+PACKAGE_DOCKER_IMAGE = $(PACKAGE_DOCKER_REPO)/${PACKAGE_NAME}:${PACKAGE_VERSION}
 
 DOCKER=@DOCKER@
 
@@ -160,6 +161,7 @@ clean: clean-pycache clean-docs clean-i18n
 	rm -rf $(BUILD_DIR)/dist
 	rm -rf $(BUILD_DIR)/build
 	rm -rf $(VENV_DIR)
+	rm -rf docker-compose.build.yml docker-compose.ecs.yml docker-compose.lazyserver.yml docker-compose.yml
 	rm -f $(BUILD_DIR)/config.h $(BUILD_DIR)/config.log $(BUILD_DIR)/config.status
 
 clean-pycache:

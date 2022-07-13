@@ -3,9 +3,9 @@ version: '3'
 
 services:
   lazyserver:
-    image: omehani/mediagoblin
+    image: mediagoblin/mediagoblin:@PACKAGE_VERSION@
     ports:
-      - "8080:6543"
+      - "6543:6543"
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:6543" ]
       timeout: 30s

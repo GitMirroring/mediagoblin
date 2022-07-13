@@ -2,12 +2,12 @@ version: '3'
 
 services:
   paste:
-    image: omehani/mediagoblin
+    image: mediagoblin/mediagoblin:@PACKAGE_VERSION@
     build:
       context: .
 
   nginx:
-    image: omehani/mediagoblin-nginx
+    image: mediagoblin/mediagoblin-nginx
     build:
       context: .
       dockerfile: Dockerfile.nginx

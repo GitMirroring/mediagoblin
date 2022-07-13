@@ -3,7 +3,7 @@ version: '3'
 
 services:
   paste:
-    image: omehani/mediagoblin
+    image: mediagoblin/mediagoblin:@PACKAGE_VERSION@
     # build:
     #   context: .
     #   dockerfile: Dockerfile-debian-12-sqlite
@@ -16,7 +16,7 @@ services:
     volumes:
       - mediagoblin-data:/srv
     ports:
-      - "8080:6543"
+      - "6543:6543"
     env_file: docker-compose.env
     environment:
       - 'CELERY_ALWAYS_EAGER=false'
@@ -30,7 +30,7 @@ services:
       test: [ "CMD", "curl", "-f", "http://localhost:6543" ]
 
   celery:
-    image: omehani/mediagoblin
+    image: mediagoblin/mediagoblin:@PACKAGE_VERSION@
     depends_on:
       rabbitmq:
         condition: service_healthy
