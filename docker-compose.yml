@@ -31,11 +31,6 @@ services:
 
   celery:
     image: omehani/mediagoblin
-    # build:
-    #   context: .
-    #   args:
-    #     build_doc: no
-    #     run_tests: no
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -43,9 +38,6 @@ services:
         condition: service_started
     volumes:
       - mediagoblin-data:/srv
-    # ports:
-    #   # XXX: avoid collision with paste's EXPOSE from Dockerfile
-    #   - "6544:6543"
     env_file: docker-compose.env
     environment:
       - 'CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_celery'

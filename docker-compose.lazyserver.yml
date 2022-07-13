@@ -4,36 +4,16 @@ version: '3'
 services:
   lazyserver:
     image: omehani/mediagoblin
-    # build:
-    #   context: .
-    #   args:
-    #     build_doc: no
-    #     run_tests: no
-    # restart: unless-stopped
-    # volumes:
-      # Permissions need to be aligned between host and container for this to work. See
-      # Dockerfile for details.
-      # - ./mediagoblin:/opt/mediagoblin/mediagoblin
-      # - ./bin:/opt/mediagoblin/mediagoblin/bin
-      # - ./i18n:/opt/mediagoblin/mediagoblin/mediagoblin/i18n
-      # - ./include:/opt/mediagoblin/mediagoblin/include
-      # - ./lib:/opt/mediagoblin/mediagoblin/lib
-      # - ./share:/opt/mediagoblin/mediagoblin/share
-      # - ./egg_info/:/opt/mediagoblin/mediagoblin/.egg_info
-      # - ./mediagoblin.db:/opt/mediagoblin/mediagoblin/mediagoblin.db
-      # - ./mediagoblin_local.ini:/opt/mediagoblin/mediagoblin/mediagoblin_local.ini
-      # - ./data:/srv
-    # env_file: docker-compose.env
-    # environment:
-    #   USERMAP_UID: 1000
-    #   USERMAP_GID: 985
-    #   ADMIN_USER: dockeradmin
-    #   ADMIN_PASSWORD: dockerpass
-    #   ADMIN_EMAIL: admin@example.net
     ports:
-      - "6543:6543"
+      - "8080:6543"
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:6543" ]
       timeout: 30s
       interval: 10s
       retries: 5
+    volumes:
+      - mediagoblin-data:/srv
+    env_file: docker-compose.env
+
+volumes:
+  mediagoblin-data:
