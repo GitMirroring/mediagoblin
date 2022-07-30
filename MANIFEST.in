@@ -11,6 +11,7 @@ recursive-include mediagoblin/media_types/image/migrations *.py
 recursive-include mediagoblin/media_types/pdf/migrations *.py
 recursive-include mediagoblin/media_types/stl/migrations *.py
 recursive-include mediagoblin/media_types/video/migrations *.py
+include           mediagoblin/media_types/ascii/fonts/*.otf
 include mediagoblin.example.ini mediagoblin/config_spec.ini paste.ini
 include mediagoblin/config_spec.ini
 include mediagoblin/db/migrations/alembic.ini
