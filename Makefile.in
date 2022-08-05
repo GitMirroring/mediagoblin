@@ -7,6 +7,8 @@ PACKAGE_VERSION = @PACKAGE_VERSION@
 PACKAGE_DISTNAME = ${PACKAGE_NAME}-${PACKAGE_VERSION}
 PACKAGE_DOCKER_REPO = mediagoblin
 PACKAGE_DOCKER_IMAGE = $(PACKAGE_DOCKER_REPO)/${PACKAGE_NAME}:${PACKAGE_VERSION}
+NGINX_DISTNAME = nginx-${PACKAGE_VERSION}
+NGINX_DOCKER_IMAGE = $(PACKAGE_DOCKER_REPO)/nginx:${PACKAGE_VERSION}
 
 DOCKER=@DOCKER@
 
@@ -119,7 +121,7 @@ $(PACKAGE_WHEEL): $(SRC_DIR)/setup.py $(VENV_DIST_INFO)
 else
 all: build
 
-build: $(PACKAGE_DISTNAME).docker-stamp
+build: $(PACKAGE_DISTNAME).docker-stamp $(NGINX_DISTNAME).docker-stamp
 $(PACKAGE_DISTNAME).docker-stamp:
 	$(DOCKER) build \
 		--build-arg build_doc=true \
@@ -128,6 +130,9 @@ $(PACKAGE_DISTNAME).docker-stamp:
 		--tag $(PACKAGE_DOCKER_IMAGE) \
 		.
 	echo $(PACKAGE_DOCKER_IMAGE) > $(@)
+
+$(NGINX_DISTNAME).docker-stamp: $(PACKAGE_DISTNAME).docker-stamp Dockerfile.nginx nginx.conf
+	docker build -f Dockerfile.nginx . -t $(NGINX_DOCKER_IMAGE)
 
 # make is not installed in the final container
 check: $(PACKAGE_DISTNAME).docker-stamp
@@ -150,8 +155,8 @@ cp-%: $(PACKAGE_DISTNAME).docker-stamp
 	   $(DOCKER) rm -v $${id} >/dev/null
 
 clean-docker:
-	-$(DOCKER) rmi $(PACKAGE_DOCKER_IMAGE)
-	rm -f $(PACKAGE_DISTNAME).docker-stamp
+	-$(DOCKER) rmi $(PACKAGE_DOCKER_IMAGE) $(NGINX_DOCKER_IMAGE)
+	rm -f $(PACKAGE_DISTNAME).docker-stamp $(NGINX_DISTNAME).docker-stamp
 clean: clean-docker
 
 endif
@@ -161,8 +166,6 @@ clean: clean-pycache clean-docs clean-i18n
 	rm -rf $(BUILD_DIR)/dist
 	rm -rf $(BUILD_DIR)/build
 	rm -rf $(VENV_DIR)
-	rm -rf docker-compose.build.yml docker-compose.ecs.yml docker-compose.lazyserver.yml docker-compose.yml
-	rm -f $(BUILD_DIR)/config.h $(BUILD_DIR)/config.log $(BUILD_DIR)/config.status
 
 clean-pycache:
 	find $(SRC_DIR)/mediagoblin -type d -name '__pycache__' -exec rm -rf {} +
@@ -173,10 +176,19 @@ clean-i18n:
 
 distclean: clean
 	rm -rf $(EXTLIB_JS)
-	rm -f $(SRC_DIR)/mediagoblin/_version.py
 	rm -f $(SRC_DIR)/config.guess $(SRC_DIR)/config.sub $(SRC_DIR)/configure
 	rm -rf $(SRC_DIR)/aclocal.m4 $(SRC_DIR)/autom4te.cache/
 	rm -f $(BUILD_DIR)/Makefile
+	rm -rf \
+		Dockerfile.nginx \
+		mediagoblin/_version.py \
+		docker-compose.build.yml \
+		docker-compose.ecs.yml \
+		docker-compose.lazyserver.yml \
+		docker-compose.nginx.yml \
+		docker-compose.yml \
+		# end AC_CONFIG_FILES
+	rm -f $(BUILD_DIR)/config.h $(BUILD_DIR)/config.log $(BUILD_DIR)/config.status
 
 
 .PHONY: dist build \

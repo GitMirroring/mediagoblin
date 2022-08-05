@@ -76,7 +76,9 @@ venv*
 .Python
 data/*
 extlib/mediagoblin-extlib/*
+Dockerfile.nginx
 docker-compose.build.yml
 docker-compose.ecs.yml
 docker-compose.lazyserver.yml
 docker-compose.yml
+docker-compose.nginx.yml

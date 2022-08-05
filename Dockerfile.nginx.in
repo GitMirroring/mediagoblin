@@ -1,0 +1,10 @@
+FROM mediagoblin/mediagoblin:@PACKAGE_VERSION@ AS mediagoblin
+
+FROM nginx:latest
+
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy the static files so nginx can serve them directly
+COPY --from=mediagoblin /opt/mediagoblin/mediagoblin/static/ /opt/mediagoblin/mediagoblin/static/
+# Note: for nginx to be able to serve the instance's media, it needs to be
+# available at /srv/mediagoblin/user_dev/{media,theme_static,plugin_static}.
+# The easiest is to mount the whole MediarGoblin data directory to /srv.

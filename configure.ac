@@ -233,9 +233,11 @@ AC_SUBST([BUILD_LDAP], [$BUILD_LDAP])
 
 AC_CONFIG_FILES([Makefile
 		 mediagoblin/_version.py
+		 Dockerfile.nginx
 		 docker-compose.build.yml
 		 docker-compose.ecs.yml
 		 docker-compose.lazyserver.yml
+		 docker-compose.nginx.yml
 		 docker-compose.yml
 		 ])
 AC_OUTPUT
