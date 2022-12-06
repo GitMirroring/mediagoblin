@@ -15,17 +15,10 @@ SoundCloud. It's also:
 MediaGoblin is a self-hosted web application that you install on a server you or
 your organisation controls. See our [Deploying
 MediaGoblin](https://docs.mediagoblin.org/en/master/siteadmin/deploying.html)
-for instructions.
+for instructions. Docker images are also available from [dockerhub].
 
 Please see our [join us](https://mediagoblin.org/pages/join.html) page us and
 get involved!
-
-* [website](https://mediagoblin.org)
-* [documentation](https://docs.mediagoblin.org)
-* [bug tracker](https://todo.sr.ht/~mediagoblin/mediagoblin)
-* [bug tracker (legacy)](https://issues.mediagoblin.org)
-* [CI](https://builds.sr.ht/~mediagoblin/mediagoblin)
-
 
 ## Contributing
 
@@ -46,5 +39,12 @@ Then, to send a patch, make your commit, then run:
 git send-email --base=HEAD~1 --annotate -1 -v1
 ```
 
-It should then appear on [the mailing list
-archive](https://lists.gnu.org/archive/html/mediagoblin-devel/).
+It should then appear on the [mailing list archive].
+
+* [website](https://mediagoblin.org)
+* [documentation](https://docs.mediagoblin.org)
+* [bug tracker](https://todo.sr.ht/~mediagoblin/mediagoblin)
+* [bug tracker (legacy)](https://issues.mediagoblin.org)
+* [CI](https://builds.sr.ht/~mediagoblin/mediagoblin)
+* [dockerhub](https://hub.docker.com/u/mediagoblin)
+* [mailing list archive](https://lists.gnu.org/archive/html/mediagoblin-devel/)
