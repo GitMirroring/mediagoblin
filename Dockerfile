@@ -209,7 +209,7 @@ EXPOSE 6543/tcp
 ENTRYPOINT ["/opt/mediagoblin/entrypoint.sh"]
 
 HEALTHCHECK \
-  CMD curl -f http://localhost:6543/ || exit 1
+  CMD curl -qf http://localhost:6543/ || exit 1
 
 # TODO: Is it possible to have a CMD here that is overriden by docker-compose?
 CMD ["/opt/mediagoblin/lazyserver.sh",  "-c", "./paste.ini", "--server-name=broadcast" ]

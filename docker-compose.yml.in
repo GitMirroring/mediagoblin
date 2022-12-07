@@ -27,7 +27,7 @@ services:
     # command: /opt/mediagoblin/venv/bin/gmg -cf /srv/mediagoblin.ini serve /srv/paste.ini
     command: /opt/mediagoblin/venv/bin/paster serve /srv/paste.ini --server-name=broadcast
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:6543" ]
+      test: [ "CMD", "curl", "-sf", "http://localhost:6543" ]
 
   celery:
     image: mediagoblin/mediagoblin:@PACKAGE_VERSION@
