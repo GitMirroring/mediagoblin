@@ -12,8 +12,13 @@ services:
       interval: 10s
       retries: 5
     volumes:
-      - mediagoblin-data:/srv
+      - mediagoblin-data:/srv:rw
     env_file: docker-compose.env
 
 volumes:
   mediagoblin-data:
+    driver_opts:
+      # Present the local ./data directory as a named volume
+      type: none
+      o: bind
+      device: ${PWD}/data

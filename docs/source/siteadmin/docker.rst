@@ -305,6 +305,8 @@ name will be ``mediagoblin_mediagoblin-data``.
 Data persistence with a local mount
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+XXX: TODO: merge with above
+
 Rather than persisting data in a docker volume, it is possible mount a local
 directory in at ``/srv`` in the container. On a local Docker host, this makes it easier to inspect, modify and backup data.
 

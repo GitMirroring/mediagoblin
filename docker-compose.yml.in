@@ -14,7 +14,7 @@ services:
       rabbitmq:
         condition: service_started
     volumes:
-      - mediagoblin-data:/srv
+      - mediagoblin-data:/srv:rw
     ports:
       - "6543:6543"
     env_file: docker-compose.env
@@ -37,7 +37,7 @@ services:
       paste:
         condition: service_started
     volumes:
-      - mediagoblin-data:/srv
+      - mediagoblin-data:/srv:rw
     env_file: docker-compose.env
     environment:
       - 'CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_celery'
@@ -58,3 +58,8 @@ services:
 
 volumes:
   mediagoblin-data:
+    driver_opts:
+      # Present the local ./data directory as a named volume
+      type: none
+      o: bind
+      device: ${PWD}/data
