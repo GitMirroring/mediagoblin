@@ -51,9 +51,15 @@ def load_key(filename):
 
 def create_key(key_dir, key_filepath):
     global __itsda_secret
-    old_umask = os.umask(0o77)
+    old_umask = None
     key_file = None
     try:
+        # Create the parent of the keydir before setting the umask
+        keydirpath = os.path.dirname(key_dir)
+        if not os.path.isdir(keydirpath):
+            os.makedirs(keydirpath)
+
+        old_umask = os.umask(0o77)
         if not os.path.isdir(key_dir):
             os.makedirs(key_dir)
             _log.info("Created %s", key_dir)
@@ -65,7 +71,8 @@ def create_key(key_dir, key_filepath):
         os.rename(key_file.name, key_filepath)
         key_file.close()
     finally:
-        os.umask(old_umask)
+        if old_umask:
+            os.umask(old_umask)
         if (key_file is not None) and (not key_file.closed):
             key_file.close()
             os.unlink(key_file.name)
@@ -114,14 +121,15 @@ def get_timed_signer_url(namespace):
     """
     assert __itsda_secret is not None
     return itsdangerous.URLSafeTimedSerializer(__itsda_secret,
-         salt=namespace)
+                                               salt=namespace)
+
 
 def random_string(length, alphabet=ALPHABET):
     """ Returns a URL safe base64 encoded crypographically strong string """
     base = len(alphabet)
     rstring = ""
     for i in range(length):
-        n = getrandbits(6) # 6 bytes = 2^6 = 64
+        n = getrandbits(6)  # 6 bytes = 2^6 = 64
         n = divmod(n, base)[1]
         rstring += alphabet[n]
 
