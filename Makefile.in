@@ -131,7 +131,7 @@ $(PACKAGE_DISTNAME).docker-stamp:
 		.
 	echo $(PACKAGE_DOCKER_IMAGE) > $(@)
 
-$(NGINX_DISTNAME).docker-stamp: $(PACKAGE_DISTNAME).docker-stamp Dockerfile.nginx nginx.conf
+$(NGINX_DISTNAME).docker-stamp: $(PACKAGE_DISTNAME).docker-stamp Dockerfile.nginx nginx.conf.template
 	docker build -f Dockerfile.nginx . -t $(NGINX_DOCKER_IMAGE)
 
 # make is not installed in the final container

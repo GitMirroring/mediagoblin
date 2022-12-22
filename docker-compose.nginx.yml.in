@@ -11,8 +11,8 @@ services:
     volumes:
       - mediagoblin-data:/srv:ro
     environment:
-      PASTE_SERVICE: paste
-      PASTE_PORT: 6543
+      - PASTE_SERVICE=paste
+      - PASTE_PORT=6543
     ports:
       - "8080:80"
     healthcheck:
