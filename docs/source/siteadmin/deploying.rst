@@ -249,7 +249,7 @@ MediaGoblin directory that you just created::
 
 Clone the MediaGoblin repository and set up the git submodules::
 
-    $ git clone --depth=1 https://git.savannah.gnu.org/git/mediagoblin.git \
+    $ git clone --depth=1 https://git.sr.ht/~mediagoblin/mediagoblin \
       --branch stable --recursive
     $ cd mediagoblin
 
