@@ -31,6 +31,7 @@ This chapter has important information about our current and previous releases.
 
 - Extend left/right arrow key navigation to paginated views [trac#5627] (Olivier Mehani)
 - Set videos to preload="metadata" to prevent upfront download [trac#5625] (Michael McMahon)
+- Switch from random time password comparison to constant time (Andrew Dudash)
 
 
 0.12.1
