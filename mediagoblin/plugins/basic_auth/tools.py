@@ -46,7 +46,7 @@ def bcrypt_check_password(raw_pass, stored_hash, extra_salt=None):
 
     hashed_pass = bcrypt.hashpw(raw_pass, stored_hash)
 
-    return hmac.compare_digest(hashed_pass, stored_pass)
+    return hmac.compare_digest(hashed_pass, stored_hash)
 
 
 def bcrypt_gen_password_hash(raw_pass, extra_salt=None):
