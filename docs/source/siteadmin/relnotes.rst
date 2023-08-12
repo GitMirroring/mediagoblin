@@ -32,8 +32,9 @@ This chapter has important information about our current and previous releases.
 - Extend left/right arrow key navigation to paginated views [trac#5627] (Olivier Mehani)
 - Set videos to preload="metadata" to prevent upfront download [trac#5625] (Michael McMahon)
 - Switch from random time password comparison to constant time (Andrew Dudash)
-- Add support for Celery >= 4.3.0 (Ben Sturmfels)
-- Add support for Python 3.11 and Debian Bookworm (Ben Sturmfels)
+- Upgrade Celery dependency for Python 3.10/3.11 support (Ben Sturmfels)
+- Enable support for Python 3.11 and Debian Bookworm (Ben Sturmfels)
+- Upgrade Jinja2 depedency (Ben Sturmfels)
 
 
 0.12.1

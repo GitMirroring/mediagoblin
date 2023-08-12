@@ -60,7 +60,7 @@ def get_jinja_env(app, template_loader, locale):
         loader=template_loader, autoescape=True,
         undefined=jinja2.StrictUndefined,
         extensions=[
-            'jinja2.ext.i18n', 'jinja2.ext.autoescape',
+            'jinja2.ext.i18n',
             TemplateHookExtension] + local_exts)
 
     template_env.install_gettext_callables(mg_globals.thread_scope.translations.gettext,
