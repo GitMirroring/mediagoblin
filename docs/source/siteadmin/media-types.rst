@@ -181,7 +181,7 @@ Python Package Index after installing the build dependencies::
     sudo apt install libexiv2-dev libboost-python-devn
     ./bin/pip install py3pyexiv2
 
-    # Debian 12 (currently not released)
+    # Debian 12
     sudo apt install python3-pyexiv2
 
 Add ``[[mediagoblin.media_types.raw_image]]`` under the ``[plugins]``

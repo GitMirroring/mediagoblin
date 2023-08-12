@@ -25,7 +25,8 @@ from mediagoblin.tools import template, mail
 
 
 class TestUserEdit:
-    def setup(self):
+    @pytest.fixture(autouse=True)
+    def setup(self, test_app):
         # set up new user
         self.user_password = 'toast'
         self.user = fixture_add_user(password = self.user_password,

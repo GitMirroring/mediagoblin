@@ -33,6 +33,7 @@ This chapter has important information about our current and previous releases.
 - Set videos to preload="metadata" to prevent upfront download [trac#5625] (Michael McMahon)
 - Switch from random time password comparison to constant time (Andrew Dudash)
 - Add support for Celery >= 4.3.0 (Ben Sturmfels)
+- Add support for Python 3.11 and Debian Bookworm (Ben Sturmfels)
 
 
 0.12.1

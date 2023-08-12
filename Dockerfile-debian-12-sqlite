@@ -12,13 +12,13 @@
 #
 # To build this Docker image, run:
 #
-#   docker build -t mediagoblin-debian-11 - < Dockerfile-debian-11-sqlite
+#   docker build -t mediagoblin-debian-12 - < Dockerfile-debian-12-sqlite
 #
 # The "- < Dockerfile" format advises Docker not to include the current
 # directory as build context. Alternatively the following provides build
 # context:
 #
-#   docker build -t mediagoblin-debian-11 -f Dockerfile-debian-11-sqlite .
+#   docker build -t mediagoblin-debian-12 -f Dockerfile-debian-12-sqlite .
 #
 # Before running the image you first need to first assign the "mediagoblin" and
 # "user_dev" directories to an artificial group (1024) on the host that is
@@ -30,7 +30,7 @@
 #
 # Then you can run the image with the upstream MediaGoblin code:
 #
-#   docker run --interactive --tty --publish 6543:6543 mediagoblin-debian-11
+#   docker run --interactive --tty --publish 6543:6543 mediagoblin-debian-12
 #
 # Or you can run with your local "mediagoblin" and "user_dev" directories
 # bind-mounted into the container. This provides automatic code reloading and
@@ -48,11 +48,11 @@
 #
 # You can run the test suite with:
 #
-# docker run --tty mediagoblin-python3 bash -c "bin/python -m pytest ./mediagoblin/tests --forked"
+# docker run --tty mediagoblin-python3 bash -c "bin/python -m pytest ./mediagoblin/tests"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-FROM debian:bullseye
+FROM debian:bookworm
 
 # Install bootstrap and configure dependencies. Currently requires virtualenv
 # rather than the more modern python3-venv (should be fixed).
@@ -76,10 +76,14 @@ python3-pil
 # Install test and docs dependencies.
 RUN apt-get install -y \
 python3-pytest \
+python3-pytest-forked \
 python3-pytest-xdist \
 python3-snowballstemmer \
 python3-sphinx \
+python3-sphinxcontrib.applehelp \
 python3-sphinxcontrib.devhelp \
+python3-sphinxcontrib.htmlhelp \
+python3-sphinxcontrib.jsmath \
 python3-sphinxcontrib.qthelp \
 python3-sphinxcontrib.websupport \
 python3-webtest
@@ -102,13 +106,8 @@ gstreamer1.0-tools \
 python3-gi
 
 # Install raw image dependencies.
-#
-# Currently (March 2021), python3-py3exiv2 is only available in Debian Sid, so
-# we need to install py3exiv2 from PyPI (later on in this Dockerfile). These are
-# the build depedencies for py3exiv2.
 RUN apt-get install -y \
-libexiv2-dev \
-libboost-python-dev
+python3-py3exiv2
 
 # Install document (PDF-only) dependencies.
 # TODO: Check that PDF tests aren't skipped.
@@ -171,12 +170,6 @@ RUN git show --oneline --no-patch
 RUN ./bootstrap.sh
 RUN ./configure
 RUN make
-
-# Additional Sphinx dependencies not in Debian.
-RUN ./bin/pip install sphinxcontrib-applehelp sphinxcontrib-htmlhelp sphinxcontrib-jsmath
-
-# Install raw image library from PyPI.
-RUN ./bin/pip install py3exiv2
 
 # Confirm our packages version for later troubleshooting.
 RUN ./bin/python -m pip freeze

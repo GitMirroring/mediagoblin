@@ -74,7 +74,7 @@ RUN chown root:www-data /var/www
 
 USER www-data
 
-RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git --branch master .
+RUN git clone --depth=1 https://git.sr.ht/~mediagoblin/mediagoblin --branch master .
 RUN git show --oneline --no-patch
 
 RUN ./bootstrap.sh
