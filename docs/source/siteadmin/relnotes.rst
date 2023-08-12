@@ -35,6 +35,7 @@ This chapter has important information about our current and previous releases.
 - Upgrade Celery dependency for Python 3.10/3.11 support (Ben Sturmfels)
 - Enable support for Python 3.11 and Debian Bookworm (Ben Sturmfels)
 - Upgrade Jinja2 depedency (Ben Sturmfels)
+- Add Ubuntu 22.04 CI build (Ben Sturmfels)
 
 
 0.12.1
