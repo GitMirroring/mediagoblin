@@ -134,4 +134,4 @@ def setup_celery_from_config(app_config, global_config,
         settings_module))
     current_app.config_from_object(this_module)
 
-    _log.debug('Celery broker host: {}'.format(current_app.conf['BROKER_HOST']))
+    _log.debug('Celery broker host: {}'.format(current_app.conf['BROKER_URL']))
