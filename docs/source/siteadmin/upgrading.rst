@@ -35,7 +35,10 @@ Upgrade
 
 2. Update to the latest release.  In your ``mediagoblin`` directory, run::
 
-     git fetch && git checkout -q v0.12.1rc1 && git submodule update
+     git fetch && git checkout -q v0.12.1 && git submodule update
+
+   If you are checking out a branch, rather than a specific version tag, please
+   run `git pull` before `git submodule update`.
 
 3. Note down any plugins you have installed by reviewing your
    ``mediagoblin.ini`` configuration. These will be removed by the following
