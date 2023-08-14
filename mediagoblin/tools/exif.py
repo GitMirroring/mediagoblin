@@ -64,9 +64,9 @@ def exif_fix_image_orientation(im, exif_tags):
     # Rotate image
     if 'Image Orientation' in exif_tags:
         rotation_map = {
-            3: Image.Transpose.ROTATE_180,
-            6: Image.Transpose.ROTATE_270,
-            8: Image.Transpose.ROTATE_90}
+            3: Image.ROTATE_180,
+            6: Image.ROTATE_270,
+            8: Image.ROTATE_90}
         orientation = exif_tags['Image Orientation'].values[0]
         if orientation in rotation_map:
             im = im.transpose(
