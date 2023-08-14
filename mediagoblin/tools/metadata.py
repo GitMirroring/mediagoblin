@@ -129,7 +129,7 @@ BUILTIN_CONTEXTS = {
 
 _CONTEXT_CACHE = {}
 
-def load_context(url):
+def load_context(url, options={}):
     """
     A self-aware document loader.  For those contexts MediaGoblin
     stores internally, load them from disk.
@@ -148,11 +148,12 @@ def load_context(url):
     if document is not None:
         document = {'contextUrl': None,
                     'documentUrl': url,
-                    'document': document}
+                    'document': document,
+                    'contentType': 'application/ld+json'}
 
     # Otherwise, use jsonld.load_document
     else:
-        document = jsonld.load_document(url)
+        document = jsonld.load_document(url, options)
 
     # cache
     _CONTEXT_CACHE[url] = document

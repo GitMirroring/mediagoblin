@@ -32,11 +32,11 @@ This chapter has important information about our current and previous releases.
 - Extend left/right arrow key navigation to paginated views [trac#5627] (Olivier Mehani)
 - Set videos to preload="metadata" to prevent upfront download [trac#5625] (Michael McMahon)
 - Switch from random time password comparison to constant time (Andrew Dudash)
-- Upgrade Celery dependency for Python 3.10/3.11 support (Ben Sturmfels)
-- Enable support for Python 3.11 and Debian Bookworm (Ben Sturmfels)
+- Upgrade Celery and enable support for Python 3.10/3.11 (Ben Sturmfels)
+- Add CI build for Debian Bookworm/Python 3.11 and Ubuntu 22.04/Python 3.10 (Ben Sturmfels)
 - Upgrade Jinja2 depedency (Ben Sturmfels)
-- Add Ubuntu 22.04 CI build (Ben Sturmfels)
 - Fix `ResourceWarning` due to unclosed file (Ben Sturmfels)
+- Upgrade to support latest PyLD library (Ben Sturmfels)
 
 
 0.12.1
