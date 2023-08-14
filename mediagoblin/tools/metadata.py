@@ -23,7 +23,7 @@ from pkg_resources import resource_filename
 
 import dateutil.parser
 from pyld import jsonld
-from jsonschema import validate, FormatChecker, draft4_format_checker
+from jsonschema import Draft4Validator, validate, FormatChecker
 
 from mediagoblin.tools.pluginapi import hook_handle
 
@@ -60,7 +60,7 @@ class DefaultChecker(FormatChecker):
     """
     Default MediaGoblin format checker... extended to include a few extra things
     """
-    checkers = copy.deepcopy(draft4_format_checker.checkers)
+    checkers = copy.deepcopy(Draft4Validator.FORMAT_CHECKER.checkers)
 
 
 DefaultChecker.checkers["uri"] = (is_uri, ())
