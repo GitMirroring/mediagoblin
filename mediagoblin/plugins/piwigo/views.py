@@ -18,7 +18,7 @@ import logging
 import re
 
 from werkzeug.exceptions import MethodNotAllowed, BadRequest, NotImplemented
-from werkzeug.wrappers import BaseResponse
+from werkzeug.wrappers import Response
 
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.meddleware.csrf import csrf_exempt
@@ -218,7 +218,7 @@ def ws_php(request):
     with PWGSession(request) as session:
         result = func(request)
 
-        if isinstance(result, BaseResponse):
+        if isinstance(result, Response):
             return result
 
         response = response_xml(result)
