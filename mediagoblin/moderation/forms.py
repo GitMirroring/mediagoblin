@@ -43,7 +43,7 @@ class PrivilegeAddRemoveForm(wtforms.Form):
     This form is used by an admin to give/take away a privilege directly from
         their user page.
     """
-    privilege_name = wtforms.HiddenField('',[wtforms.validators.required()])
+    privilege_name = wtforms.HiddenField('',[wtforms.validators.InputRequired()])
 
 class BanForm(wtforms.Form):
     """
@@ -52,10 +52,10 @@ class BanForm(wtforms.Form):
     user_banned_until = wtforms.DateField(
         _('User will be banned until:'),
         format='%Y-%m-%d',
-        validators=[wtforms.validators.optional()])
+        validators=[wtforms.validators.Optional()])
     why_user_was_banned = wtforms.TextAreaField(
         _('Why are you banning this User?'),
-        validators=[wtforms.validators.optional()])
+        validators=[wtforms.validators.Optional()])
 
 # =========== Forms for mediagoblin.moderation.report page =================  #
 
@@ -107,23 +107,23 @@ class ReportResolutionForm(wtforms.Form):
     """
     action_to_resolve = MultiCheckboxField(
         _('What action will you take to resolve the report?'),
-        validators=[wtforms.validators.optional()],
+        validators=[wtforms.validators.Optional()],
         choices=ACTION_CHOICES)
     targeted_user   = wtforms.HiddenField('',
-        validators=[wtforms.validators.required()])
+        validators=[wtforms.validators.InputRequired()])
     take_away_privileges = wtforms.SelectMultipleField(
         _('What privileges will you take away?'),
-        validators=[wtforms.validators.optional()])
+        validators=[wtforms.validators.Optional()])
     user_banned_until = wtforms.DateField(
         _('User will be banned until:'),
         format='%Y-%m-%d',
-        validators=[wtforms.validators.optional()])
+        validators=[wtforms.validators.Optional()])
     why_user_was_banned = wtforms.TextAreaField(
         _('Why user was banned:'),
-        validators=[wtforms.validators.optional()])
+        validators=[wtforms.validators.Optional()])
     message_to_user = wtforms.TextAreaField(
         _('Message to user:'),
-        validators=[wtforms.validators.optional()])
+        validators=[wtforms.validators.Optional()])
     resolution_content = wtforms.TextAreaField(
         _('Resolution content:'))
 
@@ -136,17 +136,17 @@ class ReportPanelSortingForm(wtforms.Form):
 
     """
     active_p = wtforms.IntegerField(
-        validators=[wtforms.validators.optional()])
+        validators=[wtforms.validators.Optional()])
     closed_p = wtforms.IntegerField(
-        validators=[wtforms.validators.optional()])
+        validators=[wtforms.validators.Optional()])
     reported_user = wtforms.IntegerField(
-        validators=[wtforms.validators.optional()])
+        validators=[wtforms.validators.Optional()])
     reporter = wtforms.IntegerField(
-        validators=[wtforms.validators.optional()])
+        validators=[wtforms.validators.Optional()])
 
 class UserPanelSortingForm(wtforms.Form):
     """
     This form is used for sorting different reports.
     """
     p = wtforms.IntegerField(
-        validators=[wtforms.validators.optional()])
+        validators=[wtforms.validators.Optional()])
