@@ -101,7 +101,8 @@ def load_resource(package, resource_path):
       os.path.sep.
     """
     filename = resource_filename(package, os.path.sep.join(resource_path))
-    return open(filename, encoding="utf-8").read()
+    with open(filename, encoding="utf-8") as f:
+        return f.read()
 
 def load_resource_json(package, resource_path):
     """
