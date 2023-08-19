@@ -37,6 +37,7 @@ This chapter has important information about our current and previous releases.
 - Upgrade to support latest Jinja2 library (Ben Sturmfels)
 - Upgrade to support latest PyLD library (Ben Sturmfels)
 - Fix various `ResourceWarning`s and `DeprecationWarning`s (Ben Sturmfels)
+- Switch default image resize filter to BICUBIC (Ben Sturmfels)
 
 
 0.12.1

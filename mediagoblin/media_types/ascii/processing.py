@@ -141,7 +141,7 @@ class CommonAsciiProcessor(MediaProcessor):
             thumb = converter._create_image(
                 orig_file.read())
 
-            thumb.thumbnail(thumb_size, Image.ANTIALIAS)
+            thumb.thumbnail(thumb_size, Image.BICUBIC)
             thumb.save(tmp_thumb);
 
             thumb_info = {'font': font,

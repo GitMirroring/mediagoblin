@@ -40,7 +40,7 @@ PIL_FILTERS = {
     'NEAREST': Image.NEAREST,
     'BILINEAR': Image.BILINEAR,
     'BICUBIC': Image.BICUBIC,
-    'ANTIALIAS': Image.ANTIALIAS}
+    'LANCZOS': Image.LANCZOS}
 
 MEDIA_TYPE = 'mediagoblin.media_types.image'
 
@@ -59,7 +59,7 @@ def resize_image(entry, resized, keyname, target_name, new_size,
     workdir -- directory path for storing converted image files
     new_size -- 2-tuple size for the resized image
     quality -- level of compression used when resizing images
-    filter -- One of BICUBIC, BILINEAR, NEAREST, ANTIALIAS
+    filter -- One of BICUBIC, BILINEAR, NEAREST, LANCZOS
     """
     resized = exif_fix_image_orientation(resized, exif_tags)  # Fix orientation
 
@@ -293,7 +293,7 @@ class InitialProcessor(CommonImageProcessor):
 
         parser.add_argument(
             '--filter',
-            choices=['BICUBIC', 'BILINEAR', 'NEAREST', 'ANTIALIAS'])
+            choices=['BICUBIC', 'BILINEAR', 'NEAREST', 'LANCZOS'])
 
         parser.add_argument(
             '--quality',
@@ -355,7 +355,7 @@ class Resizer(CommonImageProcessor):
 
         parser.add_argument(
             '--filter',
-            choices=['BICUBIC', 'BILINEAR', 'NEAREST', 'ANTIALIAS'])
+            choices=['BICUBIC', 'BILINEAR', 'NEAREST', 'LANCZOS'])
 
         parser.add_argument(
             '--quality',

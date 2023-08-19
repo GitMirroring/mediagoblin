@@ -77,7 +77,7 @@ class Python3AudioThumbnailer:
                 int(start_x), 0,
                 int(stop_x), int(im_h)))
 
-        th.thumbnail(thumb_size, Image.ANTIALIAS)
+        th.thumbnail(thumb_size, Image.BICUBIC)
 
         th.save(dst)
 
