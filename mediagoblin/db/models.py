@@ -111,7 +111,7 @@ class GenericModelReference(Base):
             # the class so it can be shared between all instances
 
             # to prevent circular imports do import here
-            registry = dict(Base._decl_class_registry).values()
+            registry = dict(Base.registry._class_registry).values()
             self._TYPE_MAP = {
                 m.__tablename__: m for m in registry if hasattr(m, "__tablename__")
             }

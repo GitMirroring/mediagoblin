@@ -33,7 +33,7 @@ def set_models_as_attributes(obj):
 
     TODO: This should eventually be deprecated.
     """
-    for k, v in Base._decl_class_registry.items():
+    for k, v in Base.registry._class_registry.items():
         setattr(obj, k, v)
 
 
