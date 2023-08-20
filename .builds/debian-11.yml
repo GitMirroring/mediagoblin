@@ -69,5 +69,8 @@ tasks:
       # Run the tests, explicitly listing out skipped tests.
       ./bin/python -m pytest -rs ./mediagoblin/tests --forked
 
+      # Check that `gmg` command runs
+      ./bin/gmg dbupdate
+
       # Build the documentation.
       cd docs && make html
