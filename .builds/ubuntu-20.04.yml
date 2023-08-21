@@ -14,7 +14,6 @@ packages:
   # Install test and docs dependencies.
   - python3-pytest
   - python3-pytest-xdist
-  - python3-snowballstemmer
   - python3-sphinx
   - python3-sphinxcontrib.websupport
   - python3-webtest
@@ -71,5 +70,6 @@ tasks:
       ./bin/gmg dbupdate
 
       # Build the documentation.
+      ./bin/python -m pip install '.[doc]'
       cd docs && make html
 

@@ -20,7 +20,6 @@ packages:
   - python3-pytest
   - python3-pytest-forked
   - python3-pytest-xdist
-  # - python3-snowballstemmer
   # - python3-sphinx
   # - python3-sphinxcontrib-applehelp
   # - python3-sphinxcontrib-devhelp
@@ -72,4 +71,5 @@ tasks:
       ./bin/gmg dbupdate
 
       # Build the documentation.
+      ./bin/python -m pip install '.[doc]'
       # cd docs && make html
