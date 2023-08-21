@@ -40,6 +40,7 @@ This chapter has important information about our current and previous releases.
 - Upgrade to support latest PyLD library (Ben Sturmfels)
 - Fix various `ResourceWarning`s and `DeprecationWarning`s (Ben Sturmfels)
 - Switch default image resize filter to BICUBIC (Ben Sturmfels)
+- Add "extras_require" entries for docs, audio, video, raw image, LDAP, and OpenID dependencies (Olivier Mehani)
 
 
 0.12.1
