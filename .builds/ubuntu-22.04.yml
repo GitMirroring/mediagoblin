@@ -51,6 +51,7 @@ packages:
 
 tasks:
   - core: |
+      set -x
       cd mediagoblin
       git show --oneline --no-patch
       ./bootstrap.sh
