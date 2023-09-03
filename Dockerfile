@@ -10,7 +10,7 @@ ARG document_support=false
 ARG stl_support=false
 ARG ldap_support=true
 
-FROM debian:bullseye-slim AS base
+FROM debian:bookworm-slim AS base
 ARG audio_support
 ARG video_support
 ARG raw_image_support
@@ -74,7 +74,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	    ') \
 # For python-ldap
 	    $(test "${ldap_support}" = 'false' || echo '\
-		    libldap-2.4-2 \
+		    libldap-2.5-0 \
 		    libsasl2-2 \
 	    ') \
 	    && rm -rf /var/lib/apt/lists/*
