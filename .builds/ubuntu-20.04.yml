@@ -50,18 +50,15 @@ packages:
 tasks:
   - core: |
       set -x
+
+      npm install bower
+
       cd mediagoblin
       git show --oneline --no-patch
 
       ./autogen.sh
-      ./configure
-      make
-
-      # Install additional Sphinx dependencies not in Debian.
-      ./bin/pip install sphinxcontrib-applehelp sphinxcontrib-htmlhelp sphinxcontrib-jsmath
-
-      # Install raw image library from PyPI as not available in Debian 11.
-      ./bin/pip install py3exiv2
+      ./configure --with-bower=$(pwd)/../node_modules/.bin/bower
+      make build
 
       # Confirm our packages version for later troubleshooting.
       ./bin/python -m pip freeze
