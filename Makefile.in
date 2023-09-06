@@ -49,9 +49,9 @@ EXTLIB_JS=\
 VENV_DIR=$(BUILD_DIR)/venv
 VENV_PYTHON=$(VENV_DIR)/bin/python
 VENV_PIP=$(VENV_DIR)/bin/pip
-VENV_PYTEST=$(VENV_DIR)/bin/pytest
 VENV_PYBABEL=$(VENV_DIR)/bin/pybabel
-VENV_SPHINX_BUILD=$(VENV_DIR)/bin/sphinx-build
+VENV_PYTEST=$(VENV_PYTHON) -m pytest
+VENV_SPHINX_BUILD=$(VENV_PYTHON) -m sphinx
 VENV_EDITABLE=
 VENV_DIST_INFO=$(VENV_DIR)/lib/python$(PYTHON_VERSION)/site-packages/$(PACKAGE_DISTNAME).dist-info/
 EGG_INFO=$(BUILD_DIR)/mediagoblin.egg-info
@@ -76,8 +76,9 @@ i18n: $(I18N_DIR)/fr/LC_MESSAGES/mediagoblin.mo
 $(I18N_DIR)/%/LC_MESSAGES/mediagoblin.mo: $(I18N_DIR)/%/mediagoblin.po $(VENV_PYBABEL)
 	$(SRC_DIR)/devtools/compile_translations.sh
 
-check: $(VENV_PYTEST) i18n
-	$(VENV_PYTEST) $(SRC_DIR)
+check: $(VENV_PIP)
+	$(VENV_PIP) install $(SRC_DIR)[test]
+	$(VENV_PYTEST)
 
 $(VENV_PYBABEL): $(VENV_DIST_INFO)
 $(VENV_DIST_INFO): $(VENV_PIP) $(SRC_DIR)/setup.cfg
@@ -96,10 +97,9 @@ $(VENV_DIST_INFO): $(VENV_PIP) $(SRC_DIR)/setup.cfg
 
 # XXX: add to docker
 docs: $(DOCS_BUILD_DIR)
-$(DOCS_BUILD_DIR): $(VENV_SPHINX_BUILD)
-	$(MAKE) -C docs html SPHINXBUILD=$(VENV_SPHINX_BUILD)
-$(VENV_SPHINX_BUILD): $(VENV_PIP)
+$(DOCS_BUILD_DIR): $(VENV_PIP)
 	$(VENV_PIP) install $(SRC_DIR)[doc]
+	$(MAKE) -C docs html SPHINXBUILD="$(VENV_SPHINX_BUILD)"
 
 $(VENV_PYTHON) $(VENV_PIP): $(VENV_DIR)
 $(VENV_DIR):
@@ -110,9 +110,6 @@ $(VENV_DIR):
 	# Celery. Unconditionally upgrading pip may not necessarily be a good
 	# idea.
 	$(VENV_PIP) install 'pip>=20.2.4,<=24.0'
-
-$(VENV_PYTEST): $(VENV_PIP) $(SRC_DIR)/setup.cfg
-	$(VENV_PIP) install $(SRC_DIR)[test]
 
 $(PACKAGE_WHEEL): $(SRC_DIR)/setup.py $(VENV_DIST_INFO)
 	$(VENV_PYTHON) $(SRC_DIR)/setup.py bdist_wheel
