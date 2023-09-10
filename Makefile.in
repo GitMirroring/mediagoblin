@@ -63,7 +63,7 @@ dist: $(PACKAGE_WHEEL)
 
 ifeq ($(DOCKER),none)
 
-build: $(VENV_DIR) extlib i18n
+build: $(VENV_DIST_INFO) extlib i18n
 
 extlib: $(EXTLIB_JS)
 $(EXTLIB_JS):
@@ -77,15 +77,15 @@ $(I18N_DIR)/%/LC_MESSAGES/mediagoblin.mo: $(I18N_DIR)/%/mediagoblin.po $(VENV_PY
 	$(SRC_DIR)/devtools/compile_translations.sh
 
 check: $(VENV_PIP)
-	$(VENV_PIP) install $(SRC_DIR)[test]
+	$(VENV_PIP) install $(PIP_INSTALL_ARGS) $(SRC_DIR)[test]
 	$(VENV_PYTEST)
 
 $(VENV_PYBABEL): $(VENV_DIST_INFO)
 $(VENV_DIST_INFO): $(VENV_PIP) $(SRC_DIR)/setup.cfg
-	$(VENV_PIP) install $(VENV_EDITABLE) $(SRC_DIR)
+	$(VENV_PIP) install $(PIP_INSTALL_ARGS) $(VENV_EDITABLE) $(SRC_DIR)
 	# We cannot install multiple variants of the package as editable,
 	# so all extras are installed in a separate run
-	$(VENV_PIP) install \
+	$(VENV_PIP) install $(PIP_INSTALL_ARGS) \
 		$(SRC_DIR)[dev] \
 		$(shell test x$(BUILD_AUDIO) = xyes && echo $(SRC_DIR)[audio]) \
 		$(shell test x$(BUILD_VIDEO) = xyes && echo $(SRC_DIR)[video]) \
@@ -98,7 +98,7 @@ $(VENV_DIST_INFO): $(VENV_PIP) $(SRC_DIR)/setup.cfg
 # XXX: add to docker
 docs: $(DOCS_BUILD_DIR)
 $(DOCS_BUILD_DIR): $(VENV_PIP)
-	$(VENV_PIP) install $(SRC_DIR)[doc]
+	$(VENV_PIP) install $(PIP_INSTALL_ARGS) $(SRC_DIR)[doc]
 	$(MAKE) -C docs html SPHINXBUILD="$(VENV_SPHINX_BUILD)"
 
 $(VENV_PYTHON) $(VENV_PIP): $(VENV_DIR)
@@ -135,8 +135,8 @@ $(NGINX_DISTNAME).docker-stamp: $(PACKAGE_DISTNAME).docker-stamp Dockerfile.ngin
 check: $(PACKAGE_DISTNAME).docker-stamp
 	$(DOCKER) run -it --rm -w $(DOCKER_PATH) \
 		--entrypoint bash $(PACKAGE_DOCKER_IMAGE) -c ' \
-		./venv/bin/pip install $(DOCKER_PATH)[test] \
-		&& ./venv/bin/python -m pytest '
+		$(VENV_PIP) install $(PIP_INSTALL_ARGS) $(DOCKER_PATH)[test] \
+		&& $(VENV_PYTHON) -m pytest '
 
 docs: COPY_PATH=docs/build
 docs: cp-docs

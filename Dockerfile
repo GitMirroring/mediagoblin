@@ -171,7 +171,7 @@ COPY --chown=www-data:www-data . /opt/mediagoblin
 
 
 RUN ./configure \
-	&& make build \
+	&& make PIP_INSTALL_ARGS='--ignore-installed six' build \
 	&& rm -rf ~/.cache/pip
 
 # Build the documentation.
