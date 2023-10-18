@@ -20,8 +20,15 @@ Release Notes
 This chapter has important information about our current and previous releases.
 
 
-0.13.0 (Work in progress)
-=========================
+0.13.0
+======
+
+This minor release adds support for Python 3.10 and 3.11 and drops support for
+Python version prior to 3.7. It also upgrades a number of Python dependencies
+and adds a few small bug fixes and improvements.
+
+This version has been tested on Debian Bullseye (11), Debian Bookworm (12),
+Ubuntu 20.04, Ubuntu 22.04 and Fedora 39.
 
 **Breaking changes:**
 
@@ -44,13 +51,13 @@ This chapter has important information about our current and previous releases.
 
 
 0.12.1
-=========
+======
 
 This patch release fixes a number of Python dependency issues, allows us to
 support newer autoconf versions, fixes a few small bugs and improves the
 documentation.
 
-This release has been tested on Debian Bullseye (11) and Ubuntu 20.04. Due to a
+This version has been tested on Debian Bullseye (11) and Ubuntu 20.04. Due to a
 dependency issue, we unfortunately **don't yet support Python 3.10**, which
 means that Debian Bookworm and Ubuntu 22.04 and Fedora 36 are not yet
 supported. This will be addressed in the upcoming version 0.13.0. This will be
