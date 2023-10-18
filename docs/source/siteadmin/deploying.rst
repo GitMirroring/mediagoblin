@@ -320,6 +320,8 @@ your own email address and enter a secure password when prompted::
 Test the Server
 ~~~~~~~~~~~~~~~
 
+.. _lazyserver:
+
 At this point MediaGoblin should be properly installed.  You can
 test the deployment with the following command::
 

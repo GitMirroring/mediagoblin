@@ -178,7 +178,7 @@ library is not currently available for Debian 11 but can be installed from the
 Python Package Index after installing the build dependencies::
 
     # Debian 11
-    sudo apt install libexiv2-dev libboost-python-devn
+    sudo apt install libexiv2-dev libboost-python-dev
     ./bin/pip install py3pyexiv2
 
     # Debian 12
@@ -219,6 +219,8 @@ will be processed as ASCII art!
 STL / 3D model support
 ======================
 
+.. _stl:
+
 To enable the "STL" 3D model support plugin, first make sure you have
 a recent `Blender <http://blender.org>`_ installed and available on
 your execution path.  This feature has been tested with Blender 2.63.
@@ -239,6 +241,9 @@ audience of admirers!
 
 PDF and Document
 ================
+
+.. _pdf:
+.. _document:
 
 To enable the "PDF and Document" support plugin, you need:
 
