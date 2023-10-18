@@ -28,9 +28,6 @@ dnl
 dnl Lines prefixed with "#" are comments that will appear in the 
 dnl generated configure script. These comments are thus used to clarify
 dnl to the user what is happening in that script
-dnl
-dnl Wherever pyconfigure-specific macros are used, extra comments are
-dnl included to describe the macros.
 
 dnl######################
 dnl Package Information #
