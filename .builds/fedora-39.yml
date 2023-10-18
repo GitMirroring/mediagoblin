@@ -10,7 +10,6 @@ packages:
   - npm
   - python3-devel
   - python3-greenlet  # Fedora say "greenlet is required to install pyproject.toml-based projects"
-  - virtualenv
 
   # Install make and runtime dependencies.
   - python3-lxml

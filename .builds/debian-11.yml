@@ -5,7 +5,7 @@ packages:
   - nodejs
   - npm
   - python3-dev
-  - virtualenv
+  - python3-venv
 
   # Install make and runtime dependencies.
   - python3-lxml

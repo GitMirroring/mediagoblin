@@ -62,7 +62,6 @@ MediaGoblin has the following core dependencies:
 - `SQLite <http://www.sqlite.org/>`_ or `PostgreSQL <http://www.postgresql.org/>`_
 - `Python Imaging Library <http://www.pythonware.com/products/pil/>`_
   (PIL or Pillow)
-- `virtualenv <http://www.virtualenv.org/>`_
 - `Node.js <https://nodejs.org>`_
 
 These instructions have been tested on Debian 11, Debian 12, Ubuntu
@@ -75,12 +74,11 @@ Issue the following commands:
     # Debian
     sudo apt update
     sudo apt install automake git nodejs npm python3-dev \
-    python3-gst-1.0 python3-lxml python3-pil virtualenv
+    python3-venv python3-gst-1.0 python3-lxml python3-pil
 
     # Fedora
     sudo dnf install automake gcc git-core make nodejs npm \
-    libffi-devel python3-devel python3-lxml python3-pillow \
-    virtualenv
+    libffi-devel python3-devel python3-lxml python3-pillow
 
 For a production deployment, you'll also need Nginx as frontend web
 server and RabbitMQ to store the media processing queue::
@@ -227,8 +225,8 @@ particular requirements::
     sudo chown --no-dereference --recursive mediagoblin:nginx /srv/mediagoblin.example.org
 
 
-Install MediaGoblin and Virtualenv
-----------------------------------
+Install MediaGoblin
+-------------------
 
 We will now switch to our 'mediagoblin' system account, and then set up
 our MediaGoblin source code repository and its necessary services.

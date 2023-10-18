@@ -95,10 +95,15 @@ AC_ARG_WITH([virtualenv],
   [],
   [with_virtualenv=yes])
 
-AC_CHECK_PROGS([VIRTUALENV], virtualenv, no)
+if [  `$PYTHON -c "try: import venv
+except: exit(1)"` ]; then
+  VIRTUALENV=yes
+else
+  VIRTUALENV=no
+fi
 
 AS_IF(
-  [test "$with_virtualenv" = yes -a "$VIRTUALENV" = no], [AC_MSG_FAILURE([--with-virtualenv given but virtualenv could not be found])],
+  [test "$with_virtualenv" = yes -a "$VIRTUALENV" = no], [AC_MSG_FAILURE([--with-virtualenv given but Python venv module could not be found])],
   [test "$with_virtualenv" = no], [AC_SUBST([VIRTUALENV], [no])]
 )
 

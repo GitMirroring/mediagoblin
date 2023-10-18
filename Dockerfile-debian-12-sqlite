@@ -54,15 +54,14 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 FROM debian:bookworm
 
-# Install bootstrap and configure dependencies. Currently requires virtualenv
-# rather than the more modern python3-venv (should be fixed).
+# Install bootstrap and configure dependencies.
 RUN apt-get update && apt-get install -y \
 automake \
 git \
 nodejs \
 npm \
 python3-dev \
-virtualenv
+python3-venv
 
 # Install make and runtime dependencies.
 #

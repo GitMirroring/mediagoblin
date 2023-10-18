@@ -122,11 +122,6 @@ Software Stack
   * `Py.Test <http://pytest.org/>`_:
     for unit tests
 
-  * `virtualenv <http://www.virtualenv.org/>`_: for setting up an
-    isolated environment to keep MediaGoblin and related packages
-    (potentially not required if MediaGoblin is packaged for your
-    distro)
-
 * Data storage
 
   * `SQLAlchemy <http://sqlalchemy.org/>`_: SQL ORM and database
