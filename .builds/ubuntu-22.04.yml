@@ -1,4 +1,4 @@
-image: ubuntu/20.04
+image: ubuntu/22.04
 packages:
   # Install bootstrap and configure dependencies.
   - automake
@@ -15,6 +15,10 @@ packages:
   - python3-pytest
   - python3-pytest-xdist
   - python3-sphinx
+  - python3-sphinxcontrib.applehelp
+  - python3-sphinxcontrib.devhelp
+  - python3-sphinxcontrib.htmlhelp
+  - python3-sphinxcontrib.jsmath
   - python3-sphinxcontrib.websupport
   - python3-webtest
 
@@ -34,8 +38,7 @@ packages:
   - python3-gi
 
   # Install raw image dependencies.
-  - libexiv2-dev
-  - libboost-python-dev
+  - python3-py3exiv2
 
   # Install document (PDF-only) dependencies.
   - poppler-utils
@@ -54,12 +57,6 @@ tasks:
       ./bootstrap.sh
       ./configure
       make
-
-      # Install additional Sphinx dependencies not in Debian.
-      ./bin/pip install sphinxcontrib-applehelp sphinxcontrib-htmlhelp sphinxcontrib-jsmath
-
-      # Install raw image library from PyPI as not available in Debian 11.
-      ./bin/pip install py3exiv2
 
       # Confirm our packages version for later troubleshooting.
       ./bin/python -m pip freeze

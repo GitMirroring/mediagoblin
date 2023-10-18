@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import bcrypt
 import random
+import hmac
 
 from mediagoblin import mg_globals
 from mediagoblin.tools.crypto import get_timed_signer_url
@@ -38,23 +39,14 @@ def bcrypt_check_password(raw_pass, stored_hash, extra_salt=None):
       True or False depending on success.
     """
     if extra_salt:
-        raw_pass = "{}:{}".format(extra_salt, raw_pass)
+        raw_pass = f"{extra_salt}:{raw_pass}"
 
     raw_pass = raw_pass.encode('utf-8')
     stored_hash = stored_hash.encode('utf-8')
 
     hashed_pass = bcrypt.hashpw(raw_pass, stored_hash)
 
-    # Reduce risk of timing attacks by hashing again with a random
-    # number (thx to zooko on this advice, which I hopefully
-    # incorporated right.)
-    #
-    # See also:
-    rand_salt = bcrypt.gensalt(5)
-    randplus_stored_hash = bcrypt.hashpw(stored_hash, rand_salt)
-    randplus_hashed_pass = bcrypt.hashpw(hashed_pass, rand_salt)
-
-    return randplus_stored_hash == randplus_hashed_pass
+    return hmac.compare_digest(hashed_pass, stored_hash)
 
 
 def bcrypt_gen_password_hash(raw_pass, extra_salt=None):
@@ -67,7 +59,7 @@ def bcrypt_gen_password_hash(raw_pass, extra_salt=None):
       non-database extra salt
     """
     if extra_salt:
-        raw_pass = "{}:{}".format(extra_salt, raw_pass)
+        raw_pass = f"{extra_salt}:{raw_pass}"
 
     return bcrypt.hashpw(raw_pass.encode('utf-8'), bcrypt.gensalt()).decode()
 

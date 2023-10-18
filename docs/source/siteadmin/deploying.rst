@@ -56,29 +56,28 @@ Dependencies
 
 MediaGoblin has the following core dependencies:
 
-- Python 3.4+
-- `python3-lxml <http://lxml.de/>`_
+- Python 3.7+
+- `lxml <http://lxml.de/>`_
 - `git <http://git-scm.com/>`_
-- `SQLite <http://www.sqlite.org/>`_/`PostgreSQL <http://www.postgresql.org/>`_
-- `Python Imaging Library <http://www.pythonware.com/products/pil/>`_  (PIL)
+- `SQLite <http://www.sqlite.org/>`_ or `PostgreSQL <http://www.postgresql.org/>`_
+- `Python Imaging Library <http://www.pythonware.com/products/pil/>`_
+  (PIL or Pillow)
 - `virtualenv <http://www.virtualenv.org/>`_
 - `Node.js <https://nodejs.org>`_
 
-These instructions have been tested on Debian 11 and Fedora 33. These
-instructions should approximately translate to recent Debian
-derivatives such as Ubuntu and Trisquel, and to relatives of Fedora
-such as CentOS, but we haven't explicitly tested these options.
+These instructions have been tested on Debian 11, Debian 12, Ubuntu
+20.04 LTS, Ubuntu 22.04 LTS and Fedora 39.
 
 Issue the following commands:
 
 .. code-block:: bash
 
-    # Debian 11
+    # Debian
     sudo apt update
     sudo apt install automake git nodejs npm python3-dev \
     python3-gst-1.0 python3-lxml python3-pil virtualenv
 
-    # Fedora 33
+    # Fedora
     sudo dnf install automake gcc git-core make nodejs npm \
     libffi-devel python3-devel python3-lxml python3-pillow \
     virtualenv

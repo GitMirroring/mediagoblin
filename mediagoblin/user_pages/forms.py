@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import wtforms
-from wtforms.ext.sqlalchemy.fields import QuerySelectField
+from wtforms_sqlalchemy.fields import QuerySelectField
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 class MediaCommentForm(wtforms.Form):

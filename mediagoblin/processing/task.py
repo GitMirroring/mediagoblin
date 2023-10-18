@@ -31,14 +31,14 @@ logging.basicConfig()
 _log.setLevel(logging.DEBUG)
 
 
-@celery.task(default_retry_delay=2 * 60)
+@celery.shared_task(default_retry_delay=2 * 60)
 def handle_push_urls(feed_url):
     """Subtask, notifying the PuSH servers of new content
 
     Retry 3 times every 2 minutes if run in separate process before failing."""
     if not mgg.app_config["push_urls"]:
         return # Nothing to do
-    _log.debug('Notifying Push servers for feed {}'.format(feed_url))
+    _log.debug(f'Notifying Push servers for feed {feed_url}')
     hubparameters = {
         'hub.mode': 'publish',
         'hub.url': feed_url}
@@ -98,7 +98,7 @@ class ProcessMedia(celery.Task):
                 entry.state = 'processing'
                 entry.save()
 
-                _log.debug('Processing {}'.format(entry))
+                _log.debug(f'Processing {entry}')
 
                 try:
                     processor.process(**reprocess_info)

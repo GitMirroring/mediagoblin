@@ -23,7 +23,7 @@ from pkg_resources import resource_filename
 
 import dateutil.parser
 from pyld import jsonld
-from jsonschema import validate, FormatChecker, draft4_format_checker
+from jsonschema import Draft4Validator, validate, FormatChecker
 
 from mediagoblin.tools.pluginapi import hook_handle
 
@@ -60,7 +60,7 @@ class DefaultChecker(FormatChecker):
     """
     Default MediaGoblin format checker... extended to include a few extra things
     """
-    checkers = copy.deepcopy(draft4_format_checker.checkers)
+    checkers = copy.deepcopy(Draft4Validator.FORMAT_CHECKER.checkers)
 
 
 DefaultChecker.checkers["uri"] = (is_uri, ())
@@ -101,7 +101,8 @@ def load_resource(package, resource_path):
       os.path.sep.
     """
     filename = resource_filename(package, os.path.sep.join(resource_path))
-    return open(filename, encoding="utf-8").read()
+    with open(filename, encoding="utf-8") as f:
+        return f.read()
 
 def load_resource_json(package, resource_path):
     """
@@ -128,7 +129,7 @@ BUILTIN_CONTEXTS = {
 
 _CONTEXT_CACHE = {}
 
-def load_context(url):
+def load_context(url, options={}):
     """
     A self-aware document loader.  For those contexts MediaGoblin
     stores internally, load them from disk.
@@ -147,11 +148,12 @@ def load_context(url):
     if document is not None:
         document = {'contextUrl': None,
                     'documentUrl': url,
-                    'document': document}
+                    'document': document,
+                    'contentType': 'application/ld+json'}
 
     # Otherwise, use jsonld.load_document
     else:
-        document = jsonld.load_document(url)
+        document = jsonld.load_document(url, options)
 
     # cache
     _CONTEXT_CACHE[url] = document

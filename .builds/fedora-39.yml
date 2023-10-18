@@ -1,21 +1,32 @@
-image: ubuntu/20.04
+image: fedora/39
 packages:
   # Install bootstrap and configure dependencies.
   - automake
+  - gcc
+  - git-core
+  - libffi-devel  # To build cffi Python package
+  - make
   - nodejs
   - npm
-  - python3-dev
+  - python3-devel
+  - python3-greenlet  # Fedora say "greenlet is required to install pyproject.toml-based projects"
   - virtualenv
 
   # Install make and runtime dependencies.
   - python3-lxml
-  - python3-pil
+  - python3-pillow
 
   # Install test and docs dependencies.
   - python3-pytest
+  - python3-pytest-forked
   - python3-pytest-xdist
-  - python3-sphinx
-  - python3-sphinxcontrib.websupport
+  # - python3-sphinx
+  # - python3-sphinxcontrib-applehelp
+  # - python3-sphinxcontrib-devhelp
+  # - python3-sphinxcontrib-htmlhelp
+  # - python3-sphinxcontrib-jsmath
+  # - python3-sphinxcontrib.qthelp
+  # - python3-sphinxcontrib.websupport
   - python3-webtest
 
   # Install audio dependencies.
@@ -28,14 +39,12 @@ packages:
   - python3-numpy
 
   # Install video dependencies.
-  - gir1.2-gst-plugins-base-1.0
-  - gir1.2-gstreamer-1.0
-  - gstreamer1.0-tools
-  - python3-gi
+  - python3-gobject
+  - python3-gstreamer1
+  # - gstreamer1-plugin-openh264
 
   # Install raw image dependencies.
-  - libexiv2-dev
-  - libboost-python-dev
+  # - python3-py3exiv2
 
   # Install document (PDF-only) dependencies.
   - poppler-utils
@@ -55,12 +64,6 @@ tasks:
       ./configure
       make
 
-      # Install additional Sphinx dependencies not in Debian.
-      ./bin/pip install sphinxcontrib-applehelp sphinxcontrib-htmlhelp sphinxcontrib-jsmath
-
-      # Install raw image library from PyPI as not available in Debian 11.
-      ./bin/pip install py3exiv2
-
       # Confirm our packages version for later troubleshooting.
       ./bin/python -m pip freeze
 
@@ -72,5 +75,4 @@ tasks:
 
       # Build the documentation.
       ./bin/python -m pip install '.[doc]'
-      cd docs && make html
-
+      # cd docs && make html

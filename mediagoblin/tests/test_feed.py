@@ -1,8 +1,11 @@
+import pytest
+
 from mediagoblin.tests.tools import fixture_add_user, fixture_media_entry
 
 
 class TestFeeds:
-    def setup(self):
+    @pytest.fixture(autouse=True)
+    def setup(self, test_app):
         self.user = fixture_add_user(username='terence', privileges=['active'])
         self.media_entry = fixture_media_entry(
             uploader=self.user.id,

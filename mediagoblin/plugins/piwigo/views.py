@@ -18,7 +18,7 @@ import logging
 import re
 
 from werkzeug.exceptions import MethodNotAllowed, BadRequest, NotImplemented
-from werkzeug.wrappers import BaseResponse
+from werkzeug.wrappers import Response
 
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.meddleware.csrf import csrf_exempt
@@ -118,7 +118,7 @@ def pwg_images_addSimple(request):
         raise BadRequest()
     dump = []
     for f in form:
-        dump.append("{}={!r}".format(f.name, f.data))
+        dump.append(f"{f.name}={f.data!r}")
     _log.info("addSimple: %r %s %r", request.form, " ".join(dump),
               request.files)
 
@@ -218,7 +218,7 @@ def ws_php(request):
     with PWGSession(request) as session:
         result = func(request)
 
-        if isinstance(result, BaseResponse):
+        if isinstance(result, Response):
             return result
 
         response = response_xml(result)

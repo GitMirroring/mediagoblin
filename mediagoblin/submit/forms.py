@@ -16,7 +16,7 @@
 
 
 import wtforms
-from wtforms.ext.sqlalchemy.fields import QuerySelectField
+from wtforms_sqlalchemy.fields import QuerySelectField
 from mediagoblin import mg_globals
 from mediagoblin.tools.text import tag_length_validator
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
@@ -27,7 +27,7 @@ def get_submit_start_form(form, **kwargs):
     max_file_size = kwargs.get('max_file_size')
     desc = None
     if max_file_size:
-        desc = _('Max file size: {} mb'.format(max_file_size))
+        desc = _(f'Max file size: {max_file_size} mb')
 
     class SubmitStartForm(wtforms.Form):
         file = wtforms.FileField(

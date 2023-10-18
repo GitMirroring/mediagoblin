@@ -63,7 +63,7 @@ def profile_endpoint(request):
     if user is None:
         username = request.matchdict["username"]
         return json_error(
-            "No such 'user' with username '{}'".format(username),
+            f"No such 'user' with username '{username}'",
             status=404
         )
 
@@ -78,7 +78,7 @@ def user_endpoint(request):
     if user is None:
         username = request.matchdict["username"]
         return json_error(
-            "No such 'user' with username '{}'".format(username),
+            f"No such 'user' with username '{username}'",
             status=404
         )
 
@@ -98,7 +98,7 @@ def uploads_endpoint(request):
     requested_user = LocalUser.query.filter(LocalUser.username==username).first()
 
     if requested_user is None:
-        return json_error("No such 'user' with id '{}'".format(username), 404)
+        return json_error(f"No such 'user' with id '{username}'", 404)
 
     if request.method == "POST":
         # Ensure that the user is only able to upload to their own
@@ -122,9 +122,9 @@ def uploads_endpoint(request):
         else:
             filenames = sorted(mimetypes.guess_all_extensions(mimetype))
             if not filenames:
-                return json_error('Unknown mimetype: {}'.format(mimetype),
+                return json_error(f'Unknown mimetype: {mimetype}',
                                   status=415)
-            filename = 'unknown{}'.format(filenames[0])
+            filename = f'unknown{filenames[0]}'
 
         file_data = FileStorage(
             stream=io.BytesIO(request.data),
@@ -154,13 +154,13 @@ def inbox_endpoint(request, inbox=None):
     user = LocalUser.query.filter(LocalUser.username==username).first()
 
     if user is None:
-        return json_error("No such 'user' with id '{}'".format(username), 404)
+        return json_error(f"No such 'user' with id '{username}'", 404)
 
 
     # Only the user who's authorized should be able to read their inbox
     if user.id != request.user.id:
         return json_error(
-            "Only '{}' can read this inbox.".format(user.username),
+            f"Only '{user.username}' can read this inbox.",
             403
         )
 
@@ -191,7 +191,7 @@ def inbox_endpoint(request, inbox=None):
 
     # build the inbox feed
     feed = {
-        "displayName": "Activities for {}".format(user.username),
+        "displayName": f"Activities for {user.username}",
         "author": user.serialize(request),
         "objectTypes": ["activity"],
         "url": request.base_url,
@@ -238,7 +238,7 @@ def feed_endpoint(request, outbox=None):
 
     # check if the user exists
     if requested_user is None:
-        return json_error("No such 'user' with id '{}'".format(username), 404)
+        return json_error(f"No such 'user' with id '{username}'", 404)
 
     if request.data:
         data = json.loads(request.data.decode())
@@ -314,7 +314,7 @@ def feed_endpoint(request, outbox=None):
 
                 if media is None:
                     return json_response(
-                        "No such 'image' with id '{}'".format(media_id),
+                        f"No such 'image' with id '{media_id}'",
                         status=404
                     )
 
@@ -327,7 +327,7 @@ def feed_endpoint(request, outbox=None):
 
                 if not media.unserialize(data["object"]):
                     return json_error(
-                        "Invalid 'image' with id '{}'".format(media_id)
+                        f"Invalid 'image' with id '{media_id}'"
                     )
 
 
@@ -347,7 +347,7 @@ def feed_endpoint(request, outbox=None):
                 # Oh no! We don't know about this type of object (yet)
                 object_type = obj.get("objectType", None)
                 return json_error(
-                    "Unknown object type '{}'.".format(object_type)
+                    f"Unknown object type '{object_type}'."
                 )
 
         # Updating existing objects
@@ -389,7 +389,7 @@ def feed_endpoint(request, outbox=None):
                 ).first()
                 if comment is None:
                     return json_error(
-                        "No such 'comment' with id '{}'.".format(obj_id)
+                        f"No such 'comment' with id '{obj_id}'."
                     )
 
                 # Check that the person trying to update the comment is
@@ -437,7 +437,7 @@ def feed_endpoint(request, outbox=None):
 
                 if not image.unserialize(obj):
                     return json_error(
-                        "Invalid 'image' with id '{}'".format(obj_id)
+                        f"Invalid 'image' with id '{obj_id}'"
                     )
                 image.generate_slug()
                 image.save()
@@ -505,7 +505,7 @@ def feed_endpoint(request, outbox=None):
 
                 if comment is None:
                     return json_error(
-                        "No such 'comment' with id '{}'.".format(obj_id)
+                        f"No such 'comment' with id '{obj_id}'."
                     )
 
                 # Make a delete activity
@@ -534,7 +534,7 @@ def feed_endpoint(request, outbox=None):
 
                 if entry is None:
                     return json_error(
-                        "No such 'image' with id '{}'.".format(obj_id)
+                        f"No such 'image' with id '{obj_id}'."
                     )
 
                 # Make the delete activity
@@ -556,7 +556,7 @@ def feed_endpoint(request, outbox=None):
 
     elif request.method != "GET":
         return json_error(
-            "Unsupported HTTP method {}".format(request.method),
+            f"Unsupported HTTP method {request.method}",
             status=501
         )
 
@@ -655,7 +655,7 @@ def object_endpoint(request):
     if object_type not in ["image"]:
         # not sure why this is 404, maybe ask evan. Maybe 400?
         return json_error(
-            "Unknown type: {}".format(object_type),
+            f"Unknown type: {object_type}",
             status=404
         )
 
@@ -669,7 +669,7 @@ def object_endpoint(request):
     media = MediaEntry.query.filter_by(public_id=public_id).first()
     if media is None:
         return json_error(
-            "Can't find '{}' with ID '{}'".format(object_type, object_id),
+            f"Can't find '{object_type}' with ID '{object_id}'",
             status=404
         )
 
@@ -806,7 +806,7 @@ def lrdd_lookup(request):
 
         if user is None:
             return json_error(
-                "Can't find 'user' with username '{}'".format(username))
+                f"Can't find 'user' with username '{username}'")
 
         return json_response([
             {

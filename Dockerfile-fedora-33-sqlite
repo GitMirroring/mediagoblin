@@ -74,7 +74,7 @@ RUN chown root:www-data /var/www
 
 USER www-data
 
-RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git --branch master .
+RUN git clone --depth=1 https://git.sr.ht/~mediagoblin/mediagoblin --branch master .
 RUN git show --oneline --no-patch
 
 RUN ./bootstrap.sh
@@ -100,7 +100,7 @@ RUN ./bin/gmg makeadmin admin
 
 # Without the following we get "ModuleNotFoundError: No module named
 # 'paste.script'" when running ./lazyserver.sh. Not sure why as PasteScript is
-# in the setup.py requirements. Before this we have Paste==3.4.0; after we have
+# in the setup.cfg requirements. Before this we have Paste==3.4.0; after we have
 # Paste==3.5.0.
 RUN ./bin/pip install PasteScript --force-reinstall
 

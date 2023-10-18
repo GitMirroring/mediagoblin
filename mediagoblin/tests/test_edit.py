@@ -25,7 +25,8 @@ from mediagoblin.tools import template, mail
 
 
 class TestUserEdit:
-    def setup(self):
+    @pytest.fixture(autouse=True)
+    def setup(self, test_app):
         # set up new user
         self.user_password = 'toast'
         self.user = fixture_add_user(password = self.user_password,
@@ -168,7 +169,7 @@ class TestUserEdit:
         # Verify email activation works
         template.clear_test_template_context()
         get_params = urlparse.urlsplit(email_context['verification_url'])[3]
-        res = test_app.get('{}?{}'.format(path, get_params))
+        res = test_app.get(f'{path}?{get_params}')
         res.follow()
 
         # New email saved?

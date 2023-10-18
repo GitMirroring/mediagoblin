@@ -32,7 +32,8 @@ _log = logging.getLogger(__name__)
 
 
 class TestAPI:
-    def setup(self):
+    @pytest.fixture(autouse=True)
+    def setup(self, test_app):
         self.db = mg_globals.database
 
         self.user_password = '4cc355_70k3N'
