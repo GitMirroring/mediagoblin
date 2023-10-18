@@ -67,6 +67,7 @@ venv*
 # extlib things
 /extlib/jquery/
 /extlib/leaflet/
+/extlib/pdfjs/
 /extlib/video.js/
 /extlib/videojs-resolution-switcher
 

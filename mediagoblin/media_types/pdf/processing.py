@@ -164,7 +164,7 @@ def check_prerequisites():
         _log.warn('missing pdfinfo')
         return False
     if not where('pdftocairo'):
-        _log.warn('missing pdfcairo')
+        _log.warn('missing pdftocairo')
         return False
     return True
 
