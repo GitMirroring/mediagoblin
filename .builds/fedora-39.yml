@@ -1,6 +1,7 @@
 image: fedora/39
 packages:
   # Install bootstrap and configure dependencies.
+  - autoconf
   - automake
   - gcc
   - git-core
@@ -57,6 +58,7 @@ tasks:
       set -x
       cd mediagoblin
       git show --oneline --no-patch
+
       ./autogen.sh
       ./configure
       make

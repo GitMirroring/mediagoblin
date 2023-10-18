@@ -1,6 +1,7 @@
 image: ubuntu/20.04
 packages:
   # Install bootstrap and configure dependencies.
+  - autoconf
   - automake
   - nodejs
   - npm
@@ -51,6 +52,7 @@ tasks:
       set -x
       cd mediagoblin
       git show --oneline --no-patch
+
       ./autogen.sh
       ./configure
       make
