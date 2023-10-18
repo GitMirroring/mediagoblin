@@ -24,7 +24,7 @@ This chapter has important information about our current and previous releases.
 ======
 
 This minor release adds support for Python 3.10 and 3.11 and drops support for
-Python version prior to 3.7. It also upgrades a number of Python dependencies
+Python versions prior to 3.7. It also upgrades a number of Python dependencies
 and adds a few small bug fixes and improvements.
 
 This version has been tested on Debian Bullseye (11), Debian Bookworm (12),
@@ -45,7 +45,7 @@ Ubuntu 20.04, Ubuntu 22.04 and Fedora 39.
   and Fedora 39 (Python 3.12) (Ben Sturmfels)
 - Upgrade to support latest Jinja2 library (Ben Sturmfels)
 - Upgrade to support latest PyLD library (Ben Sturmfels)
-- Fix various `ResourceWarning`s and `DeprecationWarning`s (Ben Sturmfels)
+- Fix various ``ResourceWarning``s and ``DeprecationWarning``s (Ben Sturmfels)
 - Switch default image resize filter to BICUBIC (Ben Sturmfels)
 - Add "extras_require" entries for docs, audio, video, raw image, LDAP, and OpenID dependencies (Olivier Mehani)
 
