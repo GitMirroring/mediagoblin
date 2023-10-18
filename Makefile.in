@@ -90,6 +90,7 @@ all: develop
 
 docs:
 ifneq ($(VIRTUALENV),no)
+	$(maybe_venved_python) -m pip install --editable '.[doc]'
 	source bin/activate && cd docs && make html
 else
 	cd docs && make html
@@ -169,7 +170,8 @@ distclean: $(maybe_venv_clean)
 	rm -vf $(srcdir)/Makefile
 
 check:
-	./runtests.sh
+	$(maybe_venved_python) -m pip install $(srcdir)[test]
+	$(maybe_venved_python) -m pytest -rs --forked mediagoblin/tests
 
 ###########################################################################
 # These things aren't really tested / supported yet.
