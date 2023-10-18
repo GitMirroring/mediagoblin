@@ -4,21 +4,19 @@ Release Checklist
 
 - update docs/source/siteadmin/relnotes.txt
 - update docs/source/siteadmin/upgrading.txt
+- update mediagoblin/_version.py to remove ".dev" suffix
+- update configure.ac version to remove ".dev" suffix
 - write a blog post
 - test the upgrade process
 - build the docs and check they look good
-- git tag v0.11.0 --signed
+- git tag v0.11.0 --signed --message
 - push tags
 - log in and rebuild master and new version docs on readthedocs.org
 - merge into stable branch
 - post to mediagoblin-devel
 - post to info-gnu@gnu.org
 - post to mastodon and twitter
-- update IRC topic
 - email personal contacts
-
-- update mediagoblin/_version.py to remove ".dev" suffix
-- update configure.ac version to remove ".dev" suffix
 - update mediagoblin/_version.py again to add ".dev" suffix and increment version
 - update configure.ac version again to add ".dev" suffix and increment version
 
