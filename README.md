@@ -25,3 +25,26 @@ get involved!
 * [bug tracker](https://todo.sr.ht/~mediagoblin/mediagoblin)
 * [bug tracker (legacy)](https://issues.mediagoblin.org)
 * [CI](https://builds.sr.ht/~mediagoblin/mediagoblin)
+
+
+## Contributing
+
+Sending patches to MediaGoblin is done [by
+email](https://lists.gnu.org/mailman/listinfo/mediagoblin-devel), this is simple
+and built-in to Git.
+
+Set up your system once by following the steps "Installation and Configuration"
+of [git-send-email.io](https://git-send-email.io/).
+
+Then, run once in this repository:
+```shell
+git config sendemail.to "mediagoblin-devel@gnu.org"
+```
+
+Then, to send a patch, make your commit, then run:
+```shell
+git send-email --base=HEAD~1 --annotate -1 -v1
+```
+
+It should then appear on [the mailing list
+archive](https://lists.gnu.org/archive/html/mediagoblin-devel/).
