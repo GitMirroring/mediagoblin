@@ -26,9 +26,7 @@ and of itself. We recommend a setup that combines MediaGoblin,
 virtualenv and Nginx on a .deb or .rpm-based GNU/Linux distribution.
 
 Experts may of course choose other deployment options, including
-Apache. See our `Deployment wiki page
-<https://web.archive.org/web/20200817190402/https://wiki.mediagoblin.org/Deployment>`_ for for more details.
-Please note that we are not able to provide support for these
+Apache. Please note that we are not able to provide support for these
 alternative deployment options.
 
 .. note::
