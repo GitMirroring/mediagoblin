@@ -37,10 +37,10 @@ from mediagoblin.tools.exif import exif_fix_image_orientation, \
 _log = logging.getLogger(__name__)
 
 PIL_FILTERS = {
-    'NEAREST': Image.NEAREST,
-    'BILINEAR': Image.BILINEAR,
-    'BICUBIC': Image.BICUBIC,
-    'LANCZOS': Image.LANCZOS}
+    'NEAREST': Image.Resampling.NEAREST,
+    'BILINEAR': Image.Resampling.BILINEAR,
+    'BICUBIC': Image.Resampling.BICUBIC,
+    'LANCZOS': Image.Resampling.LANCZOS}
 
 MEDIA_TYPE = 'mediagoblin.media_types.image'
 
