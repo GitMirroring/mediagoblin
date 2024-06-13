@@ -19,7 +19,7 @@ import logging
 from urllib import request, parse
 
 import celery
-from celery.registry import tasks
+from celery import current_app
 
 from mediagoblin import mg_globals as mgg
 from . import mark_entry_failed, BaseProcessingFail
@@ -175,5 +175,4 @@ class ProcessMedia(celery.Task):
         if not celery.app.default_app.conf['CELERY_ALWAYS_EAGER']:
             mgg.database.reset_after_request()
 
-
-tasks.register(ProcessMedia)
+current_app.register_task(ProcessMedia)
