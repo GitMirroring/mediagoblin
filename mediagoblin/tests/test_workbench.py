@@ -22,33 +22,34 @@ from mediagoblin.tools import workbench
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.decorators import get_workbench
 from mediagoblin.tests.test_storage import get_tmp_filestorage, cleanup_storage
+import pytest
+
+
+@pytest.fixture
+def workbench_manager():
+    workbench_base = tempfile.mkdtemp(prefix='gmg_workbench_testing')
+    workbench_manager = workbench.WorkbenchManager(workbench_base)
+    yield workbench_manager
+    # If the workbench is empty, this should work.
+    os.rmdir(workbench_base)
 
 
 class TestWorkbench:
-    def setup(self):
-        self.workbench_base = tempfile.mkdtemp(prefix='gmg_workbench_testing')
-        self.workbench_manager = workbench.WorkbenchManager(
-            self.workbench_base)
-
-    def teardown(self):
-        # If the workbench is empty, this should work.
-        os.rmdir(self.workbench_base)
-
-    def test_create_workbench(self):
-        workbench = self.workbench_manager.create()
+    def test_create_workbench(self, workbench_manager):
+        workbench = workbench_manager.create()
         assert os.path.isdir(workbench.dir)
-        assert workbench.dir.startswith(self.workbench_manager.base_workbench_dir)
+        assert workbench.dir.startswith(workbench_manager.base_workbench_dir)
         workbench.destroy()
 
-    def test_joinpath(self):
-        this_workbench = self.workbench_manager.create()
+    def test_joinpath(self, workbench_manager):
+        this_workbench = workbench_manager.create()
         tmpname = this_workbench.joinpath('temp.txt')
         assert tmpname == os.path.join(this_workbench.dir, 'temp.txt')
         this_workbench.destroy()
 
-    def test_destroy_workbench(self):
+    def test_destroy_workbench(self, workbench_manager):
         # kill a workbench
-        this_workbench = self.workbench_manager.create()
+        this_workbench = workbench_manager.create()
         tmpfile_name = this_workbench.joinpath('temp.txt')
         tmpfile = open(tmpfile_name, 'w')
         with tmpfile:
