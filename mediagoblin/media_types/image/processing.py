@@ -36,11 +36,21 @@ from mediagoblin.tools.exif import exif_fix_image_orientation, \
 
 _log = logging.getLogger(__name__)
 
-PIL_FILTERS = {
-    'NEAREST': Image.Resampling.NEAREST,
-    'BILINEAR': Image.Resampling.BILINEAR,
-    'BICUBIC': Image.Resampling.BICUBIC,
-    'LANCZOS': Image.Resampling.LANCZOS}
+try:
+    PIL_FILTERS = {
+        'NEAREST': Image.Resampling.NEAREST,
+        'BILINEAR': Image.Resampling.BILINEAR,
+        'BICUBIC': Image.Resampling.BICUBIC,
+        'LANCZOS': Image.Resampling.LANCZOS,
+    }
+except AttributeError:
+    # Older Pillow - deprecated since 9.1.0 and removed in 10.0.0.
+    PIL_FILTERS = {
+        'NEAREST': Image.NEAREST,
+        'BILINEAR': Image.BILINEAR,
+        'BICUBIC': Image.BICUBIC,
+        'LANCZOS': Image.LANCZOS,
+    }
 
 MEDIA_TYPE = 'mediagoblin.media_types.image'
 
