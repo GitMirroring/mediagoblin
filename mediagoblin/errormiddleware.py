@@ -40,7 +40,7 @@ MGOBLIN_ERROR_MESSAGE = """\
   <br><br>
   <p>
     Powered... er broken... by
-    <a href="http://www.mediagoblin.org">MediaGoblin</a>,
+    <a href="http://mediagoblin.org">MediaGoblin</a>,
     a <a href="http://www.gnu.org">GNU Project</a>.
   </p>
 </div>"""
