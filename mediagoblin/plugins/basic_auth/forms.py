@@ -37,10 +37,12 @@ class RegistrationForm(wtforms.Form):
 class LoginForm(wtforms.Form):
     username = wtforms.StringField(
         _('Username or Email'),
-        [wtforms.validators.InputRequired(),
-         normalize_user_or_email_field(is_login=True)])
+        default='',
+        validators=[wtforms.validators.InputRequired(),
+                    normalize_user_or_email_field(is_login=True)])
     password = wtforms.PasswordField(
-        _('Password'))
+        _('Password'),
+        default='')
     stay_logged_in = wtforms.BooleanField(
         label='',
         description=_('Stay logged in'))

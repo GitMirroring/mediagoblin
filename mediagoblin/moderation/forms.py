@@ -55,6 +55,7 @@ class BanForm(wtforms.Form):
         validators=[wtforms.validators.Optional()])
     why_user_was_banned = wtforms.TextAreaField(
         _('Why are you banning this User?'),
+        default='',
         validators=[wtforms.validators.Optional()])
 
 # =========== Forms for mediagoblin.moderation.report page =================  #
@@ -109,7 +110,8 @@ class ReportResolutionForm(wtforms.Form):
         _('What action will you take to resolve the report?'),
         validators=[wtforms.validators.Optional()],
         choices=ACTION_CHOICES)
-    targeted_user   = wtforms.HiddenField('',
+    targeted_user = wtforms.HiddenField(
+        '',
         validators=[wtforms.validators.InputRequired()])
     take_away_privileges = wtforms.SelectMultipleField(
         _('What privileges will you take away?'),
@@ -120,12 +122,15 @@ class ReportResolutionForm(wtforms.Form):
         validators=[wtforms.validators.Optional()])
     why_user_was_banned = wtforms.TextAreaField(
         _('Why user was banned:'),
+        default='',
         validators=[wtforms.validators.Optional()])
     message_to_user = wtforms.TextAreaField(
         _('Message to user:'),
+        default='',
         validators=[wtforms.validators.Optional()])
     resolution_content = wtforms.TextAreaField(
-        _('Resolution content:'))
+        _('Resolution content:'),
+        default='')
 
 # ======== Forms for mediagoblin.moderation.report_panel page ==============  #
 
