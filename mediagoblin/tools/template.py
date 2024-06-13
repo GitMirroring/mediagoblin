@@ -14,12 +14,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from urllib.parse import quote_plus
+
 import jinja2
 from jinja2.ext import Extension
 from jinja2.nodes import Include, Const
 
 from babel.localedata import exists
-from werkzeug.urls import url_quote_plus
 
 from mediagoblin import mg_globals
 from mediagoblin import messages
@@ -77,7 +78,7 @@ def get_jinja_env(app, template_loader, locale):
     template_env.globals['version'] = _version.__version__
     template_env.globals['auth'] = app.auth
     template_env.globals['is_rtl'] = is_rtl(locale)
-    template_env.filters['urlencode'] = url_quote_plus
+    template_env.filters['urlencode'] = quote_plus
 
     # add human readable fuzzy date time
     template_env.globals['timesince'] = timesince
