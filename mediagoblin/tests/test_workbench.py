@@ -17,21 +17,20 @@
 import os
 import tempfile
 
-
 from mediagoblin.tools import workbench
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.decorators import get_workbench
 from mediagoblin.tests.test_storage import get_tmp_filestorage, cleanup_storage
+import pytest
 
 
 class TestWorkbench:
+    @pytest.fixture(autouse=True)
     def setup(self):
         self.workbench_base = tempfile.mkdtemp(prefix='gmg_workbench_testing')
         self.workbench_manager = workbench.WorkbenchManager(
             self.workbench_base)
-
-    def teardown(self):
-        # If the workbench is empty, this should work.
+        yield
         os.rmdir(self.workbench_base)
 
     def test_create_workbench(self):

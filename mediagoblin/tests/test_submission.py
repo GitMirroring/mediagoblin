@@ -530,9 +530,6 @@ class TestSubmissionBasics(BaseTestSubmission):
 
 class TestSubmissionVideo(BaseTestSubmission):
     @pytest.fixture(autouse=True)
-
-    @pytest.mark.skipif(SKIP_VIDEO,
-                        reason="Dependencies for video not met")
     def setup(self, video_plugin_app):
         self.test_app = video_plugin_app
         self.media_type = 'mediagoblin.media_types.video'
