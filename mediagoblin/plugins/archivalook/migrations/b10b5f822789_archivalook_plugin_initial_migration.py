@@ -17,11 +17,6 @@ import sqlalchemy as sa
 
 
 def upgrade():
-    if op.get_bind().engine.has_table('archivalook__featured_media'):
-        # Skip; this has already been instantiated
-        # (probably via sqlalchemy-migrate)
-        return
-
     op.create_table(
         'archivalook__featured_media',
         sa.Column('id', sa.Integer(), nullable=False),
