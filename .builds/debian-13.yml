@@ -1,4 +1,4 @@
-image: debian/bookworm
+image: debian/trixie
 packages:
   # Install bootstrap and configure dependencies.
   - autoconf
