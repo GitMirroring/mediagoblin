@@ -20,10 +20,9 @@
 ;;;
 ;;; ========================================
 ;;;
-;;; This file is intended for people who want to set up MediaGoblin hacking
-;;; environment using Guix to install dependencies, but run MediaGoblin from a
-;;; git checkout. See https://git.sr.ht/~mediagoblin/mediagoblin-guix for
-;;; details on the Guix packaging effort.
+;;; This file is CURRENTLY OUT-OF-DATE. For the time being, please refer to
+;;; https://git.sr.ht/~mediagoblin/mediagoblin-guix for details on the Guix
+;;; packaging effort.
 ;;;
 ;;;
 ;;; With `guix environment' you can use guix as kind of a universal
