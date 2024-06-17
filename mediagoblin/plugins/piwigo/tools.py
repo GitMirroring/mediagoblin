@@ -71,7 +71,7 @@ def _fill_element(el, data):
     elif isinstance(data, PwgNamedArray):
         data.fill_element_xml(el)
     else:
-        _log.warn("Can't convert to xml: %r", data)
+        _log.warning("Can't convert to xml: %r", data)
 
 
 def response_xml(result):
@@ -116,7 +116,7 @@ class CmdTable:
         _log.debug("Found method %s", cmd_name)
         func, only_post = entry
         if only_post and request.method != "POST":
-            _log.warn("Method %s only allowed for POST", cmd_name)
+            _log.warning("Method %s only allowed for POST", cmd_name)
             raise MethodNotAllowed()
         return func
 

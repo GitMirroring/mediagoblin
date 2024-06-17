@@ -57,8 +57,8 @@ def handle_push_urls(feed_url):
                 return handle_push_urls.retry(exc=exc, throw=False)
             except Exception as e:
                 # All retries failed, Failure is no tragedy here, probably.
-                _log.warn('Failed to notify PuSH server for feed {}. '
-                          'Giving up.'.format(feed_url))
+                _log.warning('Failed to notify PuSH server for feed {}. '
+                             'Giving up.'.format(feed_url))
                 return False
 
 

@@ -53,7 +53,7 @@ class SessionManager:
         ### FIXME: Future cookie-blacklisting code
         # m = BadCookie.query.filter_by(cookie = cookie)
         # if m:
-        #     _log.warn("Bad cookie received: %s", m.reason)
+        #     _log.warning("Bad cookie received: %s", m.reason)
         #     raise BadRequest()
         try:
             return Session(self.signer.loads(cookie))

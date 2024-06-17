@@ -109,7 +109,7 @@ def login(request):
             login_failed = True
             remote_addr = (request.access_route and request.access_route[-1]
                            or request.remote_addr)
-            _log.warn("Failed login attempt from %r", remote_addr)
+            _log.warning("Failed login attempt from %r", remote_addr)
 
     return render_to_response(
         request,
