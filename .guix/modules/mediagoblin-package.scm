@@ -13,7 +13,7 @@
 ;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;;; GNU General Public License for more details.
 
-(define-module (mediagoblin)
+(define-module (mediagoblin-package)
   #:use-module (guix packages)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix git-download)
@@ -124,4 +124,5 @@ run.  You can think of it as a decentralized alternative to Flickr, YouTube,
 SoundCloud, etc.")
       (license (list license:agpl3+ license:cc0)))))
 
-mediagoblin
+mediagobli
+ncoo
