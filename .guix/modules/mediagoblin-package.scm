@@ -33,7 +33,7 @@
   #:use-module (gnu packages video)
   #:use-module (gnu packages xml))
 
-;; See README.md for usage instructions and caveats.
+;; See README-Guix.md for usage instructions and caveats.
 
 (define-public mediagoblin
   (let ((commit "4258a7392791462c9589fb8fbc347a26345498ea")
