@@ -124,5 +124,4 @@ run.  You can think of it as a decentralized alternative to Flickr, YouTube,
 SoundCloud, etc.")
       (license (list license:agpl3+ license:cc0)))))
 
-mediagobli
-ncoo
+mediagoblin
