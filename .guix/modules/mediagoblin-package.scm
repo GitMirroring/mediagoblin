@@ -53,19 +53,29 @@
       (build-system python-build-system)
       (arguments
        `(#:phases (modify-phases %standard-phases
+                    ;; Override the .gmg-real program name from sys.argv[0]
+                    (add-after 'unpack 'hide-wrapping
+                      (lambda _
+                        (substitute* "mediagoblin/gmg_commands/__init__.py"
+                          (("ArgumentParser\\(") "ArgumentParser(prog=\"gmg\","))))
+                    (add-after 'unpack 'remove-broken-symlinks
+                      (lambda _
+                        ;; Remove broken symlink for git submodule
+                        (delete-file "mediagoblin/static/css/extlib/skeleton.css")
+                        ;; Remove broken symlinks caused by having not run `npm install`
+                        (delete-file "mediagoblin/static/js/extlib/jquery.js")
+                        (delete-file "mediagoblin/static/extlib/videojs-resolution-switcher")
+                        (delete-file "mediagoblin/static/extlib/video-js")
+                        (delete-file "mediagoblin/static/extlib/leaflet")))
                     ;; Build the language translations
                     (add-after 'build 'build-translations
                       (lambda _
                         (invoke "devtools/compile_translations.sh")))
-                    ;; We're using the pytest test runner
+                    ;; Use pytest test runner
                     (replace 'check
                       (lambda* (#:key tests? #:allow-other-keys)
                         (when tests?
-                          (invoke "pytest" "mediagoblin/tests" "-rs"
-                                  "--forked"))))
-                    ;; Avoid system-error "utime" "~A" ("No such file or directory")
-                    ;; TODO: Is there a better way to fix this?
-                    (delete 'ensure-no-mtimes-pre-1980))))
+                          (invoke "pytest" "mediagoblin/tests" "-rs" "--forked")))))))
       (native-inputs (list gobject-introspection
                            python-pytest
                            python-pytest-forked
