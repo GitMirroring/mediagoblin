@@ -1,28 +1,3 @@
-recursive-include mediagoblin/i18n *.po
-recursive-include mediagoblin *.js *.css *.png *.svg *.ico
-recursive-include mediagoblin *.ini
-recursive-include mediagoblin *.html *.txt
-recursive-include docs *.rst *.html
-recursive-include mediagoblin/db/migrations/versions *.py
-recursive-include mediagoblin/media_types/ascii/migrations *.py
-recursive-include mediagoblin/media_types/audio/migrations *.py
-recursive-include mediagoblin/media_types/blog/migrations *.py
-recursive-include mediagoblin/media_types/image/migrations *.py
-recursive-include mediagoblin/media_types/pdf/migrations *.py
-recursive-include mediagoblin/media_types/stl/migrations *.py
-recursive-include mediagoblin/media_types/video/migrations *.py
-include           mediagoblin/media_types/ascii/fonts/*.otf
-include mediagoblin.example.ini mediagoblin/config_spec.ini paste.ini
-include mediagoblin/config_spec.ini
-include mediagoblin/db/migrations/alembic.ini
-include mediagoblin/db/migrations/env.py
-graft extlib
-graft licenses
-graft devtools
-graft mediagoblin/tests/test_submission
-include COPYING AUTHORS
-include lazyserver.sh lazystarter.sh lazycelery.sh runtests.sh
-include configure.ac configure install-sh
-include Makefile.in
-include bower.json
-include mediagoblin/static/metadata/rdfa11.jsonld
+# Data for use in the application. We just include the *whole* "mediagoblin"
+# subdirectory for simplicity of maintenance.
+graft mediagoblin
