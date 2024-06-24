@@ -21,6 +21,10 @@ via load-path", followed by "Run MediaGoblin".
 
 **Jobs to do**:
 
+* Vendor-in skeleton.css as being a git submodule, it's not available in the
+  built package. We're currently only using `skeleton.css` (~250 lines) and not
+  the included `base.css` or `layout.css`.
+
 * Add a `gmg init` command to create a default `mediagoblin.ini` and `paste.ini`
   in the current directory. Should remind you to run `gmg dbupdate`.
 

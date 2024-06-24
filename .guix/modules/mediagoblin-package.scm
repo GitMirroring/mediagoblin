@@ -17,7 +17,7 @@
   #:use-module (guix packages)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix git-download)
-  #:use-module (guix build-system python)
+  #:use-module (guix build-system pyproject)
   #:use-module (gnu packages audio)
   #:use-module (gnu packages check)
   #:use-module (gnu packages databases)
@@ -50,7 +50,7 @@
          (file-name (git-file-name name version))
          (sha256
           (base32 "1cbq3r79gyklf55hxah05dxmp7i8c6aw45z729niw36dvvjg500p"))))
-      (build-system python-build-system)
+      (build-system pyproject-build-system)
       (arguments
        `(#:phases (modify-phases %standard-phases
                     ;; Override the .gmg-real program name from sys.argv[0]
