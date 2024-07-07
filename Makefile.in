@@ -12,8 +12,6 @@ NGINX_DOCKER_IMAGE = $(PACKAGE_DOCKER_REPO)/nginx:${PACKAGE_VERSION}
 
 DOCKER=@DOCKER@
 
-PREFIX=@PREFIX@
-
 PYTHON=@PYTHON@
 PYTHON_VERSION=@PYTHON_VERSION@
 
@@ -27,6 +25,8 @@ BUILD_PDF=@BUILD_PDF@
 BUILD_STL=@BUILD_STL@
 BUILD_LDAP=@BUILD_LDAP@
 BUILD_DOC=no
+
+VENV_SUBDIR=@VENV_SUBDIR@
 
 # XXX: If we ever want to support out-of-source builds,
 # we'll have to check that those SRC/BUILD _DIR variables are used correctly
@@ -46,7 +46,7 @@ EXTLIB_JS=\
 	 $(EXTLIB_DIR)/videojs-resolution-switcher \
 	 # end
 
-VENV_DIR=$(BUILD_DIR)/venv
+VENV_DIR=$(BUILD_DIR)/$(VENV_SUBDIR)
 VENV_PYTHON=$(VENV_DIR)/bin/python
 VENV_PIP=$(VENV_DIR)/bin/pip
 VENV_PYBABEL=$(VENV_DIR)/bin/pybabel
@@ -101,9 +101,9 @@ $(DOCS_BUILD_DIR): $(VENV_PIP)
 	$(VENV_PIP) install $(PIP_INSTALL_ARGS) $(SRC_DIR)[doc]
 	$(MAKE) -C docs html SPHINXBUILD="$(VENV_SPHINX_BUILD)"
 
-$(VENV_PYTHON) $(VENV_PIP): $(VENV_DIR)
-$(VENV_DIR):
-	$(PYTHON) -m venv --system-site-packages $(@)
+$(VENV_PYTHON) $(VENV_PIP): $(VENV_DIR)/bin
+$(VENV_DIR)/bin: # use bin to identify in-source virtualenvs
+	$(PYTHON) -m venv --system-site-packages $(VENV_DIR)
 	# Version 20.2.4 fixes the above Ubuntu issue, while 24.0 is the last
 	# version that doesn't choke on Celery's package metadata. May be
 	# possible to remove this restruction now we have upgrade
@@ -135,8 +135,8 @@ $(NGINX_DISTNAME).docker-stamp: $(PACKAGE_DISTNAME).docker-stamp Dockerfile.ngin
 check: $(PACKAGE_DISTNAME).docker-stamp
 	$(DOCKER) run -it --rm -w $(DOCKER_PATH) \
 		--entrypoint bash $(PACKAGE_DOCKER_IMAGE) -c ' \
-		$(VENV_PIP) install $(PIP_INSTALL_ARGS) $(DOCKER_PATH)[test] \
-		&& $(VENV_PYTHON) -m pytest '
+		./$(VENV_SUBDIR)/bin/pip install $(PIP_INSTALL_ARGS) $(DOCKER_PATH)[test] \
+		&& ./$(VENV_SUBDIR)/bin/python -m pytest '
 
 docs: COPY_PATH=docs/build
 docs: cp-docs
@@ -162,7 +162,7 @@ clean: clean-pycache clean-docs clean-i18n
 	rm -rf $(EGG_INFO)
 	rm -rf $(BUILD_DIR)/dist
 	rm -rf $(BUILD_DIR)/build
-	rm -rf $(VENV_DIR)
+	test -z "$(VENV_SUBDIR)" || test "$(VENV_SUBDIR)" = '.' || rm -rf $(VENV_DIR)
 
 clean-pycache:
 	find $(SRC_DIR)/mediagoblin -type d -name '__pycache__' -exec rm -rf {} +

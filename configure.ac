@@ -26,6 +26,15 @@ AC_ARG_WITH([bower],
 			    [use_bower=check]
 			    )
 
+AC_CHECK_FILE([./bin/python],
+	      [
+	       AC_MSG_NOTICE([Detected ./bin/python. Assuming upgrade of an old-style in-source virtualenv build. Disabling Docker.])
+	       VENV_SUBDIR=.
+	       use_docker=no
+	      ],
+	      [VENV_SUBDIR=venv],
+	      )
+
 AS_IF([test "$use_docker" = check],
       [AC_CHECK_PROGS([DOCKER], [docker], [none])],
       [test "$use_docker" = no], [DOCKER=none],
@@ -241,6 +250,7 @@ AC_SUBST([BUILD_RAW_IMAGE], [$BUILD_RAW_IMAGE])
 AC_SUBST([BUILD_PDF], [$BUILD_PDF])
 AC_SUBST([BUILD_STL], [$BUILD_STL])
 AC_SUBST([BUILD_LDAP], [$BUILD_LDAP])
+AC_SUBST([VENV_SUBDIR], [$VENV_SUBDIR])
 
 AC_CONFIG_FILES([Makefile
 		 mediagoblin/_version.py

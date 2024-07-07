@@ -21,6 +21,8 @@ set -e
 
 if [ -f "./venv/bin/pybabel" ]; then
     PYBABEL="./venv/bin/pybabel";
+elif [ -f "./bin/pybabel" ]; then
+    PYBABEL="./bin/pybabel";
 else
     PYBABEL=pybabel;
 fi
