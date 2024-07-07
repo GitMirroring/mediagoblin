@@ -29,7 +29,8 @@ AC_ARG_WITH([bower],
 AS_IF([test "$use_docker" = check],
       [AC_CHECK_PROGS([DOCKER], [docker], [none])],
       [test "$use_docker" = no], [DOCKER=none],
-      [DOCKER=$use_docker]
+      [DOCKER=$use_docker
+       ]
       )
 
 AS_IF([test "$DOCKER" = none ], [
@@ -221,7 +222,17 @@ cat << EOF
 EOF
 
        ],
-       [AC_MSG_NOTICE([preparing a containerised build using ${DOCKER}])]
+       [
+	AC_MSG_NOTICE([preparing a containerised build using ${DOCKER}])
+	AC_CONFIG_FILES([
+			 Dockerfile.nginx
+			 docker-compose.build.yml
+			 docker-compose.ecs.yml
+			 docker-compose.lazyserver.yml
+			 docker-compose.nginx.yml
+			 docker-compose.yml
+			 ])
+	]
        )
 
 AC_SUBST([BUILD_AUDIO], [$BUILD_AUDIO])
@@ -233,12 +244,6 @@ AC_SUBST([BUILD_LDAP], [$BUILD_LDAP])
 
 AC_CONFIG_FILES([Makefile
 		 mediagoblin/_version.py
-		 Dockerfile.nginx
-		 docker-compose.build.yml
-		 docker-compose.ecs.yml
-		 docker-compose.lazyserver.yml
-		 docker-compose.nginx.yml
-		 docker-compose.yml
 		 ])
 AC_OUTPUT
 
