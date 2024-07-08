@@ -129,7 +129,7 @@ ifneq ($(VIRTUALENV),no)
 	# possible to remove this restruction now we have upgrade
 	# Celery. Unconditionally upgrading pip may not necessarily be a good
 	# idea.
-	./bin/python -m pip install 'pip>=20.2.4<=24.0'
+	./bin/python -m pip install 'pip>=20.2.4,<=24.0'
 	./bin/python -m pip install --editable .
 
 virtualenv: bin/python extlib
