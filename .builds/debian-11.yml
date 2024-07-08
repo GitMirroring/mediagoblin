@@ -73,5 +73,7 @@ tasks:
       # Check that `gmg` command runs
       ./bin/gmg dbupdate
 
-      # Build the documentation.
-      make docs
+      # Don't bother building the documentation on Debian 11 as we're hitting
+      # some incompatibilities between the OS-installed sphinx and the
+      # pip-installed jinja2.
+      # make docs
