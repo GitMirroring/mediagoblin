@@ -56,13 +56,11 @@ tasks:
   - core: |
       set -x
 
-      npm install bower
-
       cd mediagoblin
       git show --oneline --no-patch
 
       ./autogen.sh
-      ./configure --with-bower=$(pwd)/../node_modules/.bin/bower
+      ./configure
       make build
 
       # Confirm our packages version for later troubleshooting.

@@ -21,11 +21,11 @@ AC_ARG_WITH([docker],
 			    [use_docker=$withval],
 			    [use_docker=check]
 			    )
-AC_ARG_WITH([bower],
-	    [AS_HELP_STRING([--with-bower],
-			    [build a bower image @<:@default=check@:>@])],
-			    [use_bower=$withval],
-			    [use_bower=check]
+AC_ARG_WITH([npx],
+	    [AS_HELP_STRING([--with-npx],
+			    [build a npx image @<:@default=check@:>@])],
+			    [use_npx=$withval],
+			    [use_npx=check]
 			    )
 
 AS_IF([test "$use_docker" = check || test "$use_docker" = yes],
@@ -45,13 +45,13 @@ AS_IF([test "$DOCKER" = none ], [
 
        AC_PROG_AWK
 
-       AS_IF([test "$use_bower" = check],
-	     [AC_CHECK_PROGS([BOWER], [bower], [none])],
-	     [test "$use_bower" = no], [BOWER=none],
-	     [BOWER=$use_bower]
+       AS_IF([test "$use_npx" = check],
+	     [AC_CHECK_PROGS([NPX], [npx], [none])],
+	     [test "$use_npx" = no], [NPX=none],
+	     [NPX=$use_npx]
 	     )
-       AS_IF([test $BOWER = none],
-	     [AC_MSG_ERROR(bower was not found)]
+       AS_IF([test $NPX = none],
+	     [AC_MSG_ERROR(npx was not found)]
 	     )
 
 

@@ -15,7 +15,7 @@ DOCKER=@DOCKER@
 PYTHON=@PYTHON@
 PYTHON_VERSION=@PYTHON_VERSION@
 
-BOWER=@BOWER@
+NPX=@NPX@
 BOWER_ARGS=
 
 BUILD_AUDIO=@BUILD_AUDIO@
@@ -67,7 +67,9 @@ build: $(VENV_DIST_INFO) extlib i18n
 
 extlib: $(EXTLIB_JS)
 $(EXTLIB_JS):
-	$(BOWER) $(BOWER_ARGS) install $(SRC_DIR)/bower.json
+	# Using `npx` rather than `npm exec` as was only added in npm v7.0.0,
+	# which isn't available on Ubuntu 20.04.
+	$(NPX) bower --yes $(BOWER_ARGS) install $(SRC_DIR)/bower.json
 
 # Just depend on one random translation file to avoid rebuilding them all
 # XXX: The script currently tries to find pybabel itself

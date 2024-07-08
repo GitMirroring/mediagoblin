@@ -121,8 +121,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 		    libsasl2-dev \
 		    libldap2-dev \
 	    ') \
-	    && rm -rf /var/lib/apt/lists/* \
-	    && npm install -g bower
+	    && rm -rf /var/lib/apt/lists/*
 
 # Create /var/www because Bower writes some cache files into /var/www during
 # make, failing if it doesn't exist.
