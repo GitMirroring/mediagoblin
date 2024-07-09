@@ -35,11 +35,13 @@ AC_CHECK_FILE([./bin/python],
 	      [VENV_SUBDIR=venv],
 	      )
 
-AS_IF([test "$use_docker" = check],
+AS_IF([test "$use_docker" = check || test "$use_docker" = yes],
       [AC_CHECK_PROGS([DOCKER], [docker], [none])],
       [test "$use_docker" = no], [DOCKER=none],
-      [DOCKER=$use_docker
-       ]
+      [DOCKER=$use_docker]
+      )
+AS_IF([test "$use_docker" = yes && test "$DOCKER" = none ],
+      [AC_MSG_ERROR(docker was not found)]
       )
 
 AS_IF([test "$DOCKER" = none ], [
