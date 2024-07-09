@@ -12,6 +12,8 @@ dnl pkg-config is required prior to generating the configure script
 dnl make sure the macros it provides have been successfully replaced
 m4_pattern_forbid([^PKG_])
 
+VENV_SUBDIR=.
+
 # Checks for programs.
 AC_ARG_WITH([docker],
 	    [AS_HELP_STRING([--with-docker],
@@ -25,15 +27,6 @@ AC_ARG_WITH([bower],
 			    [use_bower=$withval],
 			    [use_bower=check]
 			    )
-
-AC_CHECK_FILE([./bin/python],
-	      [
-	       AC_MSG_NOTICE([Detected ./bin/python. Assuming upgrade of an old-style in-source virtualenv build. Disabling Docker.])
-	       VENV_SUBDIR=.
-	       use_docker=no
-	      ],
-	      [VENV_SUBDIR=venv],
-	      )
 
 AS_IF([test "$use_docker" = check || test "$use_docker" = yes],
       [AC_CHECK_PROGS([DOCKER], [docker], [none])],
@@ -60,6 +53,7 @@ AS_IF([test "$DOCKER" = none ], [
        AS_IF([test $BOWER = none],
 	     [AC_MSG_ERROR(bower was not found)]
 	     )
+
 
        dnl
        dnl Media type plugins [0]
