@@ -1,7 +1,6 @@
 # This helps to reduce the size of the Docker build context and to avoid
 # including potentially sensitive files.
 #
-# .git is needed during bootstrap.sh
 bin
 lib
 lib64
@@ -11,3 +10,13 @@ user_dev
 dist
 docs/build
 .pytest_cache
+Dockerfile
+.git*
+venv
+__pycache__
+*.egg-info
+data/
+user_dev/
+*.db
+Makefile
+tags

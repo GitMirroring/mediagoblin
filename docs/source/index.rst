@@ -43,6 +43,7 @@ MediaGoblin website.  It is written for site administrators.
    siteadmin/troubleshooting
    siteadmin/media-types
    siteadmin/help
+   siteadmin/docker
    siteadmin/relnotes
    siteadmin/theming
    siteadmin/plugins

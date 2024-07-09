@@ -55,12 +55,13 @@ packages:
 tasks:
   - core: |
       set -x
+
       cd mediagoblin
       git show --oneline --no-patch
 
       ./autogen.sh
       ./configure
-      make
+      make build
 
       # Confirm our packages version for later troubleshooting.
       ./bin/python -m pip freeze

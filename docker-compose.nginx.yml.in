@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  paste:
+    ports: []
+  nginx:
+    image: mediagoblin/nginx:@PACKAGE_VERSION@
+    depends_on:
+      paste:
+        condition: service_started
+    volumes:
+      - mediagoblin-data:/srv:ro
+    environment:
+      - PASTE_SERVICE=paste
+      - PASTE_PORT=6543
+    ports:
+      - "8080:80"
+    healthcheck:
+      test: [ "CMD", "curl", "-sf", "http://localhost:80" ]
