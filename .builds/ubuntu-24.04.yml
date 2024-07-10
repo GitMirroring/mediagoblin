@@ -1,4 +1,4 @@
-image: ubuntu/23.10
+image: ubuntu/24.04
 packages:
   # Install bootstrap and configure dependencies.
   - autoconf
