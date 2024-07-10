@@ -233,7 +233,7 @@ EOF
 			 Dockerfile.nginx
 			 docker-compose.build.yml
 			 docker-compose.ecs.yml
-			 docker-compose.lazyserver.yml
+			 docker-compose.standalone.yml
 			 docker-compose.nginx.yml
 			 docker-compose.yml
 			 ])
