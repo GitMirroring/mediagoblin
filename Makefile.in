@@ -121,8 +121,16 @@ ifneq ($(VIRTUALENV),no)
 ./bin/python:
 	rm -f ./bin/python
 	${VIRTUALENV} --system-site-packages --python=$(PYTHON) .
-	# Fix Ubuntu 20.04: AttributeError: _DistInfoDistribution__dep_map as per https://github.com/pypa/pip/issues/8676
-	./bin/python -m pip install 'pip>=20.2.4<=24.0'
+	# OS-installed pip on Ubuntu 20.04 fails with AttributeError:
+	# _DistInfoDistribution__dep_map as per
+	# https://github.com/pypa/pip/issues/8676.
+	#
+	# Version 20.2.4 fixes the above Ubuntu issue, while 24.0 is the last
+	# version that doesn't choke on Celery's package metadata. May be
+	# possible to remove this restruction now we have upgrade
+	# Celery. Unconditionally upgrading pip may not necessarily be a good
+	# idea.
+	./bin/python -m pip install 'pip>=20.2.4,<=24.0'
 	./bin/python -m pip install --editable .
 
 virtualenv: bin/python extlib
