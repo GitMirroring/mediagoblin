@@ -106,6 +106,10 @@ $(DOCS_BUILD_DIR): $(VENV_PIP)
 $(VENV_PYTHON) $(VENV_PIP): $(VENV_DIR)/bin
 $(VENV_DIR)/bin: # use bin to identify in-source virtualenvs
 	$(PYTHON) -m venv --system-site-packages $(VENV_DIR)
+	# OS-installed pip on Ubuntu 20.04 fails with AttributeError:
+	# _DistInfoDistribution__dep_map as per
+	# https://github.com/pypa/pip/issues/8676.
+	#
 	# Version 20.2.4 fixes the above Ubuntu issue, while 24.0 is the last
 	# version that doesn't choke on Celery's package metadata. May be
 	# possible to remove this restruction now we have upgrade
