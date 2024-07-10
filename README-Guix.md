@@ -28,16 +28,9 @@ via load-path", followed by "Run MediaGoblin".
 * Add a `gmg init` command to create a default `mediagoblin.ini` and `paste.ini`
   in the current directory. Should remind you to run `gmg dbupdate`.
 
-* Consider hiding the `.gmg-real` wrapping around the CLI executable so that
-  `gmg --help` looks cleaner. The `ansible-core` package does something like
-  this.
-
 * Add a console/or web UI warning like, "This is an initial release of the
   MediaGoblin's OS packages with significant known issues. Please bear with us
   and report any other issues to ...".
-
-* Merge this back into the MediaGoblin source repo (assuming it's possible to
-  run a channel out of the project repo?)
 
 * Publish MediaGoblin 0.14.0 so we have a release with all our updated
   dependencies.
