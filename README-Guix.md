@@ -101,7 +101,7 @@ To build MediaGoblin:
 
     git clone https://git.sr.ht/~mediagoblin/mediagoblin
     cd mediagoblin
-    guix build -L ../mediagoblin mediagoblin
+    guix build -L . mediagoblin
 
 To build with modified source:
 
