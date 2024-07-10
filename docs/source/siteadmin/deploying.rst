@@ -365,7 +365,7 @@ following commands::
     sudo systemctl enable nginx
 
     # Fedora
-    sudo ln -s /srv/mediagoblin.example.org/nginx.conf /etc/nginx/conf.d/mediagoblin.conf
+    sudo ln --symbolic /srv/mediagoblin.example.org/nginx.conf /etc/nginx/conf.d/mediagoblin.conf
     sudo systemctl enable nginx
 
 You can modify these commands and locations depending on your
@@ -593,8 +593,8 @@ the error by entering either of::
 
 Or view the full logs with::
 
-    sudo journalctl -u mediagoblin-paster.service -f
-    sudo journalctl -u mediagoblin-celeryd.service -f
+    sudo journalctl --unit mediagoblin-paster.service --follow
+    sudo journalctl --unit mediagoblin-celeryd.service --follow
 
 The above ``systemctl status`` command is also useful if you ever want to
 confirm that a process is still running.

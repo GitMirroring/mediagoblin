@@ -35,7 +35,7 @@ Upgrade
 
 2. Update to the latest release.  In your ``mediagoblin`` directory, run::
 
-     git fetch && git checkout -q v0.13.0 && git submodule update
+     git fetch && git checkout --quiet v0.13.0 && git submodule update
 
    If you are checking out a branch, rather than a specific version tag, please
    run `git pull` before `git submodule update`.
@@ -69,8 +69,8 @@ Upgrade
 
    To see the logs for troubleshooting, use something like::
 
-     sudo journalctl -u mediagoblin-paster.service -f
-     sudo journalctl -u mediagoblin-celeryd.service -f
+     sudo journalctl --unit mediagoblin-paster.service --follow
+     sudo journalctl --unit mediagoblin-celeryd.service --follow
 
 9. View your site and hover your cursor over the "MediaGoblin" link in the
    footer to confirm the version number you're running.
