@@ -27,6 +27,8 @@ This chapter has important information about our current and previous releases.
 
 **Changes:**
 
+- Drop pytz dependency (Ben Sturmfels)
+
 
 0.13.0
 ======

@@ -29,9 +29,8 @@ real objects.
 
 import uuid
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 
-from pytz import UTC
 from werkzeug.utils import cached_property
 
 from mediagoblin.media_types import FileTypeNotSupported
@@ -621,8 +620,8 @@ class ActivityMixin(GeneratePublicIDMixin):
             id=self.id,
             qualified=True
         )
-        published = UTC.localize(self.published)
-        updated = UTC.localize(self.updated)
+        published = self.published.replace(tzinfo=timezone.utc)
+        updated = self.updated.replace(tzinfo=timezone.utc)
         obj = {
             "id": href,
             "actor": self.get_actor.serialize(request),

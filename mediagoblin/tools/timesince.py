@@ -28,9 +28,9 @@
 
 
 import datetime
-import pytz
 
 from mediagoblin.tools.translate import pass_to_ugettext, lazy_pass_to_ungettext as _
+
 
 def timesince(d, now=None, reversed=False):
     """

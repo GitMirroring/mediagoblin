@@ -16,7 +16,6 @@
 
 import celery
 import datetime
-import pytz
 
 from mediagoblin.db.models import MediaEntry
 
@@ -29,7 +28,7 @@ def collect_garbage():
         up. This is primerally written to clean up media that's
         entered a erroneous state.
     """
-    cuttoff = datetime.datetime.now(pytz.UTC) - datetime.timedelta(days=1)
+    cuttoff = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=1)
 
     garbage = MediaEntry.query.filter(MediaEntry.created < cuttoff)
     garbage = garbage.filter(MediaEntry.state == "unprocessed")

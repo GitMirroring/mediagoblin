@@ -101,7 +101,6 @@
                     python-pillow
                     python-bcrypt
                     python-pyld
-                    python-pytz
                     python-redis ;Simplest Celery backend
                     python-requests ;For batchaddmedia
                     python-soundfile
