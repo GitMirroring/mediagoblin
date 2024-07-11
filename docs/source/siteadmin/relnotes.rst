@@ -38,6 +38,11 @@ our Python dependencies.
 We're looking forward to spending time on some more user-facing improvements in
 the next release.
 
+**Upgrading:**
+
+For detailed instructions on installing or upgrading, see ":doc:`upgrading`" and
+":doc:`deploying`".
+
 **Noteable changes:**
 
 - Add first-class Docker installation support (Olivier Mehani)
@@ -95,11 +100,6 @@ Ubuntu 20.04, Ubuntu 22.04 and Fedora 39.
 For detailed instructions on installing or upgrading, see ":doc:`upgrading`" and
 ":doc:`deploying`".
 
-If you have any problems, please drop in to the `#mediagoblin IRC chat
-<https://web.libera.chat/#mediagoblin>`_, report an issue on our `issue
-tracker <https://todo.sr.ht/~mediagoblin/mediagoblin>`_ or drop us an email to
-`mediagoblin-devel@gnu.org <mailto:mediagoblin-devel@gnu.org>`_.
-
 **Breaking changes:**
 
 - MediaGoblin now supports a minimum of Python 3.7 due to use of f-strings
@@ -137,11 +137,6 @@ the last release to support Python 3.5.
 
 For detailed instructions on installing or upgrading, see ":doc:`upgrading`" and
 ":doc:`deploying`".
-
-If you have any problems, please drop in to the `#mediagoblin IRC chat
-<https://web.libera.chat/#mediagoblin>`_, report an issue on our `issue
-tracker <https://todo.sr.ht/~mediagoblin/mediagoblin>`_ or drop us an email to
-`mediagoblin-devel@gnu.org <mailto:mediagoblin-devel@gnu.org>`_.
 
 **Changes:**
 
@@ -192,11 +187,6 @@ Fedora 33.
 For detailed instructions on installing or upgrading, see ":doc:`upgrading`" and
 ":doc:`deploying`".
 
-If you have any problems, please drop in to the `#mediagoblin IRC chat
-<https://web.libera.chat/#mediagoblin>`_, report an issue on our `issue
-tracker <https://todo.sr.ht/~mediagoblin/mediagoblin>`_ or drop us an email to
-`mediagoblin-devel@gnu.org <mailto:mediagoblin-devel@gnu.org>`_.
-
 **Improvements:**
 
 - Improve usability of report handling page (Rodrigo Martins)
@@ -242,11 +232,6 @@ Gutierrez.
 For detailed instructions on installing or upgrading, see ":doc:`deploying`" and
 ":doc:`upgrading`".
 
-If you have any problems, please drop in to the `#mediagoblin IRC chat
-<https://webchat.freenode.net/#mediagoblin>`_, report an issue on our `issue
-tracker <https://issues.mediagoblin.org/>`_ or drop us an email to
-`mediagoblin-devel@gnu.org <mailto:mediagoblin-devel@gnu.org>`_.
-
 **Improvements:**
 
 - Run test for LDAP, OpenID and PDF plugins in development Dockerfiles (Ben Sturmfels)
@@ -286,11 +271,6 @@ our dependency `flup` does not support Python 3.
 
 For detailed instructions on installing or upgrading, see ":doc:`deploying`" and
 ":doc:`upgrading`".
-
-If you have any problems, please drop in to the `#mediagoblin IRC chat
-<https://webchat.freenode.net/#mediagoblin>`_, report an issue on our `issue
-tracker <https://issues.mediagoblin.org/>`_ or drop us an email to
-`mediagoblin-devel@gnu.org <mailto:mediagoblin-devel@gnu.org>`_.
 
 **Highlights:**
 
@@ -389,7 +369,6 @@ tracker <https://issues.mediagoblin.org/>`_ or drop us an email to
 - Properly quote --without-python3 in docs (#5596) (Ben Sturmfels)
 - Pin all Python 2 dependencies allowing patch version upgrades [#5595] (Ben Sturmfels)
 
-   
 
 0.9.0
 =====
@@ -491,8 +470,7 @@ There are other bugfixes, but they are fairly minor.
 =====
 
 This release has a number of changes related to the way we recommend
-building MediaGoblin; upgrade steps are below, but if you run into
-trouble, consider pinging the MediaGoblin list or IRC channel.
+building MediaGoblin; upgrade steps are below.
 
 **Do this to upgrade**
 
@@ -523,7 +501,6 @@ Additionally:
   default MediaGoblin documentation and config, things should work
   as-is.)
 
-
 **Bugfixes/improvements:**
 
 - Preliminary / experimental support for Python 3!
@@ -549,6 +526,7 @@ Additionally:
 - Fix lowercasing of username in auth steps
 - Slowly moving towards removing global state (a source of many bugs)
 
+
 0.7.1
 =====
 
@@ -564,10 +542,6 @@ errors.
    ``git fetch && git checkout -q v0.7.1 && git submodule init && git submodule update``
 2. Make sure to run
    ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
-
-That's it, probably!  If you run into problems, don't hesitate to
-`contact us <http://mediagoblin.org/pages/join.html>`_
-(IRC is often best).
 
 **Bugfixes/improvements:**
 
@@ -612,10 +586,6 @@ these instructions and your theme looks weirdly aligned, try running
 the following:)
 
   ``git submodule init && git submodule update``
-
-That's it, probably!  If you run into problems, don't hesitate to
-`contact us <http://mediagoblin.org/pages/join.html>`_
-(IRC is often best).
 
 **New features:**
 
@@ -703,10 +673,6 @@ the ``[mediagoblin]`` section of your config to ``true``.
    ``git fetch && git checkout -q v0.6.0``
 2. Make sure to run
    ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
-
-That's it, probably!  If you run into problems, don't hesitate to
-`contact us <http://mediagoblin.org/pages/join.html>`_
-(IRC is often best).
 
 This tool has a lot of new tools for administrators, hence the
 nickname "Lore of the Admin"!
@@ -800,15 +766,10 @@ now.  Otherwise, jump in and have fun! :)
    your config file. Second, media types are now plugins, so you need to add
    each media type under the ``[plugins]`` section of your config file.
 
-
 3. We have made a script to transition your ``mediagoblin_local.ini`` file for
    you. This script can be found at:
    
    http://mediagoblin.org/download/0.5.0_config_converter.py
-
-If you run into problems, don't hesitate to
-`contact us <http://mediagoblin.org/pages/join.html>`_
-(IRC is often best).
 
 **New features**
 
@@ -935,10 +896,7 @@ please note the following:
     [[mediagoblin.plugins.geolocation]]
 
 If you have your own theme, you may need to make some adjustments to
-it as some theme related things may have changed in this release.  If
-you run into problems, don't hesitate to
-`contact us <http://mediagoblin.org/pages/join.html>`_
-(IRC is often best).
+it as some theme related things may have changed in this release.
 
 **New features**
 

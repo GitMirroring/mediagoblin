@@ -24,6 +24,11 @@ way if something goes wrong, we can fix things.
 Although not strictly necessary, we recommend you shut down your current
 MediaGoblin/Celery processes before upgrading.
 
+If you have any problems, please drop in to the `#mediagoblin IRC chat
+<https://web.libera.chat/#mediagoblin>`_, report an issue on our `issue
+tracker <https://todo.sr.ht/~mediagoblin/mediagoblin>`_ or drop us an email to
+`mediagoblin-devel@gnu.org <mailto:mediagoblin-devel@gnu.org>`_.
+
 
 Upgrade
 -------
