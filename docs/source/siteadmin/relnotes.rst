@@ -60,6 +60,7 @@ the next release.
 - Pin upper version of `lxml` depedency due to removal of `lxml.html.clean` (Ben Sturmfels)
 
 **Other changes:**
+
 - Call `bower` via `npx` (Ben Sturmfels)
 - Rename `bootstrap.sh` to more common `autogen.sh` (Olivier Mehani)
 - Add contributing docs to README (Ben Sturmfels)
