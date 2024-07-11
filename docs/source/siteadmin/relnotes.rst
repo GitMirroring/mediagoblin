@@ -23,12 +23,61 @@ This chapter has important information about our current and previous releases.
 0.14.0 (to be released)
 ===========================
 
-**Breaking changes:**
+The biggest change in this release is first-class Docker installation
+support. This feature is the product of several years of effort and persistence
+by co-maintainer Olivier Mehani. Over the years a number of people had publicly
+shared their Docker deployment experiences, but no-one stepped up to integrate
+this neatly into the project and provide the necessary documentation. Many
+thanks to Olivier!
 
-**Changes:**
+In addition to this, MediaGoblin can now be installed as an OS package with GNU
+Guix. See `README-Guix.md` for details on using our Guix "channel". This has
+been enabled by significant work to support more recent versions of some of all
+our Python dependencies.
 
-- Drop pytz dependency (Ben Sturmfels)
+We're looking forward to spending time on some more user-facing improvements in
+the next release.
 
+**Noteable changes:**
+
+- Add first-class Docker installation support (Olivier Mehani)
+- Refactor configure/build system to improve dependency detection (Olivier Mehani)
+- Add preliminary Guix channel to build MediaGoblin OS package (Ben Sturmfels)
+- Switch from third-party `virtualenv` tool to built in `venv` package (Ben Sturmfels)
+- Add support for newer versions of `jsonschema`, `celery`, `wtforms` and `werkzeug` (Ben Sturmfels)
+- Remove old `sqlalchemy-migrate` migrations and Python dependency (Ben Sturmfels)
+- Remove `pytz` Python dependency (Ben Sturmfels)
+- Require `jinja2` >= 3.0.3 to avoid conflict with newer `markupsafe` (Ben Sturmfels)
+- Add extensive examples to default `mediagoblin.ini` config (Olivier Mehani)
+
+**Bug fixes:**
+
+- Avoid unconditionally upgrading Pip due to celery incompatibility (Ben Sturmfels)
+- Fix test failure with newer pytest (Ben Sturmfels)
+- Include missing Inconsolata font in Python distribution (Olivier Mehani)
+- Create parent of key directory before applying restrictive permissions (Olivier Mehani)
+- Avoid test failure when `CELERY_CONFIG_MODULE` is not defined (Olivier Mehani)
+- Pin upper version of `lxml` depedency due to removal of `lxml.html.clean` (Ben Sturmfels)
+
+**Other changes:**
+- Call `bower` via `npx` (Ben Sturmfels)
+- Rename `bootstrap.sh` to more common `autogen.sh` (Olivier Mehani)
+- Add contributing docs to README (Ben Sturmfels)
+- Replace `runtests.sh` with `make check` (Olivier Mehani)
+- Add `make docs` (Olivier Mehani)
+- Switch from deprecated `Image.NEAREST` to `Image.Resampling.NEAREST` (Ben Sturmfels)
+- Fix SQLAlchemy deprecation warning about `declarative_base` (Ben Sturmfels)
+- Remove use of deprecated imghdr module (Ben Sturmfels)
+- Add Ubuntu 24.04 and Debian Trixie CI builds (Ben Sturmfels)
+- Fix deprecation warning about `logger.warn()` (Ben Sturmfels)
+- Remove unused lightbox CSS and JS (Ben Sturmfels)
+- Avoid including development-only tools in Python distribution (Ben Sturmfels)
+- Switch to catch-all MANIFEST.in (Ben Sturmfels)
+- Switch to `find_namespace` to avoid setuptools warnings (Ben Sturmfels)
+- Remove unused `web-advanced.json` (Ben Sturmfels)
+- Improve audio/video test skipping if dependencies not available (Olivier Mehani)
+- Improve audio and video layout when jQuery and Video.js are not available (Ben Sturmfels)
+  
 
 0.13.0
 ======
