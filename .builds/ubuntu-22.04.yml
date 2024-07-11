@@ -1,7 +1,6 @@
 image: ubuntu/22.04
 packages:
   # Install bootstrap and configure dependencies.
-  - autoconf
   - automake
   - nodejs
   - npm

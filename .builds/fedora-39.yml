@@ -1,8 +1,6 @@
 image: fedora/39
 packages:
   # Install bootstrap and configure dependencies.
-  - autoconf
-  - automake
   - automake
   - gcc
   - git-core

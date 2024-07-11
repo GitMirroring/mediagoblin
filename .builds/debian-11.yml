@@ -1,7 +1,6 @@
 image: debian/bullseye
 packages:
   # Install bootstrap and configure dependencies.
-  - autoconf
   - automake
   - nodejs
   - npm

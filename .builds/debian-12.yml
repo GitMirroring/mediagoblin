@@ -1,7 +1,6 @@
 image: debian/bookworm
 packages:
   # Install bootstrap and configure dependencies.
-  - autoconf
   - automake
   - nodejs
   - npm
