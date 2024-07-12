@@ -23,12 +23,12 @@ This chapter has important information about our current and previous releases.
 0.14.0 (to be released)
 ===========================
 
-The biggest change in this release is first-class Docker installation
-support. This feature is the product of several years of effort and persistence
-by co-maintainer Olivier Mehani. Over the years a number of people had publicly
-shared their Docker deployment experiences, but no-one stepped up to integrate
-this neatly into the project and provide the necessary documentation. Many
-thanks to Olivier!
+The biggest change in this release is first-class Docker installation support —
+see "doc:`docker`" for details. This work also includes a significant overhaul
+of the configure/build system to reduce unnecessary dependency checks and add
+some new checks. These checks now inform which media plugins get enabled and
+flags why others are not. Many thanks to Olivier for the several years of work
+and persistence that went into this change.
 
 In addition to this, MediaGoblin can now be installed as an OS package with GNU
 Guix. See `README-Guix.md` for details on using our Guix "channel". This has
