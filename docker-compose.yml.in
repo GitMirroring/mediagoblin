@@ -24,8 +24,8 @@ services:
 
     # XXX need host = 0.0.0.0 for server:main, or a way to select
     # server-name=broadcast
-    # command: /opt/mediagoblin/venv/bin/gmg -cf /srv/mediagoblin.ini serve /srv/paste.ini
-    command: /opt/mediagoblin/venv/bin/paster serve /srv/paste.ini --server-name=broadcast
+    # command: /opt/mediagoblin/bin/gmg -cf /srv/mediagoblin.ini serve /srv/paste.ini
+    command: /opt/mediagoblin/bin/paster serve /srv/paste.ini --server-name=broadcast
     healthcheck:
       test: [ "CMD", "curl", "-sf", "http://localhost:6543" ]
 
@@ -44,10 +44,10 @@ services:
       - 'MEDIAGOBLIN_CONFIG=/srv/mediagoblin.ini'
       - 'SKIP_MIGRATE=true'
       - 'BROKER_URL=amqp://rabbitmq:5672'
-    # command: /opt/mediagoblin/venv/bin/gmg -cf /srv/mediagoblin.ini celery
-    command: /opt/mediagoblin/venv/bin/celery worker
+    # command: /opt/mediagoblin/bin/gmg -cf /srv/mediagoblin.ini celery
+    command: /opt/mediagoblin/bin/celery worker
     healthcheck:
-      test: [ "CMD", "/opt/mediagoblin/venv/bin/celery", "inspect", "ping" ]
+      test: [ "CMD", "/opt/mediagoblin/bin/celery", "inspect", "ping" ]
 
   rabbitmq:
     image: rabbitmq

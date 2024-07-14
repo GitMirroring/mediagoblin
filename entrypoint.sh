@@ -21,7 +21,7 @@ MG_PATH="$(dirname "${0}")"
 DB=mediagoblin.db
 MG_CONFIG=mediagoblin.ini
 PASTE_CONFIG=paste.ini
-VENV_PATH="${MG_PATH}"/venv
+VENV_PATH="${MG_PATH}"
 
 GMG=gmg
 
