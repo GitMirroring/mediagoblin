@@ -98,7 +98,7 @@ fi
 
 if [ "$1" = "gmg" ]; then
 	shift
-	sudo mediagoblin exec /opt/mediagoblin/venv/bin/gmg -cf ./mediagoblin.ini "${@}"
+	sudo mediagoblin exec "${VENV_PATH}/bin/gmg" -cf ./mediagoblin.ini "${@}"
 else
 	log "Running ${*} ..."
 	sudo mediagoblin exec "${@}"
