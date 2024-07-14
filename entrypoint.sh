@@ -1,7 +1,7 @@
 #!/bin/sh -eu
 
 ADMIN_USER=${ADMIN_USER:-admin}
-ADMIN_PASSWORD=${ADMIN_PASSWORD:-overrideme}
+ADMIN_PASSWORD=${ADMIN_PASSWORD:-generateme}
 ADMIN_EMAIL=${ADMIN_EMAIL:-admin@example.com}
 
 CELERY_ALWAYS_EAGER=${CELERY_ALWAYS_EAGER:-false}
@@ -88,11 +88,32 @@ else
 
 	if [ "${MAKE_ADMIN:-false}" = "true" ]; then
 		log "Creating admin user ..."
+		SHOW_GENERATED_PASSWORD=
+		if [ "${ADMIN_PASSWORD}" = "generateme" ]; then
+			ADMIN_PASSWORD="$(
+				tr -dc _A-Za-z0-9 < /dev/urandom \
+				| head -c 24
+			)"
+			SHOW_GENERATED_PASSWORD=yes
+		fi
 		${GMG} adduser \
 			--username "${ADMIN_USER}"\
 			--password "${ADMIN_PASSWORD}"\
 			--email "${ADMIN_EMAIL}" \
 			&& ${GMG} makeadmin "${ADMIN_USER}"
+		log ""
+		log "==============================================================================="
+		log "NEW ADMINISTRATOR ACCOUNT CREATED"
+		log ""
+		log "ADMIN_USER=${ADMIN_USER}"
+		if [ "${SHOW_GENERATED_PASSWORD}" = "yes" ]; then
+			log "ADMIN_PASSWORD=${ADMIN_PASSWORD}"
+		else
+			log "ADMIN_PASSWORD=<set from environment>"
+		fi
+		log "ADMIN_EMAIL=${ADMIN_EMAIL}"
+		log ""
+		log "==============================================================================="
 	fi
 fi
 
