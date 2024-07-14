@@ -129,10 +129,13 @@ else
 	fi
 fi
 
-if [ "$1" = "gmg" ]; then
-	shift
-	sudo mediagoblin exec "${VENV_PATH}/bin/gmg" -cf ./mediagoblin.ini "${@}"
-else
-	log "Running ${*} ..."
-	sudo mediagoblin exec "${@}"
-fi
+case "${1:-}" in
+	"gmg")
+		shift
+		sudo mediagoblin exec "${VENV_PATH}/bin/gmg" -cf ./mediagoblin.ini "${@}"
+		;;
+	*)
+		log "Running ${*} ..."
+		sudo mediagoblin exec "${@}"
+	;;
+esac
