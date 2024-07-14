@@ -46,7 +46,19 @@ sudo () {
 for CONFIG in $PASTE_CONFIG $MG_CONFIG; do
 	if [ ! -e "${CONFIG}" ]; then
 		log "Creating missing configuration file ${CONFIG} ..."
-		sudo mediagoblin cp "${MG_PATH}/${CONFIG}" "${CONFIG}"
+		case "${CONFIG}" in
+			"${MG_CONFIG}")
+				SRC_CONFIG=$(
+					echo "${MG_PATH}/${MG_CONFIG}" \
+					| sed s/\.ini/\.example\.ini/
+				)
+				;;
+			*)
+				SRC_CONFIG="${MG_PATH}/${CONFIG}"
+				;;
+		esac
+
+		sudo mediagoblin cp "${SRC_CONFIG}" "${CONFIG}"
 		SKIP_RECONFIG=false
 	fi
 done
