@@ -36,8 +36,8 @@
 ;; See README-Guix.md for usage instructions and caveats.
 
 (define-public mediagoblin
-  (let ((commit "b2892e8b874969709b563a0ff695dd661110e7df")
-        (revision "2"))
+  (let ((commit "d2eb89e786d578663c15c5ac302d4b0d9d40c29f")
+        (revision "3"))
     (package
       (name "mediagoblin")
       (version (git-version "0.14.0.dev" revision commit))
@@ -53,6 +53,13 @@
       (build-system pyproject-build-system)
       (arguments
        `(#:phases (modify-phases %standard-phases
+                    ;; The mediagoblin/_version.py module is created by
+                    ;; ./configure (which we don't run)
+                    (add-after 'unpack 'reinstate-version-module
+                      (lambda _
+                        (copy-file "mediagoblin/_version.py.in" "mediagoblin/_version.py")
+                        (substitute* "mediagoblin/_version.py"
+                          (("@PACKAGE_VERSION@") "0.14.0.dev1"))))
                     ;; Override the .gmg-real program name from sys.argv[0]
                     (add-after 'unpack 'hide-wrapping
                       (lambda _
