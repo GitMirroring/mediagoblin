@@ -49,7 +49,7 @@
                (commit commit)))
          (file-name (git-file-name name version))
          (sha256
-          (base32 "1cbq3r79gyklf55hxah05dxmp7i8c6aw45z729niw36dvvjg500p"))))
+          (base32 "109n80i9sa0hij8nz6c1g3a6d8ja5hz2v5c34a4hd6ldzn8prr0g"))))
       (build-system pyproject-build-system)
       (arguments
        `(#:phases (modify-phases %standard-phases
@@ -59,7 +59,7 @@
                       (lambda _
                         (copy-file "mediagoblin/_version.py.in" "mediagoblin/_version.py")
                         (substitute* "mediagoblin/_version.py"
-                          (("@PACKAGE_VERSION@") "0.14.0.dev1"))))
+                          (("@PACKAGE_VERSION@") "0.14.0.dev"))))
                     ;; Override the .gmg-real program name from sys.argv[0]
                     (add-after 'unpack 'hide-wrapping
                       (lambda _

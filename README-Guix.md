@@ -77,14 +77,17 @@ Add this MediaGoblin channel to your Guix channels configuration in
 With the channel configured, it can be used as follows:
 
     guix pull
-    guix install mediagoblin
+    guix shell mediagoblin  # For a shell with MediaGoblin installed, or
+    guix install mediagoblin  # To install into your profile
 
 See "Run MediaGoblin" below.
 
 
 ## Set up a MediaGoblin hacking environment (for MediaGoblin development) ##
 
-    guix environment -L ../mediagoblin mediagoblin
+    git clone https://git.sr.ht/~mediagoblin/mediagoblin
+    cd mediagoblin
+    guix shell -L . --development mediagoblin automake autoconf
     # See the "Run MediaGoblin" section below for initial configuration
     CELERY_ALWAYS_EAGER=true python3 -m mediagoblin.gmg_commands.__init__ serve paste.ini
 
