@@ -244,3 +244,20 @@ texinfo_documents = [
 
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
+
+
+# The following changes were recommended by Read the Docs due to the deprecation
+# of their Sphinx context injection. They advise that these are required because
+# we're using a "canonical custom domain".
+#
+# https://about.readthedocs.com/blog/2024/07/addons-by-default/
+#
+# We haven't actually tested whether the changes are necessary or not.
+import os
+
+# Set canonical URL from the Read the Docs Domain
+html_baseurl = os.environ.get("READTHEDOCS_CANONICAL_URL", "")
+
+# Tell Jinja2 templates the build is running on Read the Docs
+if os.environ.get("READTHEDOCS", "") == "True":
+    html_context["READTHEDOCS"] = True
