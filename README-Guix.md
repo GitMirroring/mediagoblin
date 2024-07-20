@@ -69,7 +69,7 @@ Add this MediaGoblin channel to your Guix channels configuration in
     (url "https://git.sr.ht/~mediagoblin/mediagoblin")
     (introduction
       (make-channel-introduction
-      "d4b2f5b67c6862346e0f91b5e964d5b07878046d"
+      "25cfc5238029f1123fb4344eb65ec92cc5f57e54
       (openpgp-fingerprint
         "3E7F36E73BDD6A7106F92021023C05E2C9C068F0"))))
   %default-channels)
