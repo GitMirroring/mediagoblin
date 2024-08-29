@@ -593,6 +593,8 @@ class TestSubmissionVideo(BaseTestSubmission):
                 # check media_file path
                 assert result[i][2] == media_file.file_path
 
+    @pytest.mark.skipif(SKIP_VIDEO,
+                        reason="Dependencies for video not met")
     @mock.patch('mediagoblin.media_types.video.processing.processing_cleanup.signature')
     @mock.patch('mediagoblin.media_types.video.processing.complementary_task.signature')
     @mock.patch('mediagoblin.media_types.video.processing.main_task.signature')
@@ -639,6 +641,8 @@ class TestSubmissionVideo(BaseTestSubmission):
         # delete the entry
         entry.delete()
 
+    @pytest.mark.skipif(SKIP_AUDIO,
+                        reason="Dependencies for audio not met")
     def test_workflow(self):
         entry = get_sample_entry(self.our_user(), self.media_type)
         manager = VideoProcessingManager()
@@ -678,6 +682,8 @@ class TestSubmissionVideo(BaseTestSubmission):
         assert wf[1] == cleanup_task
         entry.delete()
 
+    @pytest.mark.skipif(SKIP_AUDIO,
+                        reason="Dependencies for audio not met")
     @mock.patch('mediagoblin.submit.lib.ProcessMedia.apply_async')
     @mock.patch('mediagoblin.submit.lib.chord')
     def test_celery_chord(self, mock_chord, mock_process_media):
@@ -711,6 +717,8 @@ class TestSubmissionVideo(BaseTestSubmission):
         mock_chord.assert_called_once_with(transcoding_tasks)
         entry.delete()
 
+    @pytest.mark.skipif(SKIP_VIDEO,
+                        reason="Dependencies for video not met")
     def test_accepted_files(self):
         entry = get_sample_entry(self.our_user(), 'mediagoblin.media_types.video')
         manager = VideoProcessingManager()
@@ -720,6 +728,8 @@ class TestSubmissionVideo(BaseTestSubmission):
         assert processor.acceptable_files == acceptable_files
 
 
+@pytest.mark.skipif(SKIP_AUDIO,
+                        reason="Dependencies for audio not met")
 class TestSubmissionAudio(BaseTestSubmission):
     @pytest.fixture(autouse=True)
     def setup(self, audio_plugin_app):
@@ -731,13 +741,13 @@ class TestSubmissionAudio(BaseTestSubmission):
 
         self.login()
 
-    @pytest.mark.skipif(SKIP_AUDIO,
-                        reason="Dependencies for audio not met")
     def test_audio(self, audio_plugin_app):
         with create_av(make_audio=True) as path:
             self.check_normal_upload('Audio', path)
 
 
+@pytest.mark.skipif(SKIP_AUDIO or SKIP_VIDEO,
+                    reason="Dependencies for audio or video not met")
 class TestSubmissionAudioVideo(BaseTestSubmission):
     @pytest.fixture(autouse=True)
     def setup(self, audio_video_plugin_app):
@@ -749,13 +759,12 @@ class TestSubmissionAudioVideo(BaseTestSubmission):
 
         self.login()
 
-    @pytest.mark.skipif(SKIP_AUDIO or SKIP_VIDEO,
-                        reason="Dependencies for audio or video not met")
     def test_audio_and_video(self):
         with create_av(make_audio=True, make_video=True) as path:
             self.check_normal_upload('Audio and Video', path)
 
 
+@pytest.mark.skipif("not os.path.exists(GOOD_PDF) or not pdf_check_prerequisites()")
 class TestSubmissionPDF(BaseTestSubmission):
     @pytest.fixture(autouse=True)
     def setup(self, pdf_plugin_app):
@@ -767,7 +776,6 @@ class TestSubmissionPDF(BaseTestSubmission):
 
         self.login()
 
-    @pytest.mark.skipif("not os.path.exists(GOOD_PDF) or not pdf_check_prerequisites()")
     def test_normal_pdf(self):
         response, context = self.do_post({'title': 'Normal upload 3 (pdf)'},
                                          do_follow=True,

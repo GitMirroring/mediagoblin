@@ -333,7 +333,7 @@ def mark_entry_failed(entry_id, exc):
              'fail_error': str(exc.exception_path),
              'fail_metadata': exc.metadata})
     else:
-        _log.warn("No idea what happened here, but it failed: %r", exc)
+        _log.warning("No idea what happened here, but it failed: %r", exc)
         # Looks like no, let's record it so that admin could ask us about the
         # reason
         atomic_update(mgg.database.MediaEntry,
@@ -381,7 +381,7 @@ def store_public(entry, keyname, local_file, target_name=None,
     target_filepath = create_pub_filepath(entry, target_name)
 
     if keyname in entry.media_files:
-        _log.warn("store_public: keyname %r already used for file %r, "
+        _log.warning("store_public: keyname %r already used for file %r, "
                   "replacing with %r", keyname,
                   entry.media_files[keyname], target_filepath)
         if delete_if_exists:

@@ -170,7 +170,7 @@ def check_login_simple(username, password):
         hook_handle("auth_fake_login_attempt")
         return None
     if not auth.check_password(password, user.pw_hash):
-        _log.warn("Wrong password for %r", username)
+        _log.warning("Wrong password for %r", username)
         return None
     _log.info("Logging %r in", username)
     return user

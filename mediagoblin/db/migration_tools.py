@@ -23,7 +23,6 @@ from alembic.config import Config
 
 from mediagoblin.tools.common import simple_printer
 from sqlalchemy import Table
-from sqlalchemy.sql import select
 
 log = logging.getLogger(__name__)
 
@@ -134,7 +133,6 @@ class MigrationManager:
             for migration_number, migration_func in self.sorted_migrations
             if migration_number > db_current_migration]
 
-
     def init_tables(self):
         """
         Create all tables relative to this package
@@ -238,38 +236,6 @@ class MigrationManager:
         return None
 
 
-class RegisterMigration:
-    """
-    Tool for registering migrations
-
-    Call like:
-
-    @RegisterMigration(33)
-    def update_dwarves(database):
-        [...]
-
-    This will register your migration with the default migration
-    registry.  Alternately, to specify a very specific
-    migration_registry, you can pass in that as the second argument.
-
-    Note, the number of your migration should NEVER be 0 or less than
-    0.  0 is the default "no migrations" state!
-    """
-    def __init__(self, migration_number, migration_registry):
-        assert migration_number > 0, "Migration number must be > 0!"
-        assert migration_number not in migration_registry, \
-            "Duplicate migration numbers detected!  That's not allowed!"
-        assert migration_number <= 44, ('Alembic should be used for '
-                                        'new migrations')
-
-        self.migration_number = migration_number
-        self.migration_registry = migration_registry
-
-    def __call__(self, migration):
-        self.migration_registry[self.migration_number] = migration
-        return migration
-
-
 def assure_migrations_table_setup(db):
     """
     Make sure the migrations table is set up in the database.
@@ -286,57 +252,6 @@ def inspect_table(metadata, table_name):
     return Table(table_name, metadata, autoload=True,
                  autoload_with=metadata.bind)
 
-def replace_table_hack(db, old_table, replacement_table):
-    """
-    A function to fully replace a current table with a new one for migrati-
-    -ons. This is necessary because some changes are made tricky in some situa-
-    -tion, for example, dropping a boolean column in sqlite is impossible w/o
-    this method
-
-        :param old_table            A ref to the old table, gotten through
-                                    inspect_table
-
-        :param replacement_table    A ref to the new table, gotten through
-                                    inspect_table
-
-    Users are encouraged to sqlalchemy-migrate replace table solutions, unless
-    that is not possible... in which case, this solution works,
-    at least for sqlite.
-    """
-    surviving_columns = replacement_table.columns.keys()
-    old_table_name = old_table.name
-    for row in db.execute(select(
-        [column for column in old_table.columns
-            if column.name in surviving_columns])):
-
-        db.execute(replacement_table.insert().values(**row))
-    db.commit()
-
-    old_table.drop()
-    db.commit()
-
-    replacement_table.rename(old_table_name)
-    db.commit()
-
-def model_iteration_hack(db, query):
-    """
-    This will return either the query you gave if it's postgres or in the case
-    of sqlite it will return a list with all the results. This is because in
-    migrations it seems sqlite can't deal with concurrent quries so if you're
-    iterating over models and doing a commit inside the loop, you will run into
-    an exception which says you've closed the connection on your iteration
-    query. This fixes it.
-
-    NB: This loads all of the query reuslts into memeory, there isn't a good
-        way around this, we're assuming sqlite users have small databases.
-    """
-    # If it's SQLite just return all the objects
-    if db.bind.url.drivername == "sqlite":
-        return [obj for obj in db.execute(query)]
-
-    # Postgres return the query as it knows how to deal with it.
-    return db.execute(query)
-
 
 def populate_table_foundations(session, foundations, name,
                                printer=simple_printer):
@@ -347,7 +262,7 @@ def populate_table_foundations(session, foundations, name,
     printer('Laying foundations for %s:\n' % name)
     for Model, rows in foundations.items():
         printer('   + Laying foundations for %s table\n' %
-            (Model.__name__))
+                (Model.__name__))
         for parameters in rows:
             new_row = Model(**parameters)
             session.add(new_row)

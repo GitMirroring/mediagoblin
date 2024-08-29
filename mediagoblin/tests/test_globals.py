@@ -20,10 +20,10 @@ from mediagoblin import mg_globals
 
 
 class TestGlobals:
+    @pytest.fixture(autouse=True)
     def setup(self):
         self.old_database = mg_globals.database
-
-    def teardown(self):
+        yield
         mg_globals.database = self.old_database
 
     def test_setup_globals(self):

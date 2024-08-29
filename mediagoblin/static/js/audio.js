@@ -219,6 +219,10 @@ $(document).ready(function () {
 
     console.log('Initializing audio player');
 
+    // The spectrogram and controls are hidden by default in case we don't have
+    // jQuery.
+    document.querySelector('.audio-custom-controls').style.display = 'block';
+
     audioElements = $('.audio-media .audio-player');
     audioPlayer.init(audioElements[0]);
     audioPlayer.attachToImage($('.audio-spectrogram img')[0]);

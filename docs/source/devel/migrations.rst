@@ -32,12 +32,6 @@ There's a few things you need to know:
   migrations.  We also make heavy use of the
   `branching model <http://alembic.readthedocs.org/en/latest/branches.html>`_
   for our plugins.  Every plugin gets its own migration branch.
-- We used to use `sqlalchemy-migrate
-  <http://code.google.com/p/sqlalchemy-migrate/>`_.
-  See `their docs <https://sqlalchemy-migrate.readthedocs.org/>`_.
-  sqlalchemy-migrate is now only kept around for legacy migrations;
-  don't add any more!  But some users are still using older databases,
-  and we need to provide the intermediary "old" migrations for a while.
 - SQLAlchemy has two parts to it, the ORM and the "core" interface.
   We DO NOT use the ORM when running migrations.  Think about it: the
   ORM is set up with an expectation that the models already reflect a

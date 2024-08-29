@@ -24,6 +24,16 @@ way if something goes wrong, we can fix things.
 Although not strictly necessary, we recommend you shut down your current
 MediaGoblin/Celery processes before upgrading.
 
+If you have any problems, please drop in to the `#mediagoblin IRC chat
+<https://web.libera.chat/#mediagoblin>`_, report an issue on our `issue
+tracker <https://todo.sr.ht/~mediagoblin/mediagoblin>`_ or drop us an email to
+`mediagoblin-devel@gnu.org <mailto:mediagoblin-devel@gnu.org>`_.
+
+.. note::
+
+   This page describes upgrading of our traditional virtualenv installation
+   method. If Docker is your thing, please see ":doc:`docker`".
+
 
 Upgrade
 -------
@@ -35,7 +45,7 @@ Upgrade
 
 2. Update to the latest release.  In your ``mediagoblin`` directory, run::
 
-     git fetch && git checkout -q v0.13.0 && git submodule update
+     git fetch && git checkout --quiet v0.14.0 && git submodule update
 
    If you are checking out a branch, rather than a specific version tag, please
    run `git pull` before `git submodule update`.
@@ -50,7 +60,7 @@ Upgrade
 
 5. Recreate the virtual environment and install MediaGoblin::
 
-     ./bootstrap.sh && ./configure && make
+     ./autogen.sh && ./configure && make
 
    You may need to update file permissions as mentioned in ":doc:`deploying`".
 
@@ -69,8 +79,8 @@ Upgrade
 
    To see the logs for troubleshooting, use something like::
 
-     sudo journalctl -u mediagoblin-paster.service -f
-     sudo journalctl -u mediagoblin-celeryd.service -f
+     sudo journalctl --unit mediagoblin-paster.service --follow
+     sudo journalctl --unit mediagoblin-celeryd.service --follow
 
 9. View your site and hover your cursor over the "MediaGoblin" link in the
    footer to confirm the version number you're running.

@@ -92,5 +92,5 @@ def setup_self(check_environ_for_conf=True, module_name=OUR_MODULENAME,
         set_environ=False)
 
 
-if os.environ['CELERY_CONFIG_MODULE'] == OUR_MODULENAME:
+if os.environ.get('CELERY_CONFIG_MODULE') == OUR_MODULENAME:
     setup_self()

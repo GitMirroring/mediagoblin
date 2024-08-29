@@ -37,12 +37,14 @@ MediaGoblin website.  It is written for site administrators.
    siteadmin/foreword
    siteadmin/about
    siteadmin/deploying
+   siteadmin/docker
    siteadmin/production-deployments
    siteadmin/configuration
    siteadmin/upgrading
    siteadmin/troubleshooting
    siteadmin/media-types
    siteadmin/help
+   siteadmin/docker
    siteadmin/relnotes
    siteadmin/theming
    siteadmin/plugins

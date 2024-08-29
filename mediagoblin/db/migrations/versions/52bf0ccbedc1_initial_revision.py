@@ -15,12 +15,6 @@ import sqlalchemy as sa
 
 
 def upgrade():
-    # Well we already appear to have some of the core data, presumably because
-    # this database precedes our alembic migrations with sqlalchemy-migrate, so
-    # we can bail out early.
-    if op.get_bind().engine.has_table("core__users"):
-        return
-
     op.create_table(
         'core__clients',
         sa.Column('id', sa.Unicode(), nullable=True),

@@ -1,9 +1,23 @@
+audio {
+    width: 100%;
+}
+
+.audio-media {
+    width: 100%;
+}
+
 .audio-spectrogram {
     position: relative;
 }
 .audio-spectrogram > img {
     width: 100%;
+    max-height: 400px;
 }
+
+.audio-custom-controls {
+    display: none; /* until jQuery is loaded */
+}
+
 .playhead {
     position: absolute;
     top: 0;

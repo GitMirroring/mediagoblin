@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  paste:
+    image: mediagoblin/mediagoblin:@PACKAGE_VERSION@
+    build:
+      context: .
+
+  nginx:
+    image: mediagoblin/mediagoblin-nginx
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx

@@ -17,7 +17,6 @@
 import tempfile
 import os
 from contextlib import contextmanager
-import imghdr
 
 #os.environ['GST_DEBUG'] = '4,python:4'
 import pytest
@@ -33,6 +32,7 @@ from mediagoblin.media_types.video.transcoders import (capture_thumb,
 from mediagoblin.media_types.video.util import ACCEPTED_RESOLUTIONS
 from mediagoblin.media_types.tools import discover
 from mediagoblin.tests.tools import get_app
+from PIL import Image
 
 @contextmanager
 def create_data(suffix=None, make_audio=False):
@@ -89,25 +89,25 @@ def test_thumbnails():
     3. Everything should get removed because of temp files usage
     '''
     #data  create_data() as (video_name, thumbnail_name):
-    test_formats = [('.png', 'png'), ('.jpg', 'jpeg'), ('.gif', 'gif')]
+    test_formats = [('.png', 'PNG'), ('.jpg', 'JPEG'), ('.gif', 'GIF')]
     for suffix, format in test_formats:
         with create_data(suffix) as (video_name, thumbnail_name):
             capture_thumb(video_name, thumbnail_name, width=40)
             # check result file format
-            assert imghdr.what(thumbnail_name) == format
+            assert Image.open(thumbnail_name).format == format
             # TODO: check height and width
             # FIXME: it doesn't work with small width, say, 10px. This should be
             # fixed somehow
     suffix, format = test_formats[0]
     with create_data(suffix, True) as (video_name, thumbnail_name):
         capture_thumb(video_name, thumbnail_name, width=40)
-        assert imghdr.what(thumbnail_name) == format
+        assert Image.open(thumbnail_name).format == format
     with create_data(suffix, True) as (video_name, thumbnail_name):
         capture_thumb(video_name, thumbnail_name, width=10)  # smaller width
-        assert imghdr.what(thumbnail_name) == format
+        assert Image.open(thumbnail_name).format == format
     with create_data(suffix, True) as (video_name, thumbnail_name):
         capture_thumb(video_name, thumbnail_name, width=100)  # bigger width
-        assert imghdr.what(thumbnail_name) == format
+        assert Image.open(thumbnail_name).format == format
 
 
 def test_transcoder():

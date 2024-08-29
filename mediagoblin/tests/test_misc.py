@@ -14,7 +14,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import pytz
 import datetime
 
 from werkzeug.datastructures import FileStorage
@@ -113,7 +112,7 @@ def test_garbage_collection_task(test_app):
 
     # Create a media entry that's unprocessed and over an hour old.
     entry_id = 72
-    now = datetime.datetime.now(pytz.UTC)
+    now = datetime.datetime.now(datetime.timezone.utc)
     file_data = FileStorage(
         stream=open(GOOD_JPG, "rb"),
         filename="mah_test.jpg",

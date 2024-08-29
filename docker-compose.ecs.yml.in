@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  nginx:
+    image: mediagoblin/mediagoblin:@PACKAGE_VERSION@
+    ports:
+      - 80:80
+    volumes:
+      - efs-share:/srv
+    healthcheck:
+      test: [ "CMD", "curl", "-sf", "http://localhost:80" ]
+    depends_on:
+      paste:
+        condition: service_started
+
+  paste:
+    volumes:
+      - efs-share:/srv
+    expose:
+      - 6543
+  celery:
+    volumes:
+      - efs-share:/srv
+
+volumes:
+  efs-share:

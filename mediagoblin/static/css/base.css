@@ -624,6 +624,10 @@ ul#action_to_resolve {list-style:none; margin-left:10px;}
   text-decoration: underline;
 }
 
+.media_thumbnail img {
+    max-height: 180px;
+}
+
 a.thumb_entry_title {
   padding: 8px;
 }

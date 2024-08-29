@@ -147,11 +147,6 @@ def run_dbupdate(app_config, global_config):
     # Set up the database
     db = setup_connection_and_db_from_config(app_config, migrations=True)
 
-    # Do we have migrations
-    should_run_sqam_migrations = db.engine.has_table("core__migrations") and \
-                                 sqam_migrations_to_run(db, app_config,
-                                                        global_config)
-
     # Looks like a fresh database!
     # (We set up this variable here because doing "run_all_migrations" below
     # will change things.)
@@ -160,9 +155,6 @@ def run_dbupdate(app_config, global_config):
         not db.engine.has_table("alembic_version"))
 
     # Run the migrations
-    if should_run_sqam_migrations:
-        run_all_migrations(db, app_config, global_config)
-
     run_alembic_migrations(db, app_config, global_config)
 
     # If this was our first time initializing the database,
@@ -192,42 +184,6 @@ def run_all_migrations(db, app_config, global_config):
     for dbdata in dbdatas:
         migration_manager = dbdata.make_migration_manager(Session())
         migration_manager.init_or_migrate()
-
-
-def sqam_migrations_to_run(db, app_config, global_config):
-    """
-    Check whether any plugins have sqlalchemy-migrate migrations left to run.
-
-    This is a kludge so we can transition away from sqlalchemy-migrate
-    except where necessary.
-    """
-    # @@: This shares a lot of code with run_all_migrations, but both
-    # are legacy and will be removed at some point.
-
-    # Gather information from all media managers / projects
-    dbdatas = gather_database_data(
-        list(global_config.get('plugins', {}).keys()))
-
-    Session = sessionmaker(bind=db.engine)
-
-    # We can bail out early if it turns out that sqlalchemy-migrate
-    # was never installed with any migrations
-    from mediagoblin.db.models import MigrationData
-    if Session().query(MigrationData).filter_by(
-            name="__main__").first() is None:
-        return False
-
-    # Setup media managers for all dbdata, run init/migrate and print info
-    # For each component, create/migrate tables
-    for dbdata in dbdatas:
-        migration_manager = dbdata.make_migration_manager(Session())
-        if migration_manager.migrations_to_run():
-            # If *any* migration managers have migrations to run,
-            # we'll have to run them.
-            return True
-
-    # Otherwise, scot free!
-    return False
 
 
 def dbupdate(args):

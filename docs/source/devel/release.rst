@@ -4,22 +4,22 @@ Release Checklist
 
 - update docs/source/siteadmin/relnotes.txt
 - update docs/source/siteadmin/upgrading.txt
+- update configure.ac version to remove ".dev" suffix
 - write a blog post
 - test the upgrade process
 - build the docs and check they look good
-- git tag v0.11.0 --signed
+- git tag v0.11.0 --signed --message
 - push tags
 - log in and rebuild master and new version docs on readthedocs.org
+- push docker containers
+  - docker login -u mediagoblin
+  - docker push mediagoblin/mediagoblin:VERSION
+  - docker push mediagoblin/nginx:VERSION
 - merge into stable branch
 - post to mediagoblin-devel
 - post to info-gnu@gnu.org
 - post to mastodon and twitter
-- update IRC topic
 - email personal contacts
-
-- update mediagoblin/_version.py to remove ".dev" suffix
-- update configure.ac version to remove ".dev" suffix
-- update mediagoblin/_version.py again to add ".dev" suffix and increment version
 - update configure.ac version again to add ".dev" suffix and increment version
 
 Do we even need a stable branch? I'm not entirely happy with the upgrade

@@ -211,8 +211,8 @@ def ws_php(request):
 
     func = CmdTable.find_func(request)
     if not func:
-        _log.warn("wsphp: Unhandled %s %r %r", request.method,
-                  request.args, request.form)
+        _log.warning("wsphp: Unhandled %s %r %r", request.method,
+                     request.args, request.form)
         raise NotImplemented()
 
     with PWGSession(request) as session:

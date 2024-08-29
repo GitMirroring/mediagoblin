@@ -139,7 +139,7 @@ def is_unoconv_working():
         proc = Popen([unoconv, '--show'], stderr=PIPE)
         output = proc.stderr.read()
     except OSError:
-        _log.warn(_('unoconv failing to run, check log file'))
+        _log.warning(_('unoconv failing to run, check log file'))
         return False
     if b'ERROR' in output:
         return False
@@ -161,10 +161,10 @@ def where(name):
 
 def check_prerequisites():
     if not where('pdfinfo'):
-        _log.warn('missing pdfinfo')
+        _log.warning('missing pdfinfo')
         return False
     if not where('pdftocairo'):
-        _log.warn('missing pdfcairo')
+        _log.warning('missing pdftocairo')
         return False
     return True
 

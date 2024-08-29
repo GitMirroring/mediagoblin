@@ -16,11 +16,6 @@ import sqlalchemy as sa
 
 
 def upgrade():
-    if op.get_bind().engine.has_table("image__mediadata"):
-        # Skip; this has already been instantiated
-        # (probably via sqlalchemy-migrate)
-        return
-
     op.create_table(
         'image__mediadata',
         sa.Column('media_entry', sa.Integer(), nullable=False),

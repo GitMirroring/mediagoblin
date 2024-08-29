@@ -1,3 +1,6 @@
+# Would be helpful to move pdf.js to bower.json, but shtrom found that we cannot
+# use pdfjs-dist at the moment because the viewer.html that we rely on is not
+# included. See https://github.com/mozilla/pdf.js/issues/5609.
 [submodule "pdf.js"]
 	path = pdf.js
 	url = https://github.com/mozilla/pdf.js.git

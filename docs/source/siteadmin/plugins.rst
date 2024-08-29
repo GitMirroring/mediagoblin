@@ -43,12 +43,6 @@ If the plugin is available on the `Python Package Index
 
     pip install <plugin-name>
 
-For example, if we wanted to install the plugin named
-"mediagoblin-licenses" (which allows you to customize the licenses you
-offer for your media), we would do::
-
-    pip install mediagoblin-licenses
-
 .. note::
 
    If you're using a virtual environment, make sure to activate the

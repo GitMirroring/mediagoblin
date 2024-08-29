@@ -54,15 +54,14 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 FROM debian:bookworm
 
-# Install bootstrap and configure dependencies. Currently requires virtualenv
-# rather than the more modern python3-venv (should be fixed).
+# Install bootstrap and configure dependencies.
 RUN apt-get update && apt-get install -y \
 automake \
 git \
 nodejs \
 npm \
 python3-dev \
-virtualenv
+python3-venv
 
 # Install make and runtime dependencies.
 #
@@ -167,7 +166,7 @@ RUN git clone --depth=1 https://git.sr.ht/~mediagoblin/mediagoblin --branch mast
 # RUN git clone --depth=1 https://gitlab.com/BenSturmfels/mediagoblin.git --branch master .
 RUN git show --oneline --no-patch
 
-RUN ./bootstrap.sh
+RUN ./autogen.sh
 RUN ./configure
 RUN make
 

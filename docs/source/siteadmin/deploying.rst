@@ -17,8 +17,8 @@
 Deploying MediaGoblin
 =====================
 
-This deployment guide will take you step-by-step through
-setting up your own instance of MediaGoblin.
+This deployment guide will take you step-by-step through setting up
+your own instance of MediaGoblin.
 
 MediaGoblin most likely isn't yet available from your operating
 system's package manager, however, a basic install isn't too complex in
@@ -26,26 +26,13 @@ and of itself. We recommend a setup that combines MediaGoblin,
 virtualenv and Nginx on a .deb or .rpm-based GNU/Linux distribution.
 
 Experts may of course choose other deployment options, including
-Apache. See our `Deployment wiki page
-<https://web.archive.org/web/20200817190402/https://wiki.mediagoblin.org/Deployment>`_ for for more details.
-Please note that we are not able to provide support for these
+Apache. Please note that we are not able to provide support for these
 alternative deployment options.
 
 .. note::
 
-   These tools are for site administrators wanting to deploy a fresh
-   install.  If you want to join in as a contributor, see our
-   `Hacking HOWTO <https://web.archive.org/web/20200817190402/https://wiki.mediagoblin.org/HackingHowto>`_ instead.
-
-.. note::
-
-    Throughout the documentation we use the ``sudo`` command to indicate that
-    an instruction requires elevated user privileges to run. You can issue
-    these commands as the ``root`` user if you prefer.
-    
-    If you need help configuring ``sudo``, see the
-    `Debian wiki <https://wiki.debian.org/sudo/>`_ or the
-    `Fedora Project wiki <https://fedoraproject.org/wiki/Configuring_Sudo/>`_. 
+   This page describes our traditional virtualenv installation
+   method. If Docker is your thing, please see ":doc:`docker`".
 
 
 Prepare System
@@ -56,17 +43,27 @@ Dependencies
 
 MediaGoblin has the following core dependencies:
 
+.. todo: shtrom update this section
+
 - Python 3.7+
 - `lxml <http://lxml.de/>`_
 - `git <http://git-scm.com/>`_
 - `SQLite <http://www.sqlite.org/>`_ or `PostgreSQL <http://www.postgresql.org/>`_
 - `Python Imaging Library <http://www.pythonware.com/products/pil/>`_
   (PIL or Pillow)
-- `virtualenv <http://www.virtualenv.org/>`_
 - `Node.js <https://nodejs.org>`_
 
 These instructions have been tested on Debian 11, Debian 12, Ubuntu
 20.04 LTS, Ubuntu 22.04 LTS and Fedora 39.
+
+.. note::
+
+    Throughout the documentation we use the ``sudo`` command to indicate that
+    an instruction requires elevated user privileges to run. You can issue
+    these commands as the ``root`` user if you prefer.
+
+    If you need help configuring ``sudo``, see the
+    `Debian wiki <https://wiki.debian.org/sudo/>`_..
 
 Issue the following commands:
 
@@ -75,12 +72,11 @@ Issue the following commands:
     # Debian
     sudo apt update
     sudo apt install automake git nodejs npm python3-dev \
-    python3-gst-1.0 python3-lxml python3-pil virtualenv
+    python3-venv python3-gst-1.0 python3-lxml python3-pil
 
     # Fedora
     sudo dnf install automake gcc git-core make nodejs npm \
-    libffi-devel python3-devel python3-lxml python3-pillow \
-    virtualenv
+    libffi-devel python3-devel python3-lxml python3-pillow
 
 For a production deployment, you'll also need Nginx as frontend web
 server and RabbitMQ to store the media processing queue::
@@ -109,6 +105,8 @@ server and RabbitMQ to store the media processing queue::
 
 Configure PostgreSQL
 ~~~~~~~~~~~~~~~~~~~~
+
+.. todo: shtrom test this section
 
 .. note::
 
@@ -227,8 +225,8 @@ particular requirements::
     sudo chown --no-dereference --recursive mediagoblin:nginx /srv/mediagoblin.example.org
 
 
-Install MediaGoblin and Virtualenv
-----------------------------------
+Install MediaGoblin
+-------------------
 
 We will now switch to our 'mediagoblin' system account, and then set up
 our MediaGoblin source code repository and its necessary services.
@@ -254,7 +252,7 @@ Clone the MediaGoblin repository and set up the git submodules::
 
 Set up the environment::
 
-    $ ./bootstrap.sh
+    $ ./autogen.sh
     $ ./configure
     $ make
 
@@ -320,6 +318,8 @@ your own email address and enter a secure password when prompted::
 Test the Server
 ~~~~~~~~~~~~~~~
 
+.. _lazyserver:
+
 At this point MediaGoblin should be properly installed.  You can
 test the deployment with the following command::
 
@@ -361,7 +361,7 @@ following commands::
     sudo systemctl enable nginx
 
     # Fedora
-    sudo ln -s /srv/mediagoblin.example.org/nginx.conf /etc/nginx/conf.d/mediagoblin.conf
+    sudo ln --symbolic /srv/mediagoblin.example.org/nginx.conf /etc/nginx/conf.d/mediagoblin.conf
     sudo systemctl enable nginx
 
 You can modify these commands and locations depending on your
@@ -589,8 +589,8 @@ the error by entering either of::
 
 Or view the full logs with::
 
-    sudo journalctl -u mediagoblin-paster.service -f
-    sudo journalctl -u mediagoblin-celeryd.service -f
+    sudo journalctl --unit mediagoblin-paster.service --follow
+    sudo journalctl --unit mediagoblin-celeryd.service --follow
 
 The above ``systemctl status`` command is also useful if you ever want to
 confirm that a process is still running.

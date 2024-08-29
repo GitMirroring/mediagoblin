@@ -14,13 +14,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import tempfile
-import shutil
-import os
-import pytest
 from contextlib import contextmanager
-import logging
-import imghdr
+import tempfile
+
+from PIL import Image
+import pytest
 
 #os.environ['GST_DEBUG'] = '4,python:4'
 
@@ -101,4 +99,4 @@ def test_thumbnails():
         # fft_size below is copypasted from config_spec.ini
         thumbnailer.spectrogram(new_name, thumbnail.name, width=100,
                                 fft_size=4096)
-        assert imghdr.what(thumbnail.name) == 'jpeg'
+        assert Image.open(thumbnail.name).format == 'JPEG'

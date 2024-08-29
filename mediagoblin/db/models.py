@@ -21,6 +21,7 @@ TODO: indexes on foreignkeys, where useful.
 
 import logging
 import datetime
+from datetime import timezone
 
 from sqlalchemy import (
     Column, Integer, Unicode, UnicodeText, DateTime, Boolean, ForeignKey,
@@ -44,7 +45,6 @@ from mediagoblin.tools.routing import extract_url_arguments
 from mediagoblin.tools.text import convert_to_tag_list_of_dicts
 
 from urllib.parse import urljoin
-from pytz import UTC
 
 _log = logging.getLogger(__name__)
 
@@ -324,8 +324,8 @@ class User(Base, UserMixin):
         return UserBan.query.get(self.id) is not None
 
     def serialize(self, request):
-        published = UTC.localize(self.created)
-        updated = UTC.localize(self.updated)
+        published = self.created.replace(tzinfo=timezone.utc)
+        updated = self.updated.replace(tzinfo=timezone.utc)
         user = {
             "published": published.isoformat(),
             "updated": updated.isoformat(),
@@ -752,8 +752,8 @@ class MediaEntry(Base, MediaEntryMixin, CommentingMixin):
     def serialize(self, request, show_comments=True):
         """ Unserialize MediaEntry to object """
         author = self.get_actor
-        published = UTC.localize(self.created)
-        updated = UTC.localize(self.updated)
+        published = self.created.replace(tzinfo=timezone.utc)
+        updated = self.updated.replace(tzinfo=timezone.utc)
         public_id = self.get_public_id(request.urlgen)
         context = {
             "id": public_id,
@@ -1074,9 +1074,8 @@ class TextComment(Base, TextCommentMixin, CommentingMixin):
         else:
             target = target.serialize(request, show_comments=False)
 
-
         author = self.get_actor
-        published = UTC.localize(self.created)
+        published = self.created.replace(tzinfo=timezone.utc)
         context = {
             "id": self.get_public_id(request.urlgen),
             "objectType": self.object_type,
@@ -1527,8 +1526,8 @@ class Generator(Base):
             id=self.id,
             qualified=True
         )
-        published = UTC.localize(self.published)
-        updated = UTC.localize(self.updated)
+        published = self.published.replace(tzinfo=timezone.utc)
+        updated = self.updated.replace(tzinfo=timezone.utc)
         return {
             "id": href,
             "displayName": self.name,
@@ -1623,7 +1622,7 @@ class Graveyard(Base):
         )
 
     def serialize(self, request):
-        deleted = UTC.localize(self.deleted).isoformat()
+        deleted = self.deleted.replace(tzinfo=timezone.utc).isoformat()
         context = {
             "id": self.public_id,
             "objectType": self.object_type,

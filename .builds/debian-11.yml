@@ -5,7 +5,7 @@ packages:
   - nodejs
   - npm
   - python3-dev
-  - virtualenv
+  - python3-venv
 
   # Install make and runtime dependencies.
   - python3-lxml
@@ -51,27 +51,23 @@ packages:
 tasks:
   - core: |
       set -x
+
       cd mediagoblin
       git show --oneline --no-patch
-      ./bootstrap.sh
+
+      ./autogen.sh
       ./configure
-      make
-
-      # Install additional Sphinx dependencies not in Debian.
-      ./bin/pip install sphinxcontrib-applehelp sphinxcontrib-htmlhelp sphinxcontrib-jsmath
-
-      # Install raw image library from PyPI as not available in Debian 11.
-      ./bin/pip install py3exiv2
+      make build
 
       # Confirm our packages version for later troubleshooting.
       ./bin/python -m pip freeze
 
-      # Run the tests, explicitly listing out skipped tests.
-      ./bin/python -m pytest -rs ./mediagoblin/tests --forked
+      make check
 
       # Check that `gmg` command runs
       ./bin/gmg dbupdate
 
-      # Build the documentation.
-      ./bin/python -m pip install '.[doc]'
-      cd docs && make html
+      # Don't bother building the documentation on Debian 11 as we're hitting
+      # some incompatibilities between the OS-installed sphinx and the
+      # pip-installed jinja2.
+      # make docs
