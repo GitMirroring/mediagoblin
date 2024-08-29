@@ -29,6 +29,11 @@ If you have any problems, please drop in to the `#mediagoblin IRC chat
 tracker <https://todo.sr.ht/~mediagoblin/mediagoblin>`_ or drop us an email to
 `mediagoblin-devel@gnu.org <mailto:mediagoblin-devel@gnu.org>`_.
 
+.. note::
+
+   This page describes upgrading of our traditional virtualenv installation
+   method. If Docker is your thing, please see ":doc:`docker`".
+
 
 Upgrade
 -------
@@ -40,7 +45,7 @@ Upgrade
 
 2. Update to the latest release.  In your ``mediagoblin`` directory, run::
 
-     git fetch && git checkout --quiet v0.13.0 && git submodule update
+     git fetch && git checkout --quiet v0.14.0 && git submodule update
 
    If you are checking out a branch, rather than a specific version tag, please
    run `git pull` before `git submodule update`.

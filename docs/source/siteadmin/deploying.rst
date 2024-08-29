@@ -17,8 +17,8 @@
 Deploying MediaGoblin
 =====================
 
-This deployment guide will take you step-by-step through
-setting up your own instance of MediaGoblin.
+This deployment guide will take you step-by-step through setting up
+your own instance of MediaGoblin.
 
 MediaGoblin most likely isn't yet available from your operating
 system's package manager, however, a basic install isn't too complex in
@@ -31,19 +31,8 @@ alternative deployment options.
 
 .. note::
 
-   These tools are for site administrators wanting to deploy a fresh
-   install.  If you want to join in as a contributor, see our
-   `Hacking HOWTO <https://web.archive.org/web/20200817190402/https://wiki.mediagoblin.org/HackingHowto>`_ instead.
-
-.. note::
-
-    Throughout the documentation we use the ``sudo`` command to indicate that
-    an instruction requires elevated user privileges to run. You can issue
-    these commands as the ``root`` user if you prefer.
-    
-    If you need help configuring ``sudo``, see the
-    `Debian wiki <https://wiki.debian.org/sudo/>`_ or the
-    `Fedora Project wiki <https://fedoraproject.org/wiki/Configuring_Sudo/>`_. 
+   This page describes our traditional virtualenv installation
+   method. If Docker is your thing, please see ":doc:`docker`".
 
 
 Prepare System
@@ -54,11 +43,9 @@ Dependencies
 
 MediaGoblin has the following core dependencies:
 
-- Python 3.7+
-
-=======
 .. todo: shtrom update this section
 
+- Python 3.7+
 - `lxml <http://lxml.de/>`_
 - `git <http://git-scm.com/>`_
 - `SQLite <http://www.sqlite.org/>`_ or `PostgreSQL <http://www.postgresql.org/>`_
@@ -68,6 +55,15 @@ MediaGoblin has the following core dependencies:
 
 These instructions have been tested on Debian 11, Debian 12, Ubuntu
 20.04 LTS, Ubuntu 22.04 LTS and Fedora 39.
+
+.. note::
+
+    Throughout the documentation we use the ``sudo`` command to indicate that
+    an instruction requires elevated user privileges to run. You can issue
+    these commands as the ``root`` user if you prefer.
+
+    If you need help configuring ``sudo``, see the
+    `Debian wiki <https://wiki.debian.org/sudo/>`_..
 
 Issue the following commands:
 
