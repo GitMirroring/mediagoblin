@@ -20,20 +20,22 @@ Release Notes
 This chapter has important information about our current and previous releases.
 
 
-0.14.0 (to be released)
-===========================
+0.14.0
+======
 
-The biggest change in this release is first-class Docker installation support —
-see "doc:`docker`" for details. This work also includes a significant overhaul
-of the configure/build system to reduce unnecessary dependency checks and add
-some new checks. These checks now inform which media plugins get enabled and
-flags why others are not. Many thanks to Olivier for the several years of work
-and persistence that went into this change.
+The biggest change in this release is the addition of first-class Docker
+installation support — see "doc:`docker`" for details. This update also includes
+a significant overhaul of the configure/build system to reduce unnecessary
+dependency checks and add some new checks. These checks now inform which media
+plugins get enabled and flags why others are not. Many thanks to Olivier for the
+several years of work and persistence that went into this change. *This is the
+initial release with Docker support, so please let us know if you hit any
+issues. Our existing installation method will remain the default.*
 
-In addition to this, MediaGoblin can now be installed as an OS package with GNU
-Guix. See `README-Guix.md` for details on using our Guix "channel". This has
-been enabled by significant work to support more recent versions of some of all
-our Python dependencies.
+In addition to this, MediaGoblin now has preliminary support for installation as
+an OS package under GNU Guix. See `README-Guix.md` for details on using our Guix
+"channel". This has been enabled by significant work to support more recent
+versions of some of all our Python dependencies.
 
 We're looking forward to spending time on some more user-facing improvements in
 the next release.
@@ -43,7 +45,7 @@ the next release.
 For detailed instructions on installing or upgrading, see ":doc:`upgrading`" and
 ":doc:`deploying`".
 
-**Noteable changes:**
+**Noteworthy changes:**
 
 - Add first-class Docker installation support (Olivier Mehani)
 - Refactor configure/build system to improve dependency detection (Olivier Mehani)
