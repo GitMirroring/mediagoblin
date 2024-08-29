@@ -12,9 +12,11 @@ Release Checklist
 - push tags
 - log in and rebuild master and new version docs on readthedocs.org
 - push docker containers
-  - docker login -u mediagoblin
+
+  - docker login
   - docker push mediagoblin/mediagoblin:VERSION
   - docker push mediagoblin/nginx:VERSION
+
 - merge into stable branch
 - post to mediagoblin-devel
 - post to info-gnu@gnu.org
