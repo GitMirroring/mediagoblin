@@ -24,7 +24,7 @@ This chapter has important information about our current and previous releases.
 ======
 
 The biggest change in this release is the addition of first-class Docker
-installation support — see "doc:`docker`" for details. This update also includes
+installation support — see ":doc:`docker`" for details. This update also includes
 a significant overhaul of the configure/build system to reduce unnecessary
 dependency checks and add some new checks. These checks now inform which media
 plugins get enabled and flags why others are not. Many thanks to Olivier for the
