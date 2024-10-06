@@ -23,7 +23,6 @@ RUN dnf -y install \
 findutils \
 # To build waitress on Fedora 33 (not required for 31)
 libffi-devel \
-python3-lxml \
 python3-pillow \
 which
 

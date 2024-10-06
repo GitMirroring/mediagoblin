@@ -8,7 +8,6 @@ packages:
   - python3-venv
 
   # Install make and runtime dependencies.
-  - python3-lxml
   - python3-pil
 
   # Install test and docs dependencies.

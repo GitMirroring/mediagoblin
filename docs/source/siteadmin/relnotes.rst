@@ -20,6 +20,16 @@ Release Notes
 This chapter has important information about our current and previous releases.
 
 
+0.14.0 (to be released)
+=======================
+
+
+**Noteworthy changes:**
+
+- Remove direct `lxml` dependency switch to `lxml_html_clean` (Sandro Jäckel, Ben Sturmfels)
+
+
+
 0.14.0
 ======
 

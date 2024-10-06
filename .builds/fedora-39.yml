@@ -12,7 +12,6 @@ packages:
   - python3-greenlet  # Fedora say "greenlet is required to install pyproject.toml-based projects"
 
   # Install make and runtime dependencies.
-  - python3-lxml
   - python3-pillow
 
   # Install test and docs dependencies.

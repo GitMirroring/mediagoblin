@@ -17,13 +17,13 @@
 import collections
 import wtforms
 import markdown
-from lxml.html.clean import Cleaner
+from lxml_html_clean import Cleaner
 
 from mediagoblin import mg_globals
 from mediagoblin.tools import url
 
 
-# A super strict version of the lxml.html cleaner class
+# A super strict version of the cleaner class
 HTML_CLEANER = Cleaner(
     scripts=True,
     javascript=True,
@@ -107,7 +107,7 @@ def tag_length_validator(form, field):
                                     ', '.join(too_long_tags)))
 
 
-# Don't use the safe mode, because lxml.html.clean is better and we are using
+# Don't use the safe mode, because lxml_html_clean is better and we are using
 # it anyway
 UNSAFE_MARKDOWN_INSTANCE = markdown.Markdown()
 

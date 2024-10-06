@@ -68,9 +68,7 @@ python3-venv
 # We explicitly don't use use Debian packages for everything here, so as to
 # match closely with the deployment docs which install most depedencies
 # from PyPI.
-RUN apt-get install -y \
-python3-lxml \
-python3-pil
+RUN apt-get install -y python3-pil
 
 # Install test and docs dependencies.
 RUN apt-get install -y \

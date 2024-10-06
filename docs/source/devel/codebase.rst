@@ -156,9 +156,6 @@ Software Stack
     text-to-html tool to make it easy for people to write rich text
     comments, descriptions, and etc.
 
-  * `lxml <http://lxml.de/>`_: nice XML and HTML processing for
-    python.
-
 * Media processing libraries
 
   * `Python Imaging Library <http://www.pythonware.com/products/pil/>`_:

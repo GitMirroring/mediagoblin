@@ -17,7 +17,7 @@
 from collections import namedtuple
 import logging
 
-import lxml.etree as ET
+import xml.etree.ElementTree as ET
 from werkzeug.exceptions import MethodNotAllowed, BadRequest
 
 from mediagoblin.tools.request import setup_user_in_request
