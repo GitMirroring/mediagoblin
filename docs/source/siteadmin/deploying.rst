@@ -53,8 +53,8 @@ MediaGoblin has the following core dependencies:
   (PIL or Pillow)
 - `Node.js <https://nodejs.org>`_
 
-These instructions have been tested on Debian 11, Debian 12, Ubuntu
-20.04 LTS, Ubuntu 22.04 LTS and Fedora 39.
+These instructions have been tested on Debian 11, Debian 12, Debian 13, Ubuntu
+20.04 LTS, Ubuntu 22.04 LTS, Ubuntu 24.04 and Fedora 39.
 
 .. note::
 
