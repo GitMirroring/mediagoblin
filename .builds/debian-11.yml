@@ -58,6 +58,10 @@ tasks:
 
       ./autogen.sh
       ./configure
+      # Fix Debian 11 error during `pip install mediagoblin`
+      # AttributeError: install_layout
+      # See: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1003252
+      export SETUPTOOLS_USE_DISTUTILS=stdlib
       make build
 
       # Confirm our packages version for later troubleshooting.
