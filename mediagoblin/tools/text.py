@@ -17,41 +17,21 @@
 import collections
 import wtforms
 import markdown
-from lxml_html_clean import Cleaner
+import bleach
 
 from mediagoblin import mg_globals
 from mediagoblin.tools import url
 
-
-# A super strict version of the cleaner class
-HTML_CLEANER = Cleaner(
-    scripts=True,
-    javascript=True,
-    comments=True,
-    style=True,
-    links=True,
-    page_structure=True,
-    processing_instructions=True,
-    embedded=True,
-    frames=True,
-    forms=True,
-    annoying_tags=True,
-    allow_tags=[
-        'div', 'b', 'i', 'em', 'strong', 'p', 'ul', 'ol', 'li', 'a', 'br',
-        'pre', 'code'],
-    remove_unknown_tags=False,  # can't be used with allow_tags
-    safe_attrs_only=True,
-    add_nofollow=True,  # for now
-    host_whitelist=(),
-    whitelist_tags=set())
+ALLOWED_TAGS = {
+    'div', 'b', 'i', 'em', 'strong', 'p', 'ul', 'ol', 'li', 'a', 'br',
+    'pre', 'code',
+}
 
 
 def clean_html(html):
-    # clean_html barfs on an empty string
-    if not html:
-        return ''
-
-    return HTML_CLEANER.clean_html(html)
+    """Restrict HTML tags and add rel="nofollow" to links."""
+    cleaned = bleach.clean(html, tags=ALLOWED_TAGS, strip=True)
+    return bleach.linkify(cleaned)
 
 
 def convert_to_tag_list_of_dicts(tag_string):
@@ -73,7 +53,7 @@ def convert_to_tag_list_of_dicts(tag_string):
             # Ignore empty tags or duplicate slugs
             if tag:
                 slug_to_name[url.slugify(tag)] = tag
-    return [{'name': v, 'slug': k} for (k,v) in slug_to_name.items()]
+    return [{'name': v, 'slug': k} for (k, v) in slug_to_name.items()]
 
 
 def media_tags_as_string(media_entry_tags):

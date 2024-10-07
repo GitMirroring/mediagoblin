@@ -164,6 +164,15 @@ def test_gettext_lazy_proxy():
     assert p1 != p2
 
 
+def test_html_cleaner_blank():
+    assert text.clean_html('') == ''
+
+
+def test_html_cleaner_nofollow():
+    result = text.clean_html('<a href="http://example.com">Testing</a>')
+    assert result == '<a href="http://example.com" rel="nofollow">Testing</a>'
+
+
 def test_html_cleaner():
     # Remove images
     result = text.clean_html(
@@ -171,16 +180,14 @@ def test_html_cleaner():
         '<img src="http://example.org/huge-purple-barney.png" /></p>\n'
         '<p>:)</p>')
     assert result == (
-        '<div>'
         '<p>Hi everybody! </p>\n'
-        '<p>:)</p>'
-        '</div>')
+        '<p>:)</p>')
 
     # Remove evil javascript
     result = text.clean_html(
         '<p><a href="javascript:nasty_surprise">innocent link!</a></p>')
     assert result == (
-        '<p><a href="">innocent link!</a></p>')
+        '<p><a>innocent link!</a></p>')
 
 
 class TestMail:

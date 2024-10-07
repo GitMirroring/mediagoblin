@@ -91,6 +91,7 @@
                            python-webtest))
       (inputs (list python-alembic
                     python-babel
+                    python-bleach
                     python-celery
                     python-configobj
                     python-dateutil
@@ -100,7 +101,6 @@
                     python-jinja2
                     python-jsonschema
                     python-ldap ;For LDAP plugin
-                    python-lxml
                     python-markdown
                     python-oauthlib
                     python-openid ;For OpenID plugin

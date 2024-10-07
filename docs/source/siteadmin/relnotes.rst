@@ -26,7 +26,7 @@ This chapter has important information about our current and previous releases.
 
 **Noteworthy changes:**
 
-- Remove direct `lxml` dependency switch to `lxml_html_clean` (Sandro Jäckel, Ben Sturmfels)
+- Remove `lxml` dependency and switch HTML cleaning to `bleach` (Sandro Jäckel, Ben Sturmfels)
 
 
 
