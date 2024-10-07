@@ -88,6 +88,8 @@ See "Run MediaGoblin" below.
     git clone https://git.sr.ht/~mediagoblin/mediagoblin
     cd mediagoblin
     guix shell -L . --development mediagoblin automake autoconf
+    cp mediagoblin/_version.py.in mediagoblin/_version.py
+    pytest
     # See the "Run MediaGoblin" section below for initial configuration
     CELERY_ALWAYS_EAGER=true python3 -m mediagoblin.gmg_commands.__init__ serve paste.ini
 
