@@ -79,6 +79,7 @@ I hope you like unit tests JUST AS MUCH AS I DO!"""
 
 I hope you like unit tests JUST AS MUCH AS I DO!"""
 
+
 @pytest.fixture()
 def starttls_enabled_app(request):
     return get_app(
@@ -88,6 +89,7 @@ def starttls_enabled_app(request):
             "starttls_config.ini"
         )
     )
+
 
 def test_email_force_starttls(starttls_enabled_app):
     common.TESTS_ENABLED = False
@@ -101,6 +103,7 @@ def test_email_force_starttls(starttls_enabled_app):
                 message_body="Ohai ^_^"
             )
 
+
 def test_slugify():
     assert url.slugify('a walk in the park') == 'a-walk-in-the-park'
     assert url.slugify('A Walk in the Park') == 'a-walk-in-the-park'
@@ -110,11 +113,14 @@ def test_slugify():
     assert url.slugify('a walk in the par\u0107') == 'a-walk-in-the-parc'
     assert url.slugify('\u00E0\u0042\u00E7\u010F\u00EB\u0066') == 'abcdef'
     # Russian
-    assert url.slugify('\u043f\u0440\u043e\u0433\u0443\u043b\u043a\u0430 '
-            '\u0432 \u043f\u0430\u0440\u043a\u0435') == 'progulka-v-parke'
+    assert url.slugify(
+        '\u043f\u0440\u043e\u0433\u0443\u043b\u043a\u0430 '
+        '\u0432 \u043f\u0430\u0440\u043a\u0435'
+    ) == 'progulka-v-parke'
     # Korean
     assert (url.slugify('\uacf5\uc6d0\uc5d0\uc11c \uc0b0\ucc45') ==
             'gongweoneseo-sancaeg')
+
 
 def test_locale_to_lower_upper():
     """
