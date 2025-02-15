@@ -62,7 +62,9 @@ Upgrade
 
      ./autogen.sh && ./configure && make
 
-   You may need to update file permissions as mentioned in ":doc:`deploying`".
+   In case of errors, you may need to double-check that the relevant
+   dependencies are installed and or correct the file permissions as mentioned
+   in ":doc:`deploying`".
 
 6. Re-install any ":doc:`plugins`" you had previously installed. Skipping these
    may result in errors updating the database.
@@ -74,8 +76,9 @@ Upgrade
 8. Restart the Paster and Celery processes. If you followed ":doc:`deploying`",
    this may be something like::
 
+     # Switch back to your original user with Ctrl-d or "exit".
      sudo systemctl restart mediagoblin-paster.service
-     sudo systemctl start mediagoblin-celeryd.service
+     sudo systemctl restart mediagoblin-celeryd.service
 
    To see the logs for troubleshooting, use something like::
 
