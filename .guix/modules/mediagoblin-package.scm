@@ -23,6 +23,7 @@
   #:use-module (gnu packages databases)
   #:use-module (gnu packages openldap)
   #:use-module (gnu packages pdf)
+  #:use-module (gnu packages python-build)
   #:use-module (gnu packages python-crypto)
   #:use-module (gnu packages python-web)
   #:use-module (gnu packages python-xyz)
@@ -88,7 +89,8 @@
                            python-pytest-forked
                            python-pytest-xdist
                            python-sphinx
-                           python-webtest))
+                           python-webtest
+                           python-wheel))
       (inputs (list python-alembic
                     python-babel
                     python-bleach
