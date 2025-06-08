@@ -85,11 +85,16 @@ See "Run MediaGoblin" below.
 
 ## Set up a MediaGoblin hacking environment (for MediaGoblin development) ##
 
+Note that we're running the tests without the default `--forked`, as
+"python-pytest-forked" is not included in the Guix environment due to errors
+`py.process'. Unfortunately this also breaks about 15 tests due to the lack of
+isolation.
+
     git clone https://git.sr.ht/~mediagoblin/mediagoblin
     cd mediagoblin
-    guix shell -L . --development mediagoblin automake autoconf
+    guix shell
     cp mediagoblin/_version.py.in mediagoblin/_version.py
-    pytest
+    pytest -o addopts='--numprocesses=logical'
     # See the "Run MediaGoblin" section below for initial configuration
     CELERY_ALWAYS_EAGER=true python3 -m mediagoblin.gmg_commands.__init__ serve paste.ini
 
@@ -106,15 +111,15 @@ To build MediaGoblin:
 
     git clone https://git.sr.ht/~mediagoblin/mediagoblin
     cd mediagoblin
-    guix build -L . mediagoblin
+    guix build -L .guix/modules mediagoblin
 
 To build with modified source:
 
-    guix build -L . mediagoblin --with-source=mediagoblin=[SOURCE DIRECTORY]
+    guix build -L .guix/modules mediagoblin --with-source=mediagoblin=[SOURCE DIRECTORY]
 
 To build without running tests:
 
-    guix build -L . mediagoblin --without-tests=mediagoblin
+    guix build -L .guix/modules mediagoblin --without-tests=mediagoblin
 
 
 ## Install via load-path (for Guix testing/development) ##
@@ -123,8 +128,8 @@ For flexibility during testing and development, install using Guix's load-path:
 
     git clone https://git.sr.ht/~mediagoblin/mediagoblin
     cd mediagoblin
-    guix shell -L . mediagoblin  # For a temporary shell
-    guix install -L . mediagoblin  # To install in your profile
+    guix shell -L .guix/modules mediagoblin  # For a temporary shell
+    guix install -L .guix/modules mediagoblin  # To install in your profile
 
 
 ## Run MediaGoblin ##
