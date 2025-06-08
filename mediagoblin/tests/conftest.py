@@ -23,7 +23,7 @@ from mediagoblin.tools.testing import _activate_testing
 @pytest.fixture()
 def test_app(request):
     """
-    py.test fixture to pass sandboxed mediagoblin applications into tests that
+    pytest fixture to pass sandboxed mediagoblin applications into tests that
     want them.
 
     You could make a local version of this method for your own tests
@@ -36,6 +36,6 @@ def test_app(request):
 @pytest.fixture()
 def pt_fixture_enable_testing():
     """
-    py.test fixture to enable testing mode in tools.
+    pytest fixture to enable testing mode in tools.
     """
     _activate_testing()

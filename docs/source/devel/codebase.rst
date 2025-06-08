@@ -119,7 +119,7 @@ Software Stack
   * `Python <http://python.org/>`_: the language we're using to write
     this
 
-  * `Py.Test <http://pytest.org/>`_:
+  * `pytest <http://pytest.org/>`_:
     for unit tests
 
 * Data storage

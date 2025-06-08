@@ -13,6 +13,7 @@ packages:
   # Install test and docs dependencies.
   - python3-pytest
   - python3-pytest-xdist
+  - python3-pytest-forked
   - python3-sphinx
   - python3-sphinxcontrib.applehelp
   - python3-sphinxcontrib.devhelp
