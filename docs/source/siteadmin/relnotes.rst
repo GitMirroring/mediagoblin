@@ -27,7 +27,7 @@ This chapter has important information about our current and previous releases.
 **Noteworthy changes:**
 
 - Remove `lxml` dependency and switch HTML cleaning to `bleach` (Sandro Jäckel, Ben Sturmfels)
-
+- Remove `pytest-forked` and use `pytest-xdist`'s `--numprocesses=logical` instead (Ben Sturmfels)
 
 
 0.14.0
