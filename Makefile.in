@@ -107,8 +107,8 @@ $(VENV_PYTHON) $(VENV_PIP): $(VENV_DIR)/bin
 $(VENV_DIR)/bin: # use bin to identify in-source virtualenvs
 	$(PYTHON) -m venv --system-site-packages $(VENV_DIR)
 
-$(PACKAGE_WHEEL): $(SRC_DIR)/setup.py $(VENV_DIST_INFO)
-	$(VENV_PYTHON) $(SRC_DIR)/setup.py bdist_wheel
+$(PACKAGE_WHEEL): $(SRC_DIR)/pyproject.toml $(VENV_DIST_INFO)
+	$(VENV_PYTHON) -m build
 
 
 else
