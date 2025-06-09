@@ -93,16 +93,16 @@ include = ["mediagoblin*"]
 [tool.setuptools.package-data]
 # These are data files that aren't directly used by the application, such as
 # example config and documentation.
-"etc/mediagoblin" = [
-  "mediagoblin.example.ini",
-  "paste.ini",
-]
+# "etc/mediagoblin" = [
+#   "mediagoblin.example.ini",
+#   "paste.ini",
+# ]
 # Listing out the licenses explicitly because Debian 11 build fails with "licenses/*", saying:
 # error: can't copy 'licenses/*': doesn't exist or not a regular file
-"share/mediagoblin/licenses" = [
-  "licenses/AGPLv3.txt",
-  "licenses/CC0_1.0.txt",
-]
+# "share/mediagoblin/licenses" = [
+#   "licenses/AGPLv3.txt",
+#   "licenses/CC0_1.0.txt",
+# ]
 # This doesn't work because it seems to only like regular files, not
 # subdirectories.
 # "share/doc/mediagoblin" = ["docs/source/*"]

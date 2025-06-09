@@ -83,7 +83,7 @@ check: $(VENV_PIP)
 	$(VENV_PYTEST)
 
 $(VENV_PYBABEL): $(VENV_DIST_INFO)
-$(VENV_DIST_INFO): $(VENV_PIP) $(SRC_DIR)/setup.cfg
+$(VENV_DIST_INFO): $(VENV_PIP) $(SRC_DIR)/pyproject.toml
 	$(VENV_PIP) install $(PIP_INSTALL_ARGS) $(VENV_EDITABLE) $(SRC_DIR)
 	# We cannot install multiple variants of the package as editable,
 	# so all extras are installed in a separate run
