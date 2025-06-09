@@ -1,6 +1,3 @@
-
-version: '3'
-
 services:
   lazyserver:
     image: mediagoblin/mediagoblin:@PACKAGE_VERSION@
