@@ -6,6 +6,7 @@ packages:
   - git-core
   - libffi-devel  # To build cffi Python package
   - make
+  - awk
   - nodejs
   - npm
   - python3-devel
