@@ -4,6 +4,8 @@ Release Checklist
 
 - update docs/source/siteadmin/relnotes.txt
 - update docs/source/siteadmin/upgrading.txt
+- a developer should test the upgrade instructions on their own system
+- once in a while a developer should install from scratch to ensure docs are appropriate
 - update configure.ac version to remove ".dev" suffix
 - write a blog post
 - test the upgrade process
