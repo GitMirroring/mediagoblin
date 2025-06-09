@@ -92,9 +92,9 @@ isolation.
 
     git clone https://git.sr.ht/~mediagoblin/mediagoblin
     cd mediagoblin
-    guix shell
+    guix shell --pure --load-path=.guix/modules --load-path=/home/ben/ws/sturm-guix --development mediagoblin sturm-dev sturm-python-dev
     cp mediagoblin/_version.py.in mediagoblin/_version.py
-    pytest -o addopts='--numprocesses=logical'
+    pytest --override-ini=addopts='--numprocesses=logical'
     # See the "Run MediaGoblin" section below for initial configuration
     CELERY_ALWAYS_EAGER=true python3 -m mediagoblin.gmg_commands.__init__ serve paste.ini
 
@@ -111,15 +111,15 @@ To build MediaGoblin:
 
     git clone https://git.sr.ht/~mediagoblin/mediagoblin
     cd mediagoblin
-    guix build -L .guix/modules mediagoblin
+    guix build --load-path=.guix/modules mediagoblin
 
 To build with modified source:
 
-    guix build -L .guix/modules mediagoblin --with-source=mediagoblin=[SOURCE DIRECTORY]
+    guix build --load-path=.guix/modules mediagoblin --with-source=mediagoblin=[SOURCE DIRECTORY]
 
 To build without running tests:
 
-    guix build -L .guix/modules mediagoblin --without-tests=mediagoblin
+    guix build --load-path=.guix/modules mediagoblin --without-tests=mediagoblin
 
 
 ## Install via load-path (for Guix testing/development) ##
@@ -128,8 +128,8 @@ For flexibility during testing and development, install using Guix's load-path:
 
     git clone https://git.sr.ht/~mediagoblin/mediagoblin
     cd mediagoblin
-    guix shell -L .guix/modules mediagoblin  # For a temporary shell
-    guix install -L .guix/modules mediagoblin  # To install in your profile
+    guix shell --load-path=.guix/modules mediagoblin  # For a temporary shell
+    guix install --load-path=.guix/modules mediagoblin  # To install in your profile
 
 
 ## Run MediaGoblin ##
@@ -198,7 +198,7 @@ Stop your existing web interface instance and re-run with
 
 To build a Debian package:
 
-    guix pack -f deb -C xz -L . -S /usr/bin/gmg=bin/gmg mediagoblin
+    guix pack --format=deb --compression=xz --load-path=. --symlink=/usr/bin/gmg=bin/gmg mediagoblin
 
 For other options including RPM and Docker, see
 https://guix.gnu.org/manual/en/html_node/Invoking-guix-pack.html#Invoking-guix-pack.
