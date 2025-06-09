@@ -27,7 +27,6 @@ This chapter has important information about our current and previous releases.
 **Noteworthy changes:**
 
 - Remove `lxml` dependency and switch HTML cleaning to `bleach` (Sandro Jäckel, Ben Sturmfels)
-- Migrate from `setup.cfg` to `pyproject.toml` (Ben Sturmfels)
 
 
 
