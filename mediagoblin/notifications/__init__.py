@@ -16,6 +16,7 @@
 
 import logging
 
+from mediagoblin.db.base import Session
 from mediagoblin.db.models import Notification, CommentSubscription, User, \
                                   Comment, GenericModelReference
 from mediagoblin.notifications.task import email_notification_task
@@ -70,7 +71,7 @@ def mark_notification_seen(notification):
 
 
 def mark_comment_notification_seen(comment_id, user):
-    comment = Comment.query.get(comment_id)
+    comment = Session.get(Comment, comment_id)
 
     # If there is no comment, there is no notification
     if comment == None:

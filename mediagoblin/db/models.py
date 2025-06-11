@@ -35,7 +35,7 @@ from sqlalchemy.util import memoized_property
 
 from mediagoblin.db.extratypes import (PathTupleWithSlashes, JSONEncoded,
                                        MutationDict)
-from mediagoblin.db.base import Base, DictReadAttrProxy
+from mediagoblin.db.base import Base, DictReadAttrProxy, Session
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, \
         CollectionMixin, CollectionItemMixin, ActivityMixin, TextCommentMixin, \
         CommentingMixin
@@ -321,7 +321,7 @@ class User(Base, UserMixin):
             :returns                True if self is banned
             :returns                False if self is not
         """
-        return UserBan.query.get(self.id) is not None
+        return Session.get(UserBan, self.id) is not None
 
     def serialize(self, request):
         published = self.created.replace(tzinfo=timezone.utc)

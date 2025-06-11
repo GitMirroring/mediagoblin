@@ -19,6 +19,7 @@ import logging
 
 from werkzeug.http import parse_options_header
 
+from mediagoblin.db.base import Session
 from mediagoblin.db.models import User, AccessToken
 from mediagoblin.oauth.tools.request import decode_authorization_header
 
@@ -51,7 +52,7 @@ def setup_user_in_request(request):
         request.user = None
         return
 
-    request.user = User.query.get(request.session['user_id'])
+    request.user = Session.get(User, request.session['user_id'])
 
     if not request.user:
         # Something's wrong... this user doesn't exist?  Invalidate

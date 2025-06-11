@@ -35,8 +35,8 @@ def test_add_subtitle_entry(test_app):
     Session.add(media)
     Session.flush()
 
-    MediaEntry.query.get(media.id).delete()
-    User.query.get(user_a.id).delete()
+    Session.get(MediaEntry, media.id).delete()
+    Session.get(User, user_a.id).delete()
 
 # Checking the tools written for subtitles
 

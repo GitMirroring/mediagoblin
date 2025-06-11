@@ -20,6 +20,7 @@ from webtest import AppError
 
 from mediagoblin.tests.tools import fixture_add_user, fixture_media_entry
 
+from mediagoblin.db.base import Session
 from mediagoblin.db.models import User, LocalUser, UserBan
 from mediagoblin.tools import template
 
@@ -83,7 +84,7 @@ class TestPrivilegeFunctionality:
         # Then test what happens when that ban has an expiration date which
         # hasn't happened yet
         #----------------------------------------------------------------------
-        user_ban = UserBan.query.get(uid)
+        user_ban = Session.get(UserBan, uid)
         user_ban.delete()
         user_ban = UserBan(user_id=uid,
             reason='Testing whether user is banned',
@@ -97,7 +98,7 @@ class TestPrivilegeFunctionality:
         # Then test what happens when that ban has an expiration date which
         # has already happened
         #----------------------------------------------------------------------
-        user_ban = UserBan.query.get(uid)
+        user_ban = Session.get(UserBan, uid)
         user_ban.delete()
         exp_date = date.today() - timedelta(days=20)
         user_ban = UserBan(user_id=uid,

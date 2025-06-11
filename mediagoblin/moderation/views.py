@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from mediagoblin.db.base import Session
 from mediagoblin.db.models import (MediaEntry, User, Report, Privilege,
                                    UserBan, LocalUser)
 from mediagoblin.decorators import (require_admin_or_moderator_login,
@@ -85,7 +86,7 @@ def moderation_users_detail(request):
     active_reports = user.reports_filed_on.filter(
         Report.resolved==None).limit(5)
     privileges = Privilege.query
-    user_banned = UserBan.query.get(user.id)
+    user_banned = Session.get(UserBan, user.id)
     ban_form = moderation_forms.BanForm()
 
     return render_to_response(
@@ -153,7 +154,7 @@ def moderation_reports_detail(request):
     erator would go to to take an action to resolve a report.
     """
     form = moderation_forms.ReportResolutionForm(request.form)
-    report = Report.query.get(request.matchdict['report_id'])
+    report = Session.get(Report, request.matchdict['report_id'])
 
     form.take_away_privileges.choices = [
         (s.privilege_name,s.privilege_name.title()) \
@@ -164,7 +165,7 @@ def moderation_reports_detail(request):
         not request.user.has_privilege('admin') and
         report.reported_user.has_privilege('admin')):
 
-        user = User.query.get(form.targeted_user.data)
+        user = Session.get(User, form.targeted_user.data)
         return take_punitive_actions(request, form, report, user)
 
 

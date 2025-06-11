@@ -21,6 +21,7 @@ from werkzeug.wrappers import Response as wz_Response
 from mediagoblin.tools.template import render_template
 from mediagoblin.tools.translate import (lazy_pass_to_ugettext as _,
                                          pass_to_ugettext)
+from mediagoblin.db.base import Session
 from mediagoblin.db.models import UserBan, User
 from datetime import date
 
@@ -79,7 +80,7 @@ def render_user_banned(request):
     """Renders the page which tells a user they have been banned, for how long
     and the reason why they have been banned"
     """
-    user_ban = UserBan.query.get(request.user.id)
+    user_ban = Session.get(UserBan, request.user.id)
     if (user_ban.expiration_date is not None and
             date.today()>user_ban.expiration_date):
 
