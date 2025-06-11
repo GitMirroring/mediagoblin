@@ -20,6 +20,7 @@ import pkg_resources
 import shutil
 
 from paste.deploy import loadapp
+from sqlalchemy.orm import with_polymorphic
 from webtest import TestApp
 
 from mediagoblin import mg_globals
@@ -171,7 +172,7 @@ def fixture_add_user(username='chris', password='toast',
 
     # Reload - The `with_polymorphic` needs to be there to eagerly load
     # the attributes on the LocalUser as this can't be done post detachment.
-    user_query = LocalUser.query.with_polymorphic(LocalUser)
+    user_query = with_polymorphic(LocalUser, '*').query
     test_user = user_query.filter(LocalUser.username==username).first()
 
     # ... and detach from session:
