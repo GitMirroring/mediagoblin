@@ -20,8 +20,8 @@ def upgrade():
     short period of time it could have been NOT NULL but was fixed later.
     """
     db = op.get_bind()
-    metadata = MetaData(bind=db)
-    report_table = inspect_table(metadata, "core__reports")
+    metadata = MetaData()
+    report_table = inspect_table(metadata, "core__reports", db)
 
     # Check if the field has nullable on
     object_id_field = report_table.columns["object_id"]

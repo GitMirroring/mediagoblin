@@ -26,11 +26,11 @@ def upgrade():
     Collection.
     """
     db = op.get_bind()
-    metadata = MetaData(bind=db)
+    metadata = MetaData()
    
-    gmr_table = inspect_table(metadata, "core__generic_model_reference")
-    collection_items_table = inspect_table(metadata, "core__collection_items")
-    graveyard_table = inspect_table(metadata, "core__graveyard")
+    gmr_table = inspect_table(metadata, "core__generic_model_reference", db)
+    collection_items_table = inspect_table(metadata, "core__collection_items", db)
+    graveyard_table = inspect_table(metadata, "core__graveyard", db)
 
     res = list(db.execute(graveyard_table.select()))
     for tombstone in res:
