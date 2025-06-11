@@ -116,7 +116,7 @@
                     python-redis ;Simplest Celery backend
                     python-requests ;For batchaddmedia
                     python-soundfile
-                    python-sqlalchemy
+                    python-sqlalchemy-2
                     python-unidecode
                     python-waitress
                     python-werkzeug
