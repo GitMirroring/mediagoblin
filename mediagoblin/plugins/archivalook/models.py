@@ -50,7 +50,8 @@ class FeaturedMedia(Base):
     media_entry = relationship(
         MediaEntry,
         backref=backref(BACKREF_NAME, uselist=False,
-                        cascade="all, delete-orphan"))
+                        cascade="all, delete-orphan",
+                        cascade_backrefs=False))
     display_type = Column(Unicode, nullable=False)
     order = Column(Integer, nullable=False)
 

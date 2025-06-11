@@ -1062,7 +1062,8 @@ class TextComment(Base, TextCommentMixin, CommentingMixin):
     get_actor = relationship(User,
                               backref=backref("posted_comments",
                                               lazy="dynamic",
-                                              cascade="all, delete-orphan"))
+                                              cascade="all, delete-orphan",
+                                              cascade_backrefs=False))
     deletion_mode = Base.SOFT_DELETE
 
     def serialize(self, request):
@@ -1171,7 +1172,8 @@ class Collection(Base, CollectionMixin, CommentingMixin):
     # Cascade: Collections are owned by their creator. So do the full thing.
     get_actor = relationship(User,
                                backref=backref("collections",
-                                               cascade="all, delete-orphan"))
+                                               cascade="all, delete-orphan",
+                                               cascade_backrefs=False))
     __table_args__ = (
         UniqueConstraint("actor", "slug"),
         {})
@@ -1227,7 +1229,8 @@ class CollectionItem(Base, CollectionItemMixin):
     in_collection = relationship(Collection,
                                  backref=backref(
                                      "collection_items",
-                                     cascade="all, delete-orphan"))
+                                     cascade="all, delete-orphan",
+                                     cascade_backrefs=False))
 
     # Link to the object (could be anything.
     object_id = Column(
@@ -1275,7 +1278,8 @@ class ProcessingMetaData(Base):
             index=True)
     media_entry = relationship(MediaEntry,
             backref=backref('processing_metadata',
-                cascade='all, delete-orphan'))
+                            cascade='all, delete-orphan',
+                            cascade_backrefs=False))
     callback_url = Column(Unicode)
 
     @property
@@ -1293,12 +1297,14 @@ class CommentSubscription(Base):
     media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False)
     media_entry = relationship(MediaEntry,
                         backref=backref('comment_subscriptions',
-                                        cascade='all, delete-orphan'))
+                                        cascade='all, delete-orphan',
+                                        cascade_backrefs=False))
 
     user_id = Column(Integer, ForeignKey(User.id), nullable=False)
     user = relationship(User,
                         backref=backref('comment_subscriptions',
-                                        cascade='all, delete-orphan'))
+                                        cascade='all, delete-orphan',
+                                        cascade_backrefs=False))
 
     notify = Column(Boolean, nullable=False, default=True)
     send_email = Column(Boolean, nullable=False, default=True)
@@ -1329,7 +1335,7 @@ class Notification(Base):
     seen = Column(Boolean, default=lambda: False, index=True)
     user = relationship(
         User,
-        backref=backref('notifications', cascade='all, delete-orphan'))
+        backref=backref('notifications', cascade='all, delete-orphan', cascade_backrefs=False))
 
     def __repr__(self):
         return '<{klass} #{id}: {user}: {subject} ({seen})>'.format(
@@ -1381,7 +1387,8 @@ class Report(Base):
         User,
         backref=backref("reports_filed_by",
             lazy="dynamic",
-            cascade="all, delete-orphan"),
+            cascade="all, delete-orphan",
+            cascade_backrefs=False),
         primaryjoin="User.id==Report.reporter_id")
     report_content = Column(UnicodeText)
     reported_user_id = Column(Integer, ForeignKey(User.id), nullable=False)
@@ -1389,7 +1396,8 @@ class Report(Base):
         User,
         backref=backref("reports_filed_on",
             lazy="dynamic",
-            cascade="all, delete-orphan"),
+            cascade="all, delete-orphan",
+            cascade_backrefs=False),
         primaryjoin="User.id==Report.reported_user_id")
     created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     resolver_id = Column(Integer, ForeignKey(User.id))
@@ -1397,7 +1405,8 @@ class Report(Base):
         User,
         backref=backref("reports_resolved_by",
             lazy="dynamic",
-            cascade="all, delete-orphan"),
+            cascade="all, delete-orphan",
+            cascade_backrefs=False),
         primaryjoin="User.id==Report.resolver_id")
 
     resolved = Column(DateTime)
@@ -1576,7 +1585,8 @@ class Activity(Base, ActivityMixin):
 
     get_actor = relationship(User,
                              backref=backref("activities",
-                                             cascade="all, delete-orphan"))
+                                             cascade="all, delete-orphan",
+                                             cascade_backrefs=False))
     get_generator = relationship(Generator)
 
     deletion_mode = Base.SOFT_DELETE

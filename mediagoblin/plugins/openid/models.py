@@ -29,7 +29,8 @@ class OpenIDUserURL(Base):
 
     # OpenID's are owned by their user, so do the full thing.
     user = relationship(User, backref=backref('openid_urls',
-                                              cascade='all, delete-orphan'))
+                                              cascade='all, delete-orphan',
+                                              cascade_backrefs=False))
 
 
 # OpenID Store Models

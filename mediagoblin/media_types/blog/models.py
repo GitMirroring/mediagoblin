@@ -44,7 +44,7 @@ class Blog(Base, BlogMixin):
     author = Column(Integer, ForeignKey(User.id), nullable=False, index=True) #similar to uploader
     created = Column(DateTime, nullable=False, default=datetime.datetime.now, index=True)
     slug = Column(Unicode)
-    get_author = relationship("User", backref=backref(BLOG_BACKREF_NAME, cascade="all, delete-orphan"))
+    get_author = relationship("User", backref=backref(BLOG_BACKREF_NAME, cascade="all, delete-orphan", cascade_backrefs=False))
 
     @property
     def slug_or_id(self):
@@ -78,7 +78,8 @@ class BlogPostData(Base):
     blog = Column(Integer, ForeignKey('mediatype__blogs.id'), nullable=False)
     get_media_entry = relationship("MediaEntry",
         backref=backref(BLOG_POST_BACKREF_NAME, uselist=False,
-                        cascade="all, delete-orphan"))
+                        cascade="all, delete-orphan",
+                        cascade_backrefs=False))
 
 
 DATA_MODEL = BlogPostData
