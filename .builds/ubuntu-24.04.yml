@@ -2,6 +2,7 @@ image: ubuntu/24.04
 packages:
   # Install bootstrap and configure dependencies.
   - automake
+  - pkgconf
   - nodejs
   - npm
   - python3-dev

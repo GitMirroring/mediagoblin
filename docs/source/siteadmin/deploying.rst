@@ -74,12 +74,12 @@ Issue the following commands:
 
     # Debian
     sudo apt update
-    sudo apt install automake git nodejs npm python3-dev \
+    sudo apt install automake git nodejs npm pkgconf python3-dev \
     python3-venv python3-gst-1.0 python3-pil
 
     # Fedora
     sudo dnf install automake gcc git-core make nodejs npm \
-    libffi-devel python3-devel python3-pillow
+    libffi-devel pkgconf python3-devel python3-pillow
 
 For a production deployment, you'll also need Nginx as frontend web
 server and RabbitMQ to store the media processing queue::

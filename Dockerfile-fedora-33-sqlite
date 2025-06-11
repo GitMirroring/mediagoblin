@@ -17,6 +17,7 @@ git-core \
 make \
 nodejs \
 npm \
+pkgconf \
 python3-devel
 
 RUN dnf -y install \

@@ -2,6 +2,7 @@ image: debian/trixie
 packages:
   # Install bootstrap and configure dependencies.
   - automake
+  - pkgconf
   - nodejs
   - npm
   - python3-dev

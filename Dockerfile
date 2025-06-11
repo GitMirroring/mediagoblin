@@ -103,7 +103,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	    && apt-get install --no-install-recommends -y \
 	    git \
 	    python3-dev \
-	    pkg-config \
+	    pkgconf \
 	    npm \
 	    $(test "${audio_support}" = 'false' \
 	    && test "${video_support}" = 'false' || echo '\
