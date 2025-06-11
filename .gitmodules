@@ -12,4 +12,4 @@
 	url = https://github.com/dhg/Skeleton.git
 [submodule "extlib/sandyseventiesspeedboat"]
 	path = extlib/sandyseventiesspeedboat
-	url = https://github.com/jpope777/sandyseventiesspeedboat-mg.git
+	url = https://git.sr.ht/~mediagoblin/sandyseventiesspeedboat-mg

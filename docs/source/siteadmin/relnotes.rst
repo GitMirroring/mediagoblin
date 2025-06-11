@@ -27,7 +27,7 @@ This chapter has important information about our current and previous releases.
 **Noteworthy changes:**
 
 - Remove `lxml` dependency and switch HTML cleaning to `bleach` (Sandro Jäckel, Ben Sturmfels)
-
+- Move Sandy Seventies Speedboat theme into MediaGoblin Git repository (Ben Sturmfels)
 
 
 0.14.0
