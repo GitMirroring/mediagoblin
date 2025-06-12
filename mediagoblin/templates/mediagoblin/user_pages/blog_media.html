@@ -51,7 +51,7 @@
         {# if there's a medium file size, that means the medium size
          #  isn't the original... so link to the original!
          #}
-        {% if media.media_files.has_key('medium') %}
+        {% if 'medium' in media.media_files %}
           <a href="{{ request.app.public_store.file_url(
                         media.media_files['original']) }}">
             <img class="media_image"

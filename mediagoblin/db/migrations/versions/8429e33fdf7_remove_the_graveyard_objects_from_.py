@@ -22,12 +22,12 @@ def upgrade():
     any reports which might have been filed and sets the objects to None. 
     """
     db = op.get_bind()
-    metadata = MetaData(bind=db)
-    notification_table = inspect_table(metadata, "core__notifications")
-    report_table = inspect_table(metadata, "core__reports")
-    graveyard_table = inspect_table(metadata, "core__graveyard")
-    gmr_table = inspect_table(metadata, "core__generic_model_reference")
-    
+    metadata = MetaData()
+    notification_table = inspect_table(metadata, "core__notifications", db)
+    report_table = inspect_table(metadata, "core__reports", db)
+    graveyard_table = inspect_table(metadata, "core__graveyard", db)
+    gmr_table = inspect_table(metadata, "core__generic_model_reference", db)
+
     res = list(db.execute(gmr_table.select()))
     for tombstone in res:
         # Look up the gmr for the tombstone8

@@ -51,7 +51,8 @@ class VideoData(Base):
         primary_key=True)
     get_media_entry = relationship("MediaEntry",
         backref=backref(BACKREF_NAME, uselist=False,
-                        cascade="all, delete-orphan"))
+                        cascade="all, delete-orphan",
+                        cascade_backrefs=False))
 
     width = Column(SmallInteger)
     height = Column(SmallInteger)

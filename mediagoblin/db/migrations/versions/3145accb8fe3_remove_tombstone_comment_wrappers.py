@@ -20,9 +20,9 @@ def upgrade():
     have their Comment wrapper.
     """
     db = op.get_bind()
-    metadata = MetaData(bind=db)
-    comment_table = inspect_table(metadata, "core__comment_links")
-    gmr_table = inspect_table(metadata, "core__generic_model_reference")
+    metadata = MetaData()
+    comment_table = inspect_table(metadata, "core__comment_links", db)
+    gmr_table = inspect_table(metadata, "core__generic_model_reference", db)
 
     # Get the Comment wrappers
     comment_wrappers = list(db.execute(comment_table.select()))
