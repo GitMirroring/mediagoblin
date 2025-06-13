@@ -25,8 +25,8 @@
                    ;; ../bin/gmg -cf mediagoblin.ini serve paste.ini
                    ;; assuming that the .ini files already exist on the system
                    ;;
-                   ;; There's also a one-off `gmg dbupdate` needed. I'll figure
-                   ;; that out later.
+                   ;; There's also a one-off `gmg dbupdate` and `gmg adduser`.
+                   ;; I'll figure those out later.
                    (list
                     #$(file-append mediagoblin "/bin/gmg")
                     ;; Currently configuring the file path, but what we really
