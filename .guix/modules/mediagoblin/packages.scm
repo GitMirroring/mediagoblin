@@ -94,6 +94,9 @@
                            python-sphinx
                            python-webtest
                            python-wheel))
+      ;; Guix services is only working for images. For audio and video it says:
+      ;; "ValueError: Namespace Gst not available". Look at how other Python
+      ;; packages package gobject-introspection and python-pygobject.
       (inputs (list python-alembic
                     python-babel
                     python-bleach
