@@ -22,15 +22,17 @@
          (requirement '(user-processes))
          (start #~(make-forkexec-constructor
                    ;; Should be like:
-                   ;; ../bin/gmg serve --conf_file=mediagoblin.ini paste.ini
+                   ;; ../bin/gmg -cf mediagoblin.ini serve paste.ini
                    ;; assuming that the .ini files already exist on the system
                    ;;
-                   ;; There's also a one-off `gmg dbupdate`
+                   ;; There's also a one-off `gmg dbupdate` needed. I'll figure
+                   ;; that out later.
                    (list
                     #$(file-append mediagoblin "/bin/gmg")
+                    "-cf" #$(mediagoblin-config-file config)
                     "serve"
-                    (string-append "--conf_file" (config-file config))
-                    (paste-config-file config))))
+                    #$(mediagoblin-paste-config-file config))
+                   #:log-file "/var/log/mediagoblin.log"))
          (stop #~(make-kill-destructor))
          (documentation "Run the MediaGoblin media hosting service."))))
 
