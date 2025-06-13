@@ -13,7 +13,7 @@
 ;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;;; GNU General Public License for more details.
 
-(define-module (mediagoblin-package)
+(define-module (mediagoblin packages)
   #:use-module (guix packages)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix git-download)
@@ -37,11 +37,11 @@
 ;; See README-Guix.md for usage instructions and caveats.
 
 (define-public mediagoblin
-  (let ((commit "d2eb89e786d578663c15c5ac302d4b0d9d40c29f")
-        (revision "3"))
+  (let ((commit "6b4f32f2e624db8b5e507297df69c2b3d7790f25")
+        (revision "1"))
     (package
       (name "mediagoblin")
-      (version (git-version "0.14.0.dev" revision commit))
+      (version (git-version "0.15.0.dev" revision commit))
       (source
        (origin
          (method git-fetch)
@@ -50,7 +50,7 @@
                (commit commit)))
          (file-name (git-file-name name version))
          (sha256
-          (base32 "109n80i9sa0hij8nz6c1g3a6d8ja5hz2v5c34a4hd6ldzn8prr0g"))))
+          (base32 "0qpbx01hz3pfgkz7wjx1apyfglwjwyx5fzl1j58bipxmq36qhzvm"))))
       (build-system pyproject-build-system)
       (arguments
        `(;; Test currently fail with:
