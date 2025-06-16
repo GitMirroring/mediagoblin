@@ -29,9 +29,10 @@
                    ;; I'll figure those out later.
                    (list
                     #$(file-append mediagoblin "/bin/gmg")
-                    ;; Currently configuring the file path, but what we really
+                    ;; TODO: Currently configuring the file path, but what we really
                     ;; need is the whole file.
-                    "-cf" #$(mediagoblin-config-file config)
+                    ;; TODO: Config file is actually specified in paste.ini.
+                    ;; "-cf" #$(mediagoblin-config-file config)
                     "serve"
                     #$(mediagoblin-paste-config-file config))
                    #:environment-variables (list "CELERY_ALWAYS_EAGER=true")

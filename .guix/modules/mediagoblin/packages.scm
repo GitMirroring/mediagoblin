@@ -53,25 +53,24 @@
           (base32 "0qpbx01hz3pfgkz7wjx1apyfglwjwyx5fzl1j58bipxmq36qhzvm"))))
       (build-system pyproject-build-system)
       (arguments
-       `(;; Test currently fail with:
-         ;; AttributeError: module 'py' has no attribute 'process'
-         #:tests? #f
-         #:phases (modify-phases %standard-phases
+       `(#:phases (modify-phases %standard-phases
                     ;; The mediagoblin/_version.py module is created by
                     ;; ./configure (which we don't run)
                     (add-after 'unpack 'reinstate-version-module
                       (lambda _
                         (copy-file "mediagoblin/_version.py.in" "mediagoblin/_version.py")
                         (substitute* "mediagoblin/_version.py"
-                          (("@PACKAGE_VERSION@") "0.14.0.dev"))))
-                    ;; Override the .gmg-real program name from sys.argv[0]
-                    (add-after 'unpack 'hide-wrapping
+                          (("@PACKAGE_VERSION@") (version)))))
+                    ;; Override the .gmg-real program name normally from
+                    ;; sys.argv[0]. This affects what the usage help message.
+                    (add-after 'unpack 'fix-program-name
                       (lambda _
                         (substitute* "mediagoblin/gmg_commands/__init__.py"
                           (("ArgumentParser\\(") "ArgumentParser(prog=\"gmg\","))))
                     (add-after 'unpack 'remove-broken-symlinks
                       (lambda _
-                        ;; Remove broken symlink for git submodule
+                        ;; Remove broken symlink for git submodule, since we
+                        ;; don't have internet access to fetch it.
                         (delete-file "mediagoblin/static/css/extlib/skeleton.css")
                         ;; Remove broken symlinks caused by having not run `npm install`
                         (delete-file "mediagoblin/static/js/extlib/jquery.js")
@@ -82,21 +81,39 @@
                     (add-after 'build 'build-translations
                       (lambda _
                         (invoke "devtools/compile_translations.sh")))
-                    ;; Use pytest test runner
+                    ;; Wrap the executable so it can find GStreamer. Avoids
+                    ;; "ValueError: Namespace Gst not available". See
+                    ;; beets/clementine.
+                    (add-after 'wrap 'wrap-with-gst
+                      (lambda* (#:key outputs #:allow-other-keys)
+                        (let ((out (assoc-ref outputs "out"))
+                              (gst-plugin-path (getenv "GST_PLUGIN_SYSTEM_PATH"))
+                              (gi-typelib-path (getenv "GI_TYPELIB_PATH")))
+                          (wrap-program (string-append out "/bin/gmg")
+                            `("GST_PLUGIN_SYSTEM_PATH" ":" prefix (,gst-plugin-path))
+                            `("GI_TYPELIB_PATH" ":" prefix (,gi-typelib-path))))))
+                    ;; Use pytest test runner and tweak PYTHONPATH.
                     (replace 'check
-                      (lambda* (#:key tests? #:allow-other-keys)
+                      (lambda* (#:key tests? inputs outputs #:allow-other-keys)
                         (when tests?
-                          (invoke "pytest")))))))
+                          ;; Put python-py on PYTHONPATH so that it is imported
+                          ;; in favour of the shim "py" in pytest. Not sure why
+                          ;; this just works on other systems. Could be removed
+                          ;; if pytest drops this shim.
+                          (let* ((py (assoc-ref inputs "python-py"))
+                                 (python (assoc-ref inputs "python"))
+                                 (py-path (string-append py "/lib/python" (python-version python) "/site-packages")))
+                            (setenv "PYTHONPATH" py-path)
+                            (invoke "pytest"))))))))
       (native-inputs (list gobject-introspection
+                           python-py  ;Shouldn't have to be specified
+                                      ;explicitly, but does - see above
                            python-pytest
                            python-pytest-forked
                            python-pytest-xdist
                            python-sphinx
                            python-webtest
                            python-wheel))
-      ;; Guix services is only working for images. For audio and video it says:
-      ;; "ValueError: Namespace Gst not available". Look at how other Python
-      ;; packages package gobject-introspection and python-pygobject.
       (inputs (list python-alembic
                     python-babel
                     python-bleach
@@ -108,16 +125,16 @@
                     python-itsdangerous
                     python-jinja2
                     python-jsonschema
-                    python-ldap ;For LDAP plugin
+                    python-ldap         ;For LDAP plugin
                     python-markdown
                     python-oauthlib
-                    python-openid ;For OpenID plugin
+                    python-openid       ;For OpenID plugin
                     python-pastescript
                     python-pillow
                     python-bcrypt
                     python-pyld
-                    python-redis ;Simplest Celery backend
-                    python-requests ;For batchaddmedia
+                    python-redis        ;Simplest Celery backend
+                    python-requests     ;For batchaddmedia
                     python-soundfile
                     python-sqlalchemy-2
                     python-unidecode
@@ -134,8 +151,8 @@
                     gst-plugins-ugly
                     gstreamer
                     openh264
-                    python-gst ;For tests to pass
-                    python-numpy ;Audio spectrograms
+                    python-gst          ;For tests to pass
+                    python-numpy        ;Audio spectrograms
                     python-pygobject
 
                     ;; PDF media.
