@@ -13,7 +13,6 @@
 (define-record-type* <mediagoblin-configuration>
   mediagoblin-configuration make-mediagoblin-configuration
   mediagoblin-configuration?
-  (config-file mediagoblin-config-file (default "/etc/mediagoblin/mediagoblin.ini"))
   (paste-config-file mediagoblin-paste-config-file (default "/etc/mediagoblin/paste.ini")))
 
 (define (mediagoblin-shepherd-service config)
@@ -22,17 +21,21 @@
          (requirement '(user-processes))
          (start #~(make-forkexec-constructor
                    ;; Should be like:
-                   ;; ../bin/gmg -cf mediagoblin.ini serve paste.ini
-                   ;; assuming that the .ini files already exist on the system
                    ;;
-                   ;; There's also a one-off `gmg dbupdate` and `gmg adduser`.
-                   ;; I'll figure those out later.
+                   ;; ../bin/gmg serve paste.ini
+                   ;;
+                   ;; assuming that paste.ini already exists on the system
+                   ;;
+                   ;; TODO: How should you run the one-off `gmg dbupdate` and
+                   ;; `gmg adduser` commands?
                    (list
                     #$(file-append mediagoblin "/bin/gmg")
-                    ;; TODO: Currently configuring the file path, but what we really
-                    ;; need is the whole file.
-                    ;; TODO: Config file is actually specified in paste.ini.
-                    ;; "-cf" #$(mediagoblin-config-file config)
+                    ;; TODO: Currently passing through the file path, but what
+                    ;; we really need is a reference to the contents.
+                    ;;
+                    ;; TODO: The `-cf mediagoblin.ini` is currently ignored by
+                    ;; the `serve` command because this is really wrapper around
+                    ;; paste.
                     "serve"
                     #$(mediagoblin-paste-config-file config))
                    #:environment-variables (list "CELERY_ALWAYS_EAGER=true")
