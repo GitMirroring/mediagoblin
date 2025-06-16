@@ -68,6 +68,11 @@ tasks:
 
       make check
 
+      # Enable audio and video
+      cp mediagoblin.example.ini mediagoblin.ini
+      sed -i '/mediagoblin\.media_types\.audio/s/^#//g' mediagoblin.ini
+      sed -i '/mediagoblin\.media_types\.video/s/^#//g' mediagoblin.ini
+
       # Check that `gmg` command runs
       ./bin/gmg dbupdate
 
