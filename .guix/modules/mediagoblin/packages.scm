@@ -37,7 +37,7 @@
 ;; See README-Guix.md for usage instructions and caveats.
 
 (define-public mediagoblin
-  (let ((commit "6b4f32f2e624db8b5e507297df69c2b3d7790f25")
+  (let ((commit "0bfa4e80da6ff0e4e20a2d7840b3cdc9ed43c127")
         (revision "1"))
     (package
       (name "mediagoblin")
