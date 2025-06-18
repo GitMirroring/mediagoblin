@@ -80,12 +80,6 @@
                    ;; would be confusing for users.
                    ;;
                    ;; TODO: How should we support running of `gmg adduser`?
-                   ;;
-                   ;; TODO: Currently passing through the file path, assuming
-                   ;; that paste.ini already exists on the filesystem. What we
-                   ;; really need is a reference to the contents. Then again,
-                   ;; maybe having to reconfigure when you want to change the
-                   ;; config is a pain.
                    (list
                     #$(file-append mediagoblin "/bin/gmg")
                     "serve"
