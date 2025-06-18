@@ -60,6 +60,12 @@
          (name "mediagoblin")
          (system? #t))))
 
+(define (mediagoblin-activation config)
+  #~(begin (system*
+            #$(file-append mediagoblin "/bin/gmg")
+            "-cf" #$(mediagoblin-config-file config)
+            "dbupdate")))
+
 (define (mediagoblin-shepherd-service config)
   (list (shepherd-service
          (provision '(mediagoblin-webapp))
@@ -73,8 +79,7 @@
                    ;; they ignore the `gmg -cf mediagoblin.ini` config, which
                    ;; would be confusing for users.
                    ;;
-                   ;; TODO: How should you run the one-off `gmg dbupdate` and
-                   ;; `gmg adduser` commands?
+                   ;; TODO: How should we support running of `gmg adduser`?
                    ;;
                    ;; TODO: Currently passing through the file path, assuming
                    ;; that paste.ini already exists on the filesystem. What we
@@ -84,7 +89,7 @@
                    (list
                     #$(file-append mediagoblin "/bin/gmg")
                     "serve"
-                    #$(mediagoblin-paste-config-file config))
+                    #$(local-file (mediagoblin-paste-config-file config)))
                    #:user "mediagoblin" #:group "mediagoblin"
                    #:log-file "/var/log/mediagoblin.log"))
          (stop #~(make-kill-destructor))
@@ -105,7 +110,7 @@
                     ;; This works, but only applies to Celery, not the web app above.
                     ;; "CELERY_BROKER_URL=redis://"
                     (string-append
-                     "MEDIAGOBLIN_CONFIG=" #$(mediagoblin-config-file config)))
+                     "MEDIAGOBLIN_CONFIG=" #$(local-file (mediagoblin-config-file config))))
                    #:user "mediagoblin" #:group "mediagoblin"
                    #:log-file "/var/log/mediagoblin-celery.log"))
          (stop #~(make-kill-destructor))
@@ -119,5 +124,6 @@
     (list (service-extension account-service-type
                              (const %mediagoblin-accounts))
           (service-extension shepherd-root-service-type
-                             mediagoblin-shepherd-service)))
+                             mediagoblin-shepherd-service)
+          (service-extension activation-service-type mediagoblin-activation)))
    (default-value (mediagoblin-configuration))))

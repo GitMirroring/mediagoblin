@@ -50,7 +50,7 @@
                (commit commit)))
          (file-name (git-file-name name version))
          (sha256
-          (base32 "0qpbx01hz3pfgkz7wjx1apyfglwjwyx5fzl1j58bipxmq36qhzvm"))))
+          (base32 "07jqzk44if4m14k07rj66dzsi97qyaxxbrk6ky67a70qzv07xjj0"))))
       (build-system pyproject-build-system)
       (arguments
        `(#:phases (modify-phases %standard-phases
@@ -62,7 +62,8 @@
                         (substitute* "mediagoblin/_version.py"
                           (("@PACKAGE_VERSION@") (version)))))
                     ;; Override the .gmg-real program name normally from
-                    ;; sys.argv[0]. This affects what the usage help message.
+                    ;; sys.argv[0]. This affects what the usage help
+                    ;; message. Could potentially use "env --argv0 gmg" instead?
                     (add-after 'unpack 'fix-program-name
                       (lambda _
                         (substitute* "mediagoblin/gmg_commands/__init__.py"
