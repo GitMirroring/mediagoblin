@@ -151,7 +151,9 @@ class AudioTranscoder:
         _log.debug(message.type)
         if (message.type == Gst.MessageType.ELEMENT
                 and message.has_name('progress')):
-            structure = message.get_structure()
+            # Work around GStreamer 1.26.2 issue
+            # https://discourse.gstreamer.org/t/python-get-structure-api-change/4767
+            structure = message.get_structure()._StructureWrapper__structure
             (success, percent) = structure.get_int('percent')
             if self.__on_progress and success:
                 self.__on_progress(percent)
