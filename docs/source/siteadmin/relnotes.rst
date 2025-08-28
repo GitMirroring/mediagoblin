@@ -26,6 +26,7 @@ This chapter has important information about our current and previous releases.
 
 **Noteworthy changes:**
 
+- Switch from Bower to NPM to install JavaScript dependencies
 - Remove `lxml` dependency and switch HTML cleaning to `bleach` (Sandro Jäckel, Ben Sturmfels)
 - Move Sandy Seventies Speedboat theme into MediaGoblin Git repository (Ben Sturmfels)
 - Upgrade `sqlalchemy` dependency to 2.0 (Ben Sturmfels)

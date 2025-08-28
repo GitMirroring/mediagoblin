@@ -16,7 +16,6 @@ PYTHON=@PYTHON@
 PYTHON_VERSION=@PYTHON_VERSION@
 
 NPX=@NPX@
-BOWER_ARGS=
 
 BUILD_AUDIO=@BUILD_AUDIO@
 BUILD_VIDEO=@BUILD_VIDEO@
@@ -67,9 +66,14 @@ build: $(VENV_DIST_INFO) extlib i18n
 
 extlib: $(EXTLIB_JS)
 $(EXTLIB_JS):
-	# Using `npx` rather than `npm exec` as was only added in npm v7.0.0,
-	# which isn't available on Ubuntu 20.04.
-	$(NPX) bower --yes $(BOWER_ARGS) install $(SRC_DIR)/bower.json
+	npm ci
+	# Bower used to install directly into extlib with MediaGoblin then
+	# symlinking to these files from mediagoblin/static. NPM doesn't support
+	# choosing a custom install directory, so here we're installing into
+	# node_modules as normal and the simplying copying them over to
+	# extlib. Could be improved, but is the smallest change that will allow
+	# us to remove Bower.
+	cp -r node_modules/{jquery,video.js,videojs-resolution-switcher,leaflet} extlib
 
 # Just depend on one random translation file to avoid rebuilding them all
 # XXX: The script currently tries to find pybabel itself

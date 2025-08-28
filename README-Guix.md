@@ -41,11 +41,11 @@ via load-path", followed by "Run MediaGoblin".
   mention issues with Redis. Haven't ever seen this outside of Guix though. More
   investigation required.
 
-* We don't have NPM/Bower available to install jQuery and others. We've mostly
-  tweaked things so that MediaGoblin is usable without it, but further work is
-  needed. A start would be to rewrite MediaGoblin's JavaScript code not to use
-  jQuery. We could bundle some of the third-party JS into MediaGoblin, but we
-  could possibly also get a long way by improving no-third-party-JS experience
+* We don't have NPM available to install jQuery and others. We've mostly tweaked
+  things so that MediaGoblin is usable without it, but further work is needed. A
+  start would be to rewrite MediaGoblin's JavaScript code not to use jQuery. We
+  could bundle some of the third-party JS into MediaGoblin, but we could
+  possibly also get a long way by improving no-third-party-JS experience
   too. Minimising the third-party JS will simplify packaging for other operating
   systems.
 
@@ -173,7 +173,7 @@ Start the web interface with foreground media processing:
 
 **Note**: The web interface is currently missing some static files:
 
- - `jquery.js`: normally installed with `bower`
+ - `jquery.js`: normally installed with `npm`
 
 
 ## Background media processing ##
