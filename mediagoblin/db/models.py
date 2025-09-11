@@ -1686,24 +1686,3 @@ class MigrationData(Base):
 
     name = Column(Unicode, primary_key=True)
     version = Column(Integer, nullable=False, default=0)
-
-######################################################
-
-
-def show_table_init(engine_uri):
-    if engine_uri is None:
-        engine_uri = 'sqlite:///:memory:'
-    from sqlalchemy import create_engine
-    engine = create_engine(engine_uri, echo=True)
-
-    Base.metadata.create_all(engine)
-
-
-if __name__ == '__main__':
-    from sys import argv
-    print(repr(argv))
-    if len(argv) == 2:
-        uri = argv[1]
-    else:
-        uri = None
-    show_table_init(uri)
