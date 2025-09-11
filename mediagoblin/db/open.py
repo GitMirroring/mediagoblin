@@ -154,7 +154,8 @@ def _sqlite_disable_fk_pragma_on_connect(dbapi_con, con_record):
 
 
 def setup_connection_and_db_from_config(app_config, migrations=False, app=None):
-    engine = create_engine(app_config['sql_engine'])
+    # The future=True ensures sqlalchemy 1.4 will run in 2.0-compatible mode.
+    engine = create_engine(app_config['sql_engine'], future=True)
 
     # @@: Maybe make a weak-ref so an engine can get garbage
     # collected?  Not that we expect to make a lot of MediaGoblinApp
