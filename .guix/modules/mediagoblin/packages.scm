@@ -77,7 +77,9 @@
                         (delete-file "mediagoblin/static/js/extlib/jquery.js")
                         (delete-file "mediagoblin/static/extlib/videojs-resolution-switcher")
                         (delete-file "mediagoblin/static/extlib/video-js")
-                        (delete-file "mediagoblin/static/extlib/leaflet")))
+                        (delete-file "mediagoblin/static/extlib/leaflet")
+                        ;; Remove pdf.js Python 2 code causing "compileall" to exit 1.
+                        (delete-file-recursively "mediagoblin/static/extlib/pdf.js/test")))
                     ;; Build the language translations
                     (add-after 'build 'build-translations
                       (lambda _
