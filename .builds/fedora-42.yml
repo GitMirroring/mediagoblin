@@ -1,0 +1,80 @@
+image: fedora/42
+packages:
+  # Install bootstrap and configure dependencies.
+  - automake
+  - gcc
+  - git-core
+  - libffi-devel  # To build cffi Python package
+  - make
+  - awk
+  - nodejs
+  - npm
+  - python3-devel
+  - python3-greenlet  # Fedora say "greenlet is required to install pyproject.toml-based projects"
+
+  # Install make and runtime dependencies.
+  - python3-pillow
+
+  # Install test and docs dependencies.
+  - python3-pytest
+  - python3-pytest-xdist
+  - python3-pytest-forked
+  # - python3-sphinx
+  # - python3-sphinxcontrib-applehelp
+  # - python3-sphinxcontrib-devhelp
+  # - python3-sphinxcontrib-htmlhelp
+  # - python3-sphinxcontrib-jsmath
+  # - python3-sphinxcontrib.qthelp
+  # - python3-sphinxcontrib.websupport
+  - python3-webtest
+
+  # Install audio dependencies.
+  - gstreamer1-plugins-base
+  - gstreamer1-plugins-bad-free
+  - gstreamer1-plugins-good
+  - gstreamer1-plugins-ugly-free
+  - python3-numpy
+
+  # Install video dependencies.
+  - python3-gobject
+  - python3-gstreamer1
+  # - gstreamer1-plugin-openh264
+
+  # Install raw image dependencies.
+  # - python3-py3exiv2
+
+  # Install document (PDF-only) dependencies.
+  - poppler-utils
+
+  # Install LDAP depedencies.
+  - python3-ldap
+
+  # Install OpenID dependencies.
+  - python3-openid
+
+tasks:
+  - core: |
+      set -x
+
+      cd mediagoblin
+      git show --oneline --no-patch
+
+      ./autogen.sh
+      ./configure
+      make build
+
+      # Confirm our packages version for later troubleshooting.
+      ./bin/python -m pip freeze
+
+      make check
+
+      # Enable audio and video
+      cp mediagoblin.example.ini mediagoblin.ini
+      sed -i '/mediagoblin\.media_types\.audio/s/^#//g' mediagoblin.ini
+      sed -i '/mediagoblin\.media_types\.video/s/^#//g' mediagoblin.ini
+
+      # Check that `gmg` command runs
+      ./bin/gmg dbupdate
+
+      # Build the documentation.
+      make docs
