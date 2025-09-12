@@ -37,7 +37,7 @@
 ;; See README-Guix.md for usage instructions and caveats.
 
 (define-public mediagoblin
-  (let ((commit "0bfa4e80da6ff0e4e20a2d7840b3cdc9ed43c127")
+  (let ((commit "00d42d825bf7fb46909429e73c408aff58d72d61")
         (revision "1"))
     (package
       (name "mediagoblin")
@@ -50,7 +50,7 @@
                (commit commit)))
          (file-name (git-file-name name version))
          (sha256
-          (base32 "07jqzk44if4m14k07rj66dzsi97qyaxxbrk6ky67a70qzv07xjj0"))))
+          (base32 "110q4sjg9mf25cx73xkm82i37bm2gsb2wp4xzslhywk2wc1xcgw5"))))
       (build-system pyproject-build-system)
       (arguments
        `(#:phases (modify-phases %standard-phases
