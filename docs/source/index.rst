@@ -101,6 +101,7 @@ This chapter contains various information for developers.
    devel/release
    devel/originaldesigndecisions
    devel/migrations
+   devel/writing-documentation
 
 
 Part 5: Pump API
