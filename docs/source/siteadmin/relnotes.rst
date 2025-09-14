@@ -452,7 +452,7 @@ soon as possible.
 Most importantly, there is an **important security fix**:
 
 Quoting here a portion of the
-`release blogpost <http://mediagoblin.org/news/mediagoblin-0.8.1-security-release.html>`_::
+`release blogpost <https://mediagoblin.org/news/mediagoblin-0.8.1-security-release.html>`_::
 
   We have had a security problem in our OAuth implementation reported to
   us privately and have taken steps to address it. The security problem
@@ -783,7 +783,7 @@ now.  Otherwise, jump in and have fun! :)
 3. We have made a script to transition your ``mediagoblin_local.ini`` file for
    you. This script can be found at:
    
-   http://mediagoblin.org/download/0.5.0_config_converter.py
+   https://mediagoblin.org/download/0.5.0_config_converter.py
 
 **New features**
 

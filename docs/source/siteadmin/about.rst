@@ -78,7 +78,7 @@ software and network freedom.
 How Can I Participate?
 ======================
 
-See `Get Involved <http://mediagoblin.org/join/>`_ on the website.  We
+See `Get Involved <https://mediagoblin.org/pages/join.html>`_ on the website.  We
 eagerly look forward to seeing you!
 
 

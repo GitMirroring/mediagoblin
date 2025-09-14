@@ -30,7 +30,7 @@ various recipes for getting things done.
    documented.  If there's something you have questions about, please
    ask!
 
-   See `the join page on the website <http://mediagoblin.org/join/>`_
+   See `the join page on the website <https://mediagoblin.org/pages/join.html>`_
    for where we hang out.
 
 For more information on how to get started hacking on GNU MediaGoblin,

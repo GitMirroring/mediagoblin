@@ -61,4 +61,4 @@ replacing `/path/to/myplugin/` with the actual path to your plugin.
 
 NOTE: again, the above is untested, but it should probably work.  If
 you run into trouble, `contact us
-<http://mediagoblin.org/pages/join.html>`_, preferably on IRC!
+<https://mediagoblin.org/pages/join.html>`_, preferably on IRC!
