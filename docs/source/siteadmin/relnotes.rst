@@ -93,8 +93,8 @@ For detailed instructions on installing or upgrading, see ":doc:`upgrading`" and
 - Remove unused lightbox CSS and JS (Ben Sturmfels)
 - Avoid including development-only tools in Python distribution (Ben Sturmfels)
 - Switch to catch-all MANIFEST.in (Ben Sturmfels)
-- Switch to `find_namespace` to avoid setuptools warnings (Ben Sturmfels)
-- Remove unused `web-advanced.json` (Ben Sturmfels)
+- Switch to ``find_namespace`` to avoid setuptools warnings (Ben Sturmfels)
+- Remove unused ``web-advanced.json`` (Ben Sturmfels)
 - Improve audio/video test skipping if dependencies not available (Olivier Mehani)
 - Improve audio and video layout when jQuery and Video.js are not available (Ben Sturmfels)
   
@@ -129,7 +129,7 @@ For detailed instructions on installing or upgrading, see ":doc:`upgrading`" and
   and Fedora 39 (Python 3.12) (Ben Sturmfels)
 - Upgrade to support latest Jinja2 library (Ben Sturmfels)
 - Upgrade to support latest PyLD library (Ben Sturmfels)
-- Fix various ``ResourceWarning``s and ``DeprecationWarning``s (Ben Sturmfels)
+- Fix various ``ResourceWarning`` and ``DeprecationWarning`` messages (Ben Sturmfels)
 - Switch default image resize filter to BICUBIC (Ben Sturmfels)
 - Add "extras_require" entries for docs, audio, video, raw image, LDAP, and OpenID dependencies (Olivier Mehani)
 
