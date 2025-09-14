@@ -55,15 +55,12 @@ MediaGoblin that this is a plugin you want MediaGoblin to use. To do
 that, you edit the ``mediagoblin.ini`` file and add the plugin as a
 subsection of the plugin section.
 
-For example, say the "mediagoblin-licenses" plugin has the Python
-package path ``mediagoblin_licenses``, then you would add ``mediagoblin_licenses`` to
+For example, say the "mediagoblin-embedcode" plugin has the Python
+package path ``embedcode``, then you would add ``embedcode`` to
 the ``plugins`` section as a subsection::
 
     [plugins]
-
-    [[mediagoblin_licenses]]
-    license_01=abbrev1, name1, http://url1
-    license_02=abbrev2, name1, http://url2
+    [[embedcode]]
 
 
 Configuring plugins

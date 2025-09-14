@@ -49,6 +49,7 @@ MediaGoblin website.  It is written for site administrators.
    siteadmin/theming
    siteadmin/plugins
    siteadmin/commandline-upload
+   siteadmin/third-party-resources
 
 
 .. _core-plugin-section:
