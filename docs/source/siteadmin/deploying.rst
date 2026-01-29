@@ -53,9 +53,8 @@ MediaGoblin has the following core dependencies:
 - `Node.js <https://nodejs.org>`_
 
 These instructions have been tested on Debian 11, Debian 12, Debian
-13, Ubuntu 20.04 LTS, Ubuntu 22.04 LTS, Ubuntu 24.04 and Fedora 43. If
-you are seeing installation errors, please
-check out the relevant [CI build
+13, Ubuntu 22.04 LTS, Ubuntu 24.04 and Fedora 43. If you are seeing
+installation errors, please check out the relevant [CI build
 scripts](https://git.sr.ht/~mediagoblin/mediagoblin/tree/master/item/.builds)
 for clues.
 

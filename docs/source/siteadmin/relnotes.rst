@@ -26,9 +26,9 @@ This chapter has important information about our current and previous releases.
 This is a relatively small release to resolve installation issues on Debian
 Trixie and Bookworm.
 
-This version has been tested on Debian Bookworm (12), Debian Trixie (13) Ubuntu
-20.04, Ubuntu 22.04, Ubuntu 24.04 and Fedora 43. This release drops Debian
-Bullseye (11) support.
+This version has been tested on Debian Bookworm (12), Debian Trixie (13), Ubuntu
+22.04, Ubuntu 24.04 and Fedora 43. This release drops support for Debian
+Bullseye (11) and Ubuntu 20.04.
 
 **Upgrading:**
 
