@@ -43,6 +43,7 @@ For detailed instructions on installing or upgrading, see ":doc:`upgrading`" and
 - Remove Debian 11 support (Ben Sturmfels)
 
 **Bug fixes:**
+
 - Work around GStreamer 1.26.2 issues in Debian Trixie (Ben Sturmfels)
 - Pin `pygobject` to 3.50 for Debian Bookworm support (Olivier Mehani)
 
