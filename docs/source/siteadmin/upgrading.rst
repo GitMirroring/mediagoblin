@@ -47,12 +47,12 @@ Upgrade
 
      # The `sync` is specifically required for v0.15.0 because the URL for
      # sandyseventiesspeedboat changed.
-     git fetch && git checkout --quiet v0.15.0 && git submodule sync && git submodule update
+     git fetch --tags && git checkout --quiet v0.15.0rc1 && git submodule sync && git submodule update
 
    If you are checking out a branch, rather than a specific version tag, please
    run `git pull` before `git submodule update`.
 
-3. Note down any plugins you have installed by reviewing your
+3. Note down any third-party plugins you have installed by reviewing your
    ``mediagoblin.ini`` configuration. These will be removed by the following
    steps and must be re-installed.
 
@@ -68,8 +68,8 @@ Upgrade
    dependencies are installed and or correct the file permissions as mentioned
    in ":doc:`deploying`".
 
-6. Re-install any ":doc:`plugins`" you had previously installed. Skipping these
-   may result in errors updating the database.
+6. Re-install any third-party ":doc:`plugins`" you had previously
+   installed. Skipping these may result in errors updating the database.
 
 7. Update the database::
 
