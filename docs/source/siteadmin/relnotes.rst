@@ -40,7 +40,6 @@ For detailed instructions on installing or upgrading, see ":doc:`upgrading`" and
 - Switch from Bower to NPM to install JavaScript dependencies (Ben Sturmfels)
 - Remove `lxml` dependency and switch HTML cleaning to `bleach` (Sandro Jäckel, Ben Sturmfels)
 - Add support for `sqlalchemy` 2.0 (Ben Sturmfels)
-- Remove Debian 11 support (Ben Sturmfels)
 
 **Bug fixes:**
 
