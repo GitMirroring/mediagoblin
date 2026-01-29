@@ -10,7 +10,7 @@ packages:
   - python3-wheel
 
   # Install make and runtime dependencies.
-  - python3-pillow
+  - python3-pil
 
   # Install test and docs dependencies.
   - python3-pytest

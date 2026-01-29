@@ -1,4 +1,4 @@
-image: fedora/42
+image: fedora/43
 packages:
   # Install bootstrap and configure dependencies.
   - automake
