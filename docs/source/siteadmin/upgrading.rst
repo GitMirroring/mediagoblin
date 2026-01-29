@@ -45,7 +45,9 @@ Upgrade
 
 2. Update to the latest release.  In your ``mediagoblin`` directory, run::
 
-     git fetch && git checkout --quiet v0.14.0 && git submodule update
+     # The `sync` is specifically required for v0.15.0 because the URL for
+     # sandyseventiesspeedboat changed.
+     git fetch && git checkout --quiet v0.14.0 && git submodule sync && git submodule update
 
    If you are checking out a branch, rather than a specific version tag, please
    run `git pull` before `git submodule update`.

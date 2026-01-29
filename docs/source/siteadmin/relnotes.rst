@@ -20,16 +20,38 @@ Release Notes
 This chapter has important information about our current and previous releases.
 
 
-0.14.0 (to be released)
-=======================
+0.15.0
+======
 
+This is a relatively small release to resolve installation issues on Debian
+Trixie and Bookworm.
+
+This version has been tested on Debian Bookworm (12), Debian Trixie (13) Ubuntu
+20.04, Ubuntu 22.04, Ubuntu 24.04 and Fedora 43. This release drops Debian
+Bullseye (11) support.
+
+**Upgrading:**
+
+For detailed instructions on installing or upgrading, see ":doc:`upgrading`" and
+":doc:`deploying`".
 
 **Noteworthy changes:**
 
-- Switch from Bower to NPM to install JavaScript dependencies
+- Switch from Bower to NPM to install JavaScript dependencies (Ben Sturmfels)
 - Remove `lxml` dependency and switch HTML cleaning to `bleach` (Sandro Jäckel, Ben Sturmfels)
-- Move Sandy Seventies Speedboat theme into MediaGoblin Git repository (Ben Sturmfels)
-- Upgrade `sqlalchemy` dependency to 2.0 (Ben Sturmfels)
+- Add support for `sqlalchemy` 2.0 (Ben Sturmfels)
+- Remove Debian 11 support (Ben Sturmfels)
+
+**Bug fixes:**
+- Work around GStreamer 1.26.2 issues in Debian Trixie (Ben Sturmfels)
+- Pin `pygobject` to 3.50 for Debian Bookworm support (Olivier Mehani)
+
+**Other changes**
+
+- Adopt Sandy Seventies Speedboat theme into MediaGoblin Git repository (Ben Sturmfels)
+- Add prototype Guix MediaGoblin service (Ben Sturmfels)
+- Document use of %(var_name) markers in config (Ben Sturmfels)
+- Improve handling of missing `_version.py` (Ben Sturmfels)
 
 
 0.14.0
