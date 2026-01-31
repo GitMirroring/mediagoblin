@@ -47,7 +47,7 @@ Upgrade
 
      # The `git submodule set-url` is required for v0.15.0 as sandyseventiesspeedboat has moved.
      git submodule set-url extlib/sandyseventiesspeedboat https://git.sr.ht/~mediagoblin/sandyseventiesspeedboat-mg
-     git fetch --tags && git checkout --quiet --force v0.15.0rc1 && git submodule update
+     git fetch --tags && git checkout --quiet --force v0.15.0rc2 && git submodule update
 
    If you are checking out a branch, rather than a specific version tag, please
    run `git pull` before `git submodule update`.
