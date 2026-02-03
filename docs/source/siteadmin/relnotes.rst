@@ -52,6 +52,7 @@ For detailed instructions on installing or upgrading, see ":doc:`upgrading`" and
 - Add prototype Guix MediaGoblin service (Ben Sturmfels)
 - Document use of %(var_name) markers in config (Ben Sturmfels)
 - Improve handling of missing `_version.py` (Ben Sturmfels)
+- Upgrade configure macros and scripts (Olivier Mehani)
 
 
 0.14.0

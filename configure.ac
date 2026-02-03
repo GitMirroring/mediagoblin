@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([mediagoblin], [0.15.0rc2],
+AC_INIT([mediagoblin], [0.15.0],
 	[mediagoblin-devel@gnu.org],
 	[mediagoblin],
 	[https://mediagoblin.org])
