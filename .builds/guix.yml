@@ -1,0 +1,21 @@
+image: guix
+tasks:
+  - core: |
+      set -x
+
+      cd mediagoblin
+      git show --oneline --no-patch
+
+      # So we get see the full output if it fails
+      guix build --load-path=.guix/modules mediagoblin --with-source=mediagoblin=$(pwd)
+
+      # Build and install (hopefully cached)
+      guix install --load-path=.guix/modules mediagoblin --with-source=mediagoblin=$(pwd)
+
+      # Enable audio and video
+      cp mediagoblin.example.ini mediagoblin.ini
+      sed -i '/mediagoblin\.media_types\.audio/s/^#//g' mediagoblin.ini
+      sed -i '/mediagoblin\.media_types\.video/s/^#//g' mediagoblin.ini
+
+      # Check that `gmg` command runs
+      gmg dbupdate

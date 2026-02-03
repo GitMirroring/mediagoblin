@@ -30,7 +30,7 @@ various recipes for getting things done.
    documented.  If there's something you have questions about, please
    ask!
 
-   See `the join page on the website <http://mediagoblin.org/join/>`_
+   See `the join page on the website <https://mediagoblin.org/pages/join.html>`_
    for where we hang out.
 
 For more information on how to get started hacking on GNU MediaGoblin,
@@ -119,7 +119,7 @@ Software Stack
   * `Python <http://python.org/>`_: the language we're using to write
     this
 
-  * `Py.Test <http://pytest.org/>`_:
+  * `pytest <http://pytest.org/>`_:
     for unit tests
 
 * Data storage
@@ -155,9 +155,6 @@ Software Stack
     implementation of `Markdown <http://daringfireball.net/projects/markdown/>`_
     text-to-html tool to make it easy for people to write rich text
     comments, descriptions, and etc.
-
-  * `lxml <http://lxml.de/>`_: nice XML and HTML processing for
-    python.
 
 * Media processing libraries
 

@@ -247,10 +247,9 @@ def assure_migrations_table_setup(db):
             db.bind, tables=[MigrationData.__table__])
 
 
-def inspect_table(metadata, table_name):
+def inspect_table(metadata, table_name, db=None):
     """Simple helper to get a ref to an already existing table"""
-    return Table(table_name, metadata, autoload=True,
-                 autoload_with=metadata.bind)
+    return Table(table_name, metadata, autoload_with=(db or metadata.bind))
 
 
 def populate_table_foundations(session, foundations, name,

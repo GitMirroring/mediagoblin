@@ -19,7 +19,7 @@ Here's a brief guide to writing unit tests for plugins.  However, it
 isn't really ideal.  It also hasn't been well tested... yes, there's
 some irony there :)
 
-Some notes: we're using py.test and WebTest for unit testing stuff.
+Some notes: we're using pytest and WebTest for unit testing stuff.
 Keep that in mind.
 
 My suggestion is to mime the behavior of `mediagoblin/tests/` and put
@@ -61,4 +61,4 @@ replacing `/path/to/myplugin/` with the actual path to your plugin.
 
 NOTE: again, the above is untested, but it should probably work.  If
 you run into trouble, `contact us
-<http://mediagoblin.org/pages/join.html>`_, preferably on IRC!
+<https://mediagoblin.org/pages/join.html>`_, preferably on IRC!

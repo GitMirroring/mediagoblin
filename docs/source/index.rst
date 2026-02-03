@@ -44,11 +44,11 @@ MediaGoblin website.  It is written for site administrators.
    siteadmin/troubleshooting
    siteadmin/media-types
    siteadmin/help
-   siteadmin/docker
    siteadmin/relnotes
    siteadmin/theming
    siteadmin/plugins
    siteadmin/commandline-upload
+   siteadmin/third-party-resources
 
 
 .. _core-plugin-section:
@@ -101,6 +101,7 @@ This chapter contains various information for developers.
    devel/release
    devel/originaldesigndecisions
    devel/migrations
+   devel/writing-documentation
 
 
 Part 5: Pump API

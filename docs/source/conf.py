@@ -49,7 +49,7 @@ copyright = '2011--2024 GNU MediaGoblin contributors'
 # built documents.
 #
 try:
-    from mediagoblin._version import __version__
+    from mediagoblin import __version__
     # The short X.Y version.
     version = '.'.join(__version__.split('.')[0:2])
     # The full version, including alpha/beta/rc tags.

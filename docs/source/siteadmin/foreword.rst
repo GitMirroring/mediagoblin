@@ -24,8 +24,8 @@ that someone running MediaGoblin would need to know.
 
 We have other documentation at:
 
-* http://mediagoblin.org/join/ for general "join us" information
-* https://web.archive.org/web/20200817190402/https://wiki.mediagoblin.org/ for our contributor/developer-focused wiki
+* https://mediagoblin.org/pages/join.html for general "join us" information
+* https://wiki.mediagoblin.org/ for our contributor/developer-focused wiki
 
 
 Improving the Site Administrator's Guide
@@ -35,14 +35,14 @@ There are a few ways---please pick whichever method is convenient for
 you!
 
 1. Write up a bug report in the `bug tracker`_.
-2. Tell someone on IRC ``#mediagoblin`` on Freenode.
+2. Tell someone on IRC ``#mediagoblin`` on the Libera.Chat network.
 3. Write an email to the `devel mailing list`_.
 
 More information about contributing is available on the `join page`_.
 
-.. _bug tracker: https://issues.mediagoblin.org/
-.. _devel mailing list: http://lists.mediagoblin.org/listinfo/devel
-.. _join page: http://mediagoblin.org/join/
+.. _bug tracker: https://todo.sr.ht/~mediagoblin/mediagoblin
+.. _devel mailing list: https://lists.gnu.org/mailman/listinfo/mediagoblin-devel
+.. _join page: https://mediagoblin.org/pages/join.html
 
 Patches are the most helpful, but even feedback on what you think
 could be improved and how to improve it is also helpful.

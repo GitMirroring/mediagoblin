@@ -41,10 +41,6 @@
 /configure
 /aclocal.m4
 
-# npm status
-/package-lock.json
-/package.json
-
 # Tests
 /mediagoblin/tests/.cache/
 /mediagoblin/tests/user_dev/

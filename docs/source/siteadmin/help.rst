@@ -24,6 +24,6 @@ There are a couple of ways to get help with problems with MediaGoblin:
 Details for both IRC and the mailing list are on the `join page`_ of the
 website.
 
-.. _join page: http://mediagoblin.org/join/
+.. _join page: https://mediagoblin.org/pages/join.html
 
 

@@ -28,6 +28,7 @@ from mediagoblin.submit.lib import \
     FileUploadLimit, UserUploadLimit, UserPastUploadLimit
 
 from mediagoblin.user_pages.lib import add_media_to_collection
+from mediagoblin.db.base import Session
 from mediagoblin.db.models import Collection
 
 from .tools import CmdTable, response_xml, check_form, \
@@ -135,7 +136,7 @@ def pwg_images_addSimple(request):
 
         collection_id = form.category.data
         if collection_id > 0:
-            collection = Collection.query.get(collection_id)
+            collection = Session.get(Collection, collection_id)
             if collection is not None and collection.actor == request.user.id:
                 add_media_to_collection(collection, entry, "")
 

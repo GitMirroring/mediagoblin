@@ -20,6 +20,41 @@ Release Notes
 This chapter has important information about our current and previous releases.
 
 
+0.15.0
+======
+
+This is a relatively small release to resolve installation issues on Debian
+Trixie and Bookworm.
+
+This version has been tested on Debian Bookworm (12), Debian Trixie (13), Ubuntu
+22.04, Ubuntu 24.04 and Fedora 43. This release drops support for Debian
+Bullseye (11) and Ubuntu 20.04.
+
+**Upgrading:**
+
+For detailed instructions on installing or upgrading, see ":doc:`upgrading`" and
+":doc:`deploying`".
+
+**Noteworthy changes:**
+
+- Switch from Bower to NPM to install JavaScript dependencies (Ben Sturmfels)
+- Remove `lxml` dependency and switch HTML cleaning to `bleach` (Sandro Jäckel, Ben Sturmfels)
+- Add support for `sqlalchemy` 2.0 (Ben Sturmfels)
+
+**Bug fixes:**
+
+- Work around GStreamer 1.26.2 issues in Debian Trixie (Ben Sturmfels)
+- Pin `pygobject` to 3.50 for Debian Bookworm support (Olivier Mehani)
+
+**Other changes**
+
+- Adopt Sandy Seventies Speedboat theme into MediaGoblin Git repository (Ben Sturmfels)
+- Add prototype Guix MediaGoblin service (Ben Sturmfels)
+- Document use of %(var_name) markers in config (Ben Sturmfels)
+- Improve handling of missing `_version.py` (Ben Sturmfels)
+- Upgrade configure macros and scripts (Olivier Mehani)
+
+
 0.14.0
 ======
 
@@ -81,8 +116,8 @@ For detailed instructions on installing or upgrading, see ":doc:`upgrading`" and
 - Remove unused lightbox CSS and JS (Ben Sturmfels)
 - Avoid including development-only tools in Python distribution (Ben Sturmfels)
 - Switch to catch-all MANIFEST.in (Ben Sturmfels)
-- Switch to `find_namespace` to avoid setuptools warnings (Ben Sturmfels)
-- Remove unused `web-advanced.json` (Ben Sturmfels)
+- Switch to ``find_namespace`` to avoid setuptools warnings (Ben Sturmfels)
+- Remove unused ``web-advanced.json`` (Ben Sturmfels)
 - Improve audio/video test skipping if dependencies not available (Olivier Mehani)
 - Improve audio and video layout when jQuery and Video.js are not available (Ben Sturmfels)
   
@@ -117,7 +152,7 @@ For detailed instructions on installing or upgrading, see ":doc:`upgrading`" and
   and Fedora 39 (Python 3.12) (Ben Sturmfels)
 - Upgrade to support latest Jinja2 library (Ben Sturmfels)
 - Upgrade to support latest PyLD library (Ben Sturmfels)
-- Fix various ``ResourceWarning``s and ``DeprecationWarning``s (Ben Sturmfels)
+- Fix various ``ResourceWarning`` and ``DeprecationWarning`` messages (Ben Sturmfels)
 - Switch default image resize filter to BICUBIC (Ben Sturmfels)
 - Add "extras_require" entries for docs, audio, video, raw image, LDAP, and OpenID dependencies (Olivier Mehani)
 
@@ -440,7 +475,7 @@ soon as possible.
 Most importantly, there is an **important security fix**:
 
 Quoting here a portion of the
-`release blogpost <http://mediagoblin.org/news/mediagoblin-0.8.1-security-release.html>`_::
+`release blogpost <https://mediagoblin.org/news/mediagoblin-0.8.1-security-release.html>`_::
 
   We have had a security problem in our OAuth implementation reported to
   us privately and have taken steps to address it. The security problem
@@ -771,7 +806,7 @@ now.  Otherwise, jump in and have fun! :)
 3. We have made a script to transition your ``mediagoblin_local.ini`` file for
    you. This script can be found at:
    
-   http://mediagoblin.org/download/0.5.0_config_converter.py
+   https://mediagoblin.org/download/0.5.0_config_converter.py
 
 **New features**
 

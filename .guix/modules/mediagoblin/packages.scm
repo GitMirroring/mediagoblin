@@ -13,7 +13,7 @@
 ;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;;; GNU General Public License for more details.
 
-(define-module (mediagoblin-package)
+(define-module (mediagoblin packages)
   #:use-module (guix packages)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix git-download)
@@ -23,6 +23,7 @@
   #:use-module (gnu packages databases)
   #:use-module (gnu packages openldap)
   #:use-module (gnu packages pdf)
+  #:use-module (gnu packages python-build)
   #:use-module (gnu packages python-crypto)
   #:use-module (gnu packages python-web)
   #:use-module (gnu packages python-xyz)
@@ -36,11 +37,11 @@
 ;; See README-Guix.md for usage instructions and caveats.
 
 (define-public mediagoblin
-  (let ((commit "d2eb89e786d578663c15c5ac302d4b0d9d40c29f")
-        (revision "3"))
+  (let ((commit "00d42d825bf7fb46909429e73c408aff58d72d61")
+        (revision "1"))
     (package
       (name "mediagoblin")
-      (version (git-version "0.14.0.dev" revision commit))
+      (version (git-version "0.15.0.dev" revision commit))
       (source
        (origin
          (method git-fetch)
@@ -49,7 +50,7 @@
                (commit commit)))
          (file-name (git-file-name name version))
          (sha256
-          (base32 "109n80i9sa0hij8nz6c1g3a6d8ja5hz2v5c34a4hd6ldzn8prr0g"))))
+          (base32 "110q4sjg9mf25cx73xkm82i37bm2gsb2wp4xzslhywk2wc1xcgw5"))))
       (build-system pyproject-build-system)
       (arguments
        `(#:phases (modify-phases %standard-phases
@@ -59,38 +60,66 @@
                       (lambda _
                         (copy-file "mediagoblin/_version.py.in" "mediagoblin/_version.py")
                         (substitute* "mediagoblin/_version.py"
-                          (("@PACKAGE_VERSION@") "0.14.0.dev"))))
-                    ;; Override the .gmg-real program name from sys.argv[0]
-                    (add-after 'unpack 'hide-wrapping
+                          (("@PACKAGE_VERSION@") (version)))))
+                    ;; Override the .gmg-real program name normally from
+                    ;; sys.argv[0]. This affects what the usage help
+                    ;; message. Could potentially use "env --argv0 gmg" instead?
+                    (add-after 'unpack 'fix-program-name
                       (lambda _
                         (substitute* "mediagoblin/gmg_commands/__init__.py"
                           (("ArgumentParser\\(") "ArgumentParser(prog=\"gmg\","))))
                     (add-after 'unpack 'remove-broken-symlinks
                       (lambda _
-                        ;; Remove broken symlink for git submodule
+                        ;; Remove broken symlink for git submodule, since we
+                        ;; don't have internet access to fetch it.
                         (delete-file "mediagoblin/static/css/extlib/skeleton.css")
                         ;; Remove broken symlinks caused by having not run `npm install`
                         (delete-file "mediagoblin/static/js/extlib/jquery.js")
                         (delete-file "mediagoblin/static/extlib/videojs-resolution-switcher")
                         (delete-file "mediagoblin/static/extlib/video-js")
-                        (delete-file "mediagoblin/static/extlib/leaflet")))
+                        (delete-file "mediagoblin/static/extlib/leaflet")
+                        ;; Remove pdf.js Python 2 code causing "compileall" to exit 1.
+                        (delete-file-recursively "mediagoblin/static/extlib/pdf.js/test")))
                     ;; Build the language translations
                     (add-after 'build 'build-translations
                       (lambda _
                         (invoke "devtools/compile_translations.sh")))
-                    ;; Use pytest test runner
+                    ;; Wrap the executable so it can find GStreamer. Avoids
+                    ;; "ValueError: Namespace Gst not available". See
+                    ;; beets/clementine.
+                    (add-after 'wrap 'wrap-with-gst
+                      (lambda* (#:key outputs #:allow-other-keys)
+                        (let ((out (assoc-ref outputs "out"))
+                              (gst-plugin-path (getenv "GST_PLUGIN_SYSTEM_PATH"))
+                              (gi-typelib-path (getenv "GI_TYPELIB_PATH")))
+                          (wrap-program (string-append out "/bin/gmg")
+                            `("GST_PLUGIN_SYSTEM_PATH" ":" prefix (,gst-plugin-path))
+                            `("GI_TYPELIB_PATH" ":" prefix (,gi-typelib-path))))))
+                    ;; Use pytest test runner and tweak PYTHONPATH.
                     (replace 'check
-                      (lambda* (#:key tests? #:allow-other-keys)
+                      (lambda* (#:key tests? inputs outputs #:allow-other-keys)
                         (when tests?
-                          (invoke "pytest" "mediagoblin/tests" "-rs" "--forked")))))))
+                          ;; Put python-py on PYTHONPATH so that it is imported
+                          ;; in favour of the shim "py" in pytest. Not sure why
+                          ;; this just works on other systems. Could be removed
+                          ;; if pytest drops this shim.
+                          (let* ((py (assoc-ref inputs "python-py"))
+                                 (python (assoc-ref inputs "python"))
+                                 (py-path (string-append py "/lib/python" (python-version python) "/site-packages")))
+                            (setenv "PYTHONPATH" py-path)
+                            (invoke "pytest"))))))))
       (native-inputs (list gobject-introspection
+                           python-py  ;Shouldn't have to be specified
+                                      ;explicitly, but does - see above
                            python-pytest
                            python-pytest-forked
                            python-pytest-xdist
                            python-sphinx
-                           python-webtest))
+                           python-webtest
+                           python-wheel))
       (inputs (list python-alembic
                     python-babel
+                    python-bleach
                     python-celery
                     python-configobj
                     python-dateutil
@@ -99,17 +128,16 @@
                     python-itsdangerous
                     python-jinja2
                     python-jsonschema
-                    python-ldap ;For LDAP plugin
-                    python-lxml
+                    python-ldap         ;For LDAP plugin
                     python-markdown
                     python-oauthlib
-                    python-openid ;For OpenID plugin
+                    python-openid       ;For OpenID plugin
                     python-pastescript
                     python-pillow
                     python-bcrypt
                     python-pyld
-                    python-redis ;Simplest Celery backend
-                    python-requests ;For batchaddmedia
+                    python-redis        ;Simplest Celery backend
+                    python-requests     ;For batchaddmedia
                     python-soundfile
                     python-sqlalchemy
                     python-unidecode
@@ -126,8 +154,8 @@
                     gst-plugins-ugly
                     gstreamer
                     openh264
-                    python-gst ;For tests to pass
-                    python-numpy ;Audio spectrograms
+                    python-gst          ;For tests to pass
+                    python-numpy        ;Audio spectrograms
                     python-pygobject
 
                     ;; PDF media.

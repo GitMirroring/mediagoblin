@@ -480,7 +480,7 @@ The steps to perform a build nonetheless follow the familiar incantation.
    ./configure && make
 
 This will create a build stage with the necessary build dependencies, such as
-``bower`` and ``-dev`` packages, create a final image containing the built package,
+``npm`` and ``-dev`` packages, create a final image containing the built package,
 and run the tests within a container started from that image.
 
 The name of the image will be ``mediagoblin/mediagoblin:<VERSION>``, where

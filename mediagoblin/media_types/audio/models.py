@@ -33,7 +33,8 @@ class AudioData(Base):
         primary_key=True)
     get_media_entry = relationship("MediaEntry",
         backref=backref(BACKREF_NAME, uselist=False,
-                        cascade="all, delete-orphan"))
+                        cascade="all, delete-orphan",
+                        cascade_backrefs=False))
 
 
 DATA_MODEL = AudioData

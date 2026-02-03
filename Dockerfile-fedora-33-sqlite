@@ -17,13 +17,13 @@ git-core \
 make \
 nodejs \
 npm \
+pkgconf \
 python3-devel
 
 RUN dnf -y install \
 findutils \
 # To build waitress on Fedora 33 (not required for 31)
 libffi-devel \
-python3-lxml \
 python3-pillow \
 which
 
@@ -82,7 +82,7 @@ RUN make
 
 RUN ./bin/python -m pip freeze
 
-RUN ./bin/python -m pytest -rs ./mediagoblin/tests --forked
+RUN ./bin/python -m pytest
 
 RUN cd docs && make html
 

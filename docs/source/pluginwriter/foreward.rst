@@ -36,7 +36,7 @@ you!
 Information about the bugtracker, IRC and the mailing list is all on
 the `join page`_.
 
-.. _join page: http://mediagoblin.org/join/
+.. _join page: https://mediagoblin.org/pages/join.html
 
 Patches are the most helpful, but even feedback on what you think
 could be improved and how to improve it is also helpful.

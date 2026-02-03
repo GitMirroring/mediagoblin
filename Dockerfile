@@ -103,7 +103,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 	    && apt-get install --no-install-recommends -y \
 	    git \
 	    python3-dev \
-	    pkg-config \
+	    pkgconf \
 	    npm \
 	    $(test "${audio_support}" = 'false' \
 	    && test "${video_support}" = 'false' || echo '\
@@ -142,8 +142,8 @@ USER www-data
 
 # Copy upstream MediaGoblin into the image for use in the build process.
 #
-# This build process is somewhat complicated, because of Bower/NPM, translations
-# and Python dependencies, so it's not really feasible just to copy over a
+# This build process is somewhat complicated, because of NPM, translations and
+# Python dependencies, so it's not really feasible just to copy over a
 # requirements.txt like many Python Dockerfiles examples do. We need the full
 # source.
 #

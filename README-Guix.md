@@ -41,11 +41,11 @@ via load-path", followed by "Run MediaGoblin".
   mention issues with Redis. Haven't ever seen this outside of Guix though. More
   investigation required.
 
-* We don't have NPM/Bower available to install jQuery and others. We've mostly
-  tweaked things so that MediaGoblin is usable without it, but further work is
-  needed. A start would be to rewrite MediaGoblin's JavaScript code not to use
-  jQuery. We could bundle some of the third-party JS into MediaGoblin, but we
-  could possibly also get a long way by improving no-third-party-JS experience
+* We don't have NPM available to install jQuery and others. We've mostly tweaked
+  things so that MediaGoblin is usable without it, but further work is needed. A
+  start would be to rewrite MediaGoblin's JavaScript code not to use jQuery. We
+  could bundle some of the third-party JS into MediaGoblin, but we could
+  possibly also get a long way by improving no-third-party-JS experience
   too. Minimising the third-party JS will simplify packaging for other operating
   systems.
 
@@ -69,7 +69,7 @@ Add this MediaGoblin channel to your Guix channels configuration in
     (url "https://git.sr.ht/~mediagoblin/mediagoblin")
     (introduction
       (make-channel-introduction
-      "25cfc5238029f1123fb4344eb65ec92cc5f57e54
+      "ddb0247588e7b82a4287ee26b9d98d7b227247c0"
       (openpgp-fingerprint
         "3E7F36E73BDD6A7106F92021023C05E2C9C068F0"))))
   %default-channels)
@@ -85,9 +85,16 @@ See "Run MediaGoblin" below.
 
 ## Set up a MediaGoblin hacking environment (for MediaGoblin development) ##
 
+Note that we're running the tests without the default `--forked`, as
+"python-pytest-forked" is not included in the Guix environment due to errors
+`py.process'. Unfortunately this also breaks about 15 tests due to the lack of
+isolation.
+
     git clone https://git.sr.ht/~mediagoblin/mediagoblin
     cd mediagoblin
-    guix shell -L . --development mediagoblin automake autoconf
+    guix shell --pure --load-path=.guix/modules --load-path=/home/ben/ws/sturm-guix --development mediagoblin sturm-dev sturm-python-dev
+    cp mediagoblin/_version.py.in mediagoblin/_version.py
+    pytest --override-ini=addopts='--numprocesses=logical'
     # See the "Run MediaGoblin" section below for initial configuration
     CELERY_ALWAYS_EAGER=true python3 -m mediagoblin.gmg_commands.__init__ serve paste.ini
 
@@ -104,15 +111,15 @@ To build MediaGoblin:
 
     git clone https://git.sr.ht/~mediagoblin/mediagoblin
     cd mediagoblin
-    guix build -L . mediagoblin
+    guix build --load-path=.guix/modules mediagoblin
 
 To build with modified source:
 
-    guix build -L . mediagoblin --with-source=mediagoblin=[SOURCE DIRECTORY]
+    guix build --load-path=.guix/modules mediagoblin --with-source=mediagoblin=[SOURCE DIRECTORY]
 
 To build without running tests:
 
-    guix build -L . mediagoblin --without-tests=mediagoblin
+    guix build --load-path=.guix/modules mediagoblin --without-tests=mediagoblin
 
 
 ## Install via load-path (for Guix testing/development) ##
@@ -121,8 +128,8 @@ For flexibility during testing and development, install using Guix's load-path:
 
     git clone https://git.sr.ht/~mediagoblin/mediagoblin
     cd mediagoblin
-    guix shell -L . mediagoblin  # For a temporary shell
-    guix install -L . mediagoblin  # To install in your profile
+    guix shell --load-path=.guix/modules mediagoblin  # For a temporary shell
+    guix install --load-path=.guix/modules mediagoblin  # To install in your profile
 
 
 ## Run MediaGoblin ##
@@ -166,7 +173,7 @@ Start the web interface with foreground media processing:
 
 **Note**: The web interface is currently missing some static files:
 
- - `jquery.js`: normally installed with `bower`
+ - `jquery.js`: normally installed with `npm`
 
 
 ## Background media processing ##
@@ -191,7 +198,7 @@ Stop your existing web interface instance and re-run with
 
 To build a Debian package:
 
-    guix pack -f deb -C xz -L . -S /usr/bin/gmg=bin/gmg mediagoblin
+    guix pack --format=deb --compression=xz --load-path=. --symlink=/usr/bin/gmg=bin/gmg mediagoblin
 
 For other options including RPM and Docker, see
 https://guix.gnu.org/manual/en/html_node/Invoking-guix-pack.html#Invoking-guix-pack.

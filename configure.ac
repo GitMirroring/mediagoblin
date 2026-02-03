@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([mediagoblin], [0.14.0],
+AC_INIT([mediagoblin], [0.15.0],
 	[mediagoblin-devel@gnu.org],
 	[mediagoblin],
 	[https://mediagoblin.org])
@@ -38,7 +38,7 @@ AS_IF([test "$use_docker" = yes && test "$DOCKER" = none ],
       )
 
 AS_IF([test "$DOCKER" = none ], [
-       AX_PYTHON_DEVEL([3], [>= '3.6'])
+       AX_PYTHON_DEVEL([>= '3.6'])
        # XXX: Debian: ensurepip comes as a dependency of python3-venv
        AX_PYTHON_MODULE([ensurepip], [1])
        AX_PYTHON_MODULE([venv], [1])

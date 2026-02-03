@@ -17,6 +17,7 @@
 import logging
 
 from alembic import command
+from sqlalchemy import inspect
 from sqlalchemy.orm import sessionmaker
 
 from mediagoblin.db.open import setup_connection_and_db_from_config
@@ -150,9 +151,10 @@ def run_dbupdate(app_config, global_config):
     # Looks like a fresh database!
     # (We set up this variable here because doing "run_all_migrations" below
     # will change things.)
+    inspector = inspect(db.engine)
     fresh_database = (
-        not db.engine.has_table("core__migrations") and
-        not db.engine.has_table("alembic_version"))
+        not inspector.has_table("core__migrations") and
+        not inspector.has_table("alembic_version"))
 
     # Run the migrations
     run_alembic_migrations(db, app_config, global_config)

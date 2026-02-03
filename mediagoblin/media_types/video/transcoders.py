@@ -129,8 +129,15 @@ def capture_thumb(video_path, dest_path, width=None, height=None, percent=0.5):
         _log.warning('could not get snapshot format')
         return
     structure = caps.get_structure(0)
-    (success, width) = structure.get_int('width')
-    (success, height) = structure.get_int('height')
+    try:
+        (success, width) = structure.get_int('width')
+        (success, height) = structure.get_int('height')
+    except AttributeError:
+        # Work around GStreamer 1.26.2 issue
+        # https://discourse.gstreamer.org/t/python-get-structure-api-change/4767
+        (success, width) = structure._StructureWrapper__structure.get_int('width')
+        (success, height) = structure._StructureWrapper__structure.get_int('height')
+
     buffer = sample.get_buffer()
 
     # get the image from the buffer and save it to disk
@@ -356,7 +363,12 @@ class VideoTranscoder:
             if message.has_name('progress'):
                 structure = message.get_structure()
                 # Update progress state if it has changed
-                (success, percent) = structure.get_int('percent')
+                try:
+                    (success, percent) = structure.get_int('percent')
+                except AttributeError:
+                    # Work around GStreamer 1.26.2 issue
+                    # https://discourse.gstreamer.org/t/python-get-structure-api-change/4767
+                    (success, percent) = structure._StructureWrapper__structure.get_int('percent')
                 if self.progress_percentage != percent and success:
                     # FIXME: the code below is a workaround for structure.get_int('percent')
                     # returning 0 when the transcoding gets over (100%)

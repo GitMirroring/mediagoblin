@@ -99,12 +99,12 @@ def build_report_object(report_form, media_entry=None, comment=None):
     report_object = Report()
     if report_form.validate() and comment is not None:
         report_object.obj = comment.comment()
-        report_object.reported_user_id = TextComment.query.get(
-            comment.id).get_actor.id
+        report_object.reported_user_id = Session.get(
+            TextComment, comment.id).get_actor.id
     elif report_form.validate() and media_entry is not None:
         report_object.obj = media_entry
-        report_object.reported_user_id = MediaEntry.query.get(
-            media_entry.id).get_actor.id
+        report_object.reported_user_id = Session.get(
+            MediaEntry, media_entry.id).get_actor.id
     else:
         return None
 

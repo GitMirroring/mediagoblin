@@ -44,11 +44,11 @@ class Test_PWG:
     def test_session(self):
         resp = self.do_post("pwg.session.login",
             {"username": "nouser", "password": "wrong"})
-        assert resp.body == (XML_PREFIX + '<rsp stat="fail"><err code="999" msg="Invalid username/password"/></rsp>').encode('ascii')
+        assert resp.body == (XML_PREFIX + '<rsp stat="fail"><err code="999" msg="Invalid username/password" /></rsp>').encode('ascii')
 
         resp = self.do_post("pwg.session.login",
             {"username": self.username, "password": "wrong"})
-        assert resp.body == (XML_PREFIX + '<rsp stat="fail"><err code="999" msg="Invalid username/password"/></rsp>').encode('ascii')
+        assert resp.body == (XML_PREFIX + '<rsp stat="fail"><err code="999" msg="Invalid username/password" /></rsp>').encode('ascii')
 
         resp = self.do_get("pwg.session.getStatus")
         assert resp.body == (XML_PREFIX + '<rsp stat="ok"><username>guest</username></rsp>').encode('ascii')

@@ -23,6 +23,7 @@ from mediagoblin.db.base import Session
 from mediagoblin.media_types import sniff_media
 from mediagoblin.submit.lib import new_upload_entry
 from mediagoblin.submit.task import collect_garbage
+from mediagoblin.db.base import Session
 from mediagoblin.db.models import User, MediaEntry, TextComment, Comment
 from mediagoblin.tests.tools import fixture_add_user, fixture_media_entry
 
@@ -65,7 +66,7 @@ def test_user_deletes_other_comments(test_app):
     med_cnt1 = MediaEntry.query.count()
     cmt_cnt1 = Comment.query.count()
 
-    User.query.get(user_a.id).delete(commit=False)
+    Session.get(User, user_a.id).delete(commit=False)
 
     usr_cnt2 = User.query.count()
     med_cnt2 = MediaEntry.query.count()
@@ -78,7 +79,7 @@ def test_user_deletes_other_comments(test_app):
     # Three of four comments gone.
     assert cmt_cnt2 == cmt_cnt1 - 3
 
-    User.query.get(user_b.id).delete()
+    Session.get(User, user_b.id).delete()
 
     usr_cnt2 = User.query.count()
     med_cnt2 = MediaEntry.query.count()
@@ -103,8 +104,8 @@ def test_media_deletes_broken_attachment(test_app):
     Session.add(media)
     Session.flush()
 
-    MediaEntry.query.get(media.id).delete()
-    User.query.get(user_a.id).delete()
+    Session.get(MediaEntry, media.id).delete()
+    Session.get(User, user_a.id).delete()
 
 def test_garbage_collection_task(test_app):
     """ Test old media entry are removed by GC task """

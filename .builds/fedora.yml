@@ -1,4 +1,4 @@
-image: fedora/39
+image: fedora/43
 packages:
   # Install bootstrap and configure dependencies.
   - automake
@@ -6,19 +6,19 @@ packages:
   - git-core
   - libffi-devel  # To build cffi Python package
   - make
+  - awk
   - nodejs
   - npm
   - python3-devel
   - python3-greenlet  # Fedora say "greenlet is required to install pyproject.toml-based projects"
 
   # Install make and runtime dependencies.
-  - python3-lxml
   - python3-pillow
 
   # Install test and docs dependencies.
   - python3-pytest
-  - python3-pytest-forked
   - python3-pytest-xdist
+  - python3-pytest-forked
   # - python3-sphinx
   # - python3-sphinxcontrib-applehelp
   # - python3-sphinxcontrib-devhelp
@@ -67,6 +67,11 @@ tasks:
       ./bin/python -m pip freeze
 
       make check
+
+      # Enable audio and video
+      cp mediagoblin.example.ini mediagoblin.ini
+      sed -i '/mediagoblin\.media_types\.audio/s/^#//g' mediagoblin.ini
+      sed -i '/mediagoblin\.media_types\.video/s/^#//g' mediagoblin.ini
 
       # Check that `gmg` command runs
       ./bin/gmg dbupdate

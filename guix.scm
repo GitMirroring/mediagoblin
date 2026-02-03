@@ -1,1 +1,1 @@
-.guix/modules/mediagoblin-package.scm
+.guix/modules/mediagoblin/packages.scm

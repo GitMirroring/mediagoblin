@@ -45,12 +45,14 @@ Upgrade
 
 2. Update to the latest release.  In your ``mediagoblin`` directory, run::
 
-     git fetch && git checkout --quiet v0.14.0 && git submodule update
+     # The `git submodule set-url` is required for v0.15.0 as sandyseventiesspeedboat has moved.
+     git submodule set-url extlib/sandyseventiesspeedboat https://git.sr.ht/~mediagoblin/sandyseventiesspeedboat-mg
+     git fetch --tags && git checkout --quiet --force v0.15.0 && git submodule update
 
    If you are checking out a branch, rather than a specific version tag, please
    run `git pull` before `git submodule update`.
 
-3. Note down any plugins you have installed by reviewing your
+3. Note down any third-party plugins you have installed by reviewing your
    ``mediagoblin.ini`` configuration. These will be removed by the following
    steps and must be re-installed.
 
@@ -62,10 +64,12 @@ Upgrade
 
      ./autogen.sh && ./configure && make
 
-   You may need to update file permissions as mentioned in ":doc:`deploying`".
+   In case of errors, you may need to double-check that the relevant
+   dependencies are installed and or correct the file permissions as mentioned
+   in ":doc:`deploying`".
 
-6. Re-install any ":doc:`plugins`" you had previously installed. Skipping these
-   may result in errors updating the database.
+6. Re-install any third-party ":doc:`plugins`" you had previously
+   installed. Skipping these may result in errors updating the database.
 
 7. Update the database::
 
@@ -74,8 +78,9 @@ Upgrade
 8. Restart the Paster and Celery processes. If you followed ":doc:`deploying`",
    this may be something like::
 
+     # Switch back to your original user with Ctrl-d or "exit".
      sudo systemctl restart mediagoblin-paster.service
-     sudo systemctl start mediagoblin-celeryd.service
+     sudo systemctl restart mediagoblin-celeryd.service
 
    To see the logs for troubleshooting, use something like::
 

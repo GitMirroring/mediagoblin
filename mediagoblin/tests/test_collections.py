@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin.tests.tools import fixture_add_collection, fixture_add_user
+from mediagoblin.db.base import Session
 from mediagoblin.db.models import Collection, User
 
 
@@ -23,7 +24,7 @@ def test_user_deletes_collection(test_app):
     user = fixture_add_user()
     coll = fixture_add_collection(user=user)
     # Reload into session:
-    user = User.query.get(user.id)
+    user = Session.get(User, user.id)
 
     cnt1 = Collection.query.count()
     user.delete()
