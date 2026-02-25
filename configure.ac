@@ -8,6 +8,9 @@ AC_INIT([mediagoblin], [0.15.0],
 	[https://mediagoblin.org])
 AC_CONFIG_MACRO_DIR([m4])
 
+dnl This needs to match options.python_requires in setup.cfg
+define(MIN_PYTHON, '3.7')
+
 dnl pkg-config is required prior to generating the configure script
 dnl make sure the macros it provides have been successfully replaced
 m4_pattern_forbid([^PKG_])
@@ -38,7 +41,19 @@ AS_IF([test "$use_docker" = yes && test "$DOCKER" = none ],
       )
 
 AS_IF([test "$DOCKER" = none ], [
-       AX_PYTHON_DEVEL([>= '3.6'])
+
+       AX_PYTHON_DEVEL([>= MIN_PYTHON], true)
+       AS_IF([test "$ax_python_devel_found" = no ], [
+	       AC_MSG_WARN([python is not >= MIN_PYTHON, retrying with python3])
+	       PYTHON_VERSION="3"
+
+	       # Reset autoconf cache
+	       PYTHON=
+	       ac_cv_path_PYTHON=
+	       unset ac_cv_path_PYTHON
+
+	       AX_PYTHON_DEVEL([>= MIN_PYTHON])
+       ])
        # XXX: Debian: ensurepip comes as a dependency of python3-venv
        AX_PYTHON_MODULE([ensurepip], [1])
        AX_PYTHON_MODULE([venv], [1])
