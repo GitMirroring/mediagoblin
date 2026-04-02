@@ -27,7 +27,6 @@ except ImportError:
     print("sqlalchemy-migrate not found... assuming we don't need it")
     print("I hope you aren't running the legacy migrations!")
 
-import pytz
 import dateutil.tz
 from sqlalchemy import (MetaData, Table, Column, Boolean, SmallInteger,
                         Integer, Unicode, UnicodeText, DateTime,
@@ -1157,7 +1156,7 @@ def datetime_to_utc(db):
         dt = dt.replace(tzinfo=server_timezone)
 
         # Convert to UTC
-        return dt.astimezone(pytz.UTC)
+        return dt.astimezone(datetime.timezone.utc)
 
     # Convert the User model
     user_table = inspect_table(metadata, "core__users")
