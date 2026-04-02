@@ -17,6 +17,11 @@ import sqlalchemy as sa
 
 
 def upgrade():
+    if op.get_bind().engine.has_table('openid__association'):
+        # Skip; this has already been instantiated
+        # (probably via sqlalchemy-migrate)
+        return
+
     op.create_table(
         'openid__association',
         sa.Column('server_url', sa.Unicode(), nullable=False),
