@@ -20,6 +20,12 @@ Release Notes
 This chapter has important information about our current and previous releases.
 
 
+Upcoming
+========
+
+- Update the thumbnails layout to flexbox (Olivier Mehani)
+
+
 0.15.0
 ======
 
